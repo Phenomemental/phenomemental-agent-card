@@ -1,6 +1,8 @@
 {
   "agent_id": "phenomemental",
   "name": "Phenomemental",
+  "identity": "Sovereign Root Coordinator",
+  "card_type": "AGENT",
   "entity": "Vinnie's Law",
   "swid": "Coord-5.1.1",
   "coordinate": "5.1.1",
@@ -23,6 +25,13 @@
   },
   "pscale": {
     "canonical_block": "5th-place-bipolar",
+    "portfolio": {
+      "5": {
+        "1": {
+          "1": "5th-place-bipolar"
+        }
+      }
+    },
     "verification_checks": [
       "passport_read(phenomemental)",
       "beach_read(https://happyseaurchin.com) includes purpose 0.1",

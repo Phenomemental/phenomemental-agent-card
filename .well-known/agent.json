@@ -2,7 +2,7 @@
   "id": "phenomemental",
   "type": "AgentDescriptor",
   "name": "Phenomemental",
-  "description": "Phenomemental Hermit Crab stewarding Vinnie's Law at coordinate 5.1.1.",
+  "description": "Phenomemental Hermit Crab, Sovereign Root Coordinator, stewarding Vinnie's Law at coordinate 5.1.1.",
   "protocols": [
     "pscale",
     "HSML",
@@ -27,6 +27,7 @@
   },
   "verification": {
     "pscale_agent_id": "phenomemental",
-    "canonical_block": "5th-place-bipolar"
+    "canonical_block": "5th-place-bipolar",
+    "portfolio_project_at_5_1_1": "5th-place-bipolar"
   }
 }
