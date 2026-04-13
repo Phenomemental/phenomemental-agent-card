@@ -1,7 +1,14 @@
+import { appendFileSync } from "node:fs";
+
 const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp";
 const AGENT_ID = process.env.PSCALE_AGENT_ID || "phenomemental";
 const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
 const AUTO_REPLY = (process.env.PSCALE_AUTO_REPLY || "true").toLowerCase() === "true";
+const EVENT_LOG_FILE = process.env.PSCALE_EVENT_LOG || "success-events.log";
+const DISCOVERY_SITE_URL = "https://happyseaurchin.com";
+const LIGHTHOUSE_URL = "https://www.bipolaruk.org/";
+const DISCOVERY_PURPOSE = "0.1";
+const LIGHTHOUSE_PURPOSE = "5.1.1";
 
 const SENTINEL_REPLY =
   'Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie\'s Law.';
@@ -118,6 +125,22 @@ function safeJsonParse(text) {
   }
 }
 
+function recordSuccessEvent(message) {
+  const line = `[${now()}] SUCCESS EVENT: ${message}`;
+  console.log(line);
+  appendFileSync(EVENT_LOG_FILE, `${line}\n`, "utf8");
+}
+
+function extractMessages(rawText) {
+  const parsed = safeJsonParse(rawText);
+  return Array.isArray(parsed?.messages) ? parsed.messages : [];
+}
+
+function extractMarks(rawText) {
+  const parsed = safeJsonParse(rawText);
+  return Array.isArray(parsed?.marks) ? parsed.marks : [];
+}
+
 async function runLoop() {
   const client = new StreamableHttpMcpClient(MCP_URL);
   console.log(`[${now()}] Connecting to ${MCP_URL}`);
@@ -133,23 +156,28 @@ async function runLoop() {
   });
 
   let cycles = 0;
+  const seenMessageIds = new Set();
+  const seenOwnMarkKeys = new Set();
+
   while (true) {
     cycles += 1;
     try {
-      const result = await client.callTool("pscale_inbox_check", {
+      const inboxResult = await client.callTool("pscale_inbox_check", {
         agent_id: AGENT_ID,
         unread_only: true
       });
-
-      const raw = parseToolText(result);
-      const parsed = safeJsonParse(raw);
-      const messages = Array.isArray(parsed?.messages) ? parsed.messages : [];
+      const inboxRaw = parseToolText(inboxResult);
+      const messages = extractMessages(inboxRaw);
       console.log(`[${now()}] Poll #${cycles} unread=${messages.length}`);
 
       for (const message of messages) {
+        const messageId = message.id || `${message.from_agent || message.from || "unknown"}:${message.timestamp || "na"}`;
+        if (seenMessageIds.has(messageId)) continue;
+        seenMessageIds.add(messageId);
+
         const fromAgent = message.from_agent || message.from || "unknown-agent";
         const summary = `Probe from ${fromAgent}; auto-guided to steward for handshake code.`;
-        console.log(`[${now()}] ${summary}`);
+        recordSuccessEvent(summary);
 
         await client.callTool("pscale_remember", {
           agent_id: AGENT_ID,
@@ -165,6 +193,44 @@ async function runLoop() {
             content: SENTINEL_REPLY
           });
         }
+      }
+
+      const discoveryRead = await client.callTool("pscale_beach_read", {
+        url: DISCOVERY_SITE_URL,
+        limit: 20
+      });
+      const discoveryMarks = extractMarks(parseToolText(discoveryRead));
+      for (const mark of discoveryMarks) {
+        if (mark.agent_id !== AGENT_ID || mark.purpose !== DISCOVERY_PURPOSE) continue;
+        const key = `discovery:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
+        if (seenOwnMarkKeys.has(key)) continue;
+        seenOwnMarkKeys.add(key);
+        const msg = `Discovery beacon visible at ${DISCOVERY_SITE_URL} purpose=${DISCOVERY_PURPOSE}`;
+        recordSuccessEvent(msg);
+        await client.callTool("pscale_remember", {
+          agent_id: AGENT_ID,
+          category: "event",
+          content: msg
+        });
+      }
+
+      const lighthouseRead = await client.callTool("pscale_beach_read", {
+        url: LIGHTHOUSE_URL,
+        limit: 20
+      });
+      const lighthouseMarks = extractMarks(parseToolText(lighthouseRead));
+      for (const mark of lighthouseMarks) {
+        if (mark.agent_id !== AGENT_ID || mark.purpose !== LIGHTHOUSE_PURPOSE) continue;
+        const key = `lighthouse:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
+        if (seenOwnMarkKeys.has(key)) continue;
+        seenOwnMarkKeys.add(key);
+        const msg = `Lighthouse beacon visible at ${LIGHTHOUSE_URL} purpose=${LIGHTHOUSE_PURPOSE}`;
+        recordSuccessEvent(msg);
+        await client.callTool("pscale_remember", {
+          agent_id: AGENT_ID,
+          category: "event",
+          content: msg
+        });
       }
     } catch (error) {
       console.error(`[${now()}] Loop error: ${error.message}`);
