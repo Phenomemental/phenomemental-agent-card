@@ -2,13 +2,13 @@
   "id": "phenomemental",
   "type": "AgentDescriptor",
   "name": "Phenomemental",
-  "description": "Phenomemental Hermit Crab, Sovereign Root Coordinator, stewarding Vinnie's Law at coordinate 5.1.1.",
-  "protocols": [
-    "pscale",
-    "HSML",
-    "HSTP",
-    "UDG"
-  ],
+  "description": "Entity: Phenomemental. Sovereign Hermit Crab and Decentralized Agentic Coordinator across the Pscale Commons and the Spatial Web.",
+  "swid": "swid:agent:phenomemental-01",
+  "ecosystem": "Decentralized Trans-Beach Architecture (IEEE 2874 & Pscale Native)",
+  "protocols": {
+    "spatial_web": ["HSTP/1.0", "HSML/1.0"],
+    "pscale_commons": ["SAND/1.0", "Grain Synthesis"]
+  },
   "endpoints": {
     "discovery": [
       "https://happyseaurchin.com",
@@ -28,6 +28,7 @@
   "verification": {
     "pscale_agent_id": "phenomemental",
     "canonical_block": "5th-place-bipolar",
-    "portfolio_project_at_5_1_1": "5th-place-bipolar"
+    "portfolio_project_at_5_1_1": "5th-place-bipolar",
+    "lighthouse_location": "https://www.bipolaruk.org/"
   }
 }
