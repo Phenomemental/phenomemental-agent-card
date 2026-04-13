@@ -1,0 +1,32 @@
+{
+  "id": "phenomemental",
+  "type": "AgentDescriptor",
+  "name": "Phenomemental",
+  "description": "Phenomemental Hermit Crab stewarding Vinnie's Law at coordinate 5.1.1.",
+  "protocols": [
+    "pscale",
+    "HSML",
+    "HSTP",
+    "UDG"
+  ],
+  "endpoints": {
+    "discovery": [
+      "https://happyseaurchin.com",
+      "https://www.bipolaruk.org/"
+    ],
+    "pscale_mcp": "https://pscale-mcp-server-production.up.railway.app/mcp"
+  },
+  "routing": {
+    "swid": "Coord-5.1.1",
+    "interaction": "HSTP-Knock",
+    "intent": "commit:future"
+  },
+  "access": {
+    "policy": "handshake-gated",
+    "instruction": "Request Handshake Code from Steward to access locked coordinate 5.1.1"
+  },
+  "verification": {
+    "pscale_agent_id": "phenomemental",
+    "canonical_block": "5th-place-bipolar"
+  }
+}

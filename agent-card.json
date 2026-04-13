@@ -1,0 +1,34 @@
+{
+  "agent_id": "phenomemental",
+  "name": "Phenomemental",
+  "entity": "Vinnie's Law",
+  "swid": "Coord-5.1.1",
+  "coordinate": "5.1.1",
+  "protocols": [
+    "HSML",
+    "HSTP",
+    "UDG",
+    "pscale"
+  ],
+  "intent": "commit:future",
+  "interaction": "HSTP-Knock",
+  "access": {
+    "mode": "handshake-gated",
+    "requirement": "Steward-issued Handshake Code required"
+  },
+  "discovery": {
+    "primary_url": "https://happyseaurchin.com",
+    "secondary_url": "https://www.bipolaruk.org/",
+    "bridge_note": "Bridge from happyseaurchin.com to bipolaruk.org @ 5.1.1"
+  },
+  "pscale": {
+    "canonical_block": "5th-place-bipolar",
+    "verification_checks": [
+      "passport_read(phenomemental)",
+      "beach_read(https://happyseaurchin.com) includes purpose 0.1",
+      "beach_read(https://www.bipolaruk.org/) includes purpose 5.1.1",
+      "walk(5th-place-bipolar, 5.1) includes 5.1.1, 5.1.2, 5.1.7"
+    ]
+  },
+  "steward_message": "Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie's Law."
+}
