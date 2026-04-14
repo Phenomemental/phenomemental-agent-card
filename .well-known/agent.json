@@ -24,16 +24,24 @@
   "identity_model": {
     "public_persona_id": "Phenomemental",
     "tier_1_operator_id": "Night-Watchman",
-    "tier_2_prefix": "hermit-crab-"
+    "tier_2_prefix": "hermit-crab-",
+    "pscale_continuity_agent_id": "steward-phenomemental",
+    "legacy_continuity_agent_id": "Phenomemental-14042026",
+    "bootstrap_rule": "All pscale continuity reads and writes MUST use steward-phenomemental."
   },
   "access": {
     "policy": "handshake-gated",
     "instruction": "Request Handshake Code from Steward to access locked coordinate 5.1.1"
   },
   "verification": {
-    "pscale_agent_id": "Phenomemental",
-    "canonical_block": "5th-place-bipolar",
+    "pscale_agent_id": "steward-phenomemental",
+    "legacy_pscale_agent_id": "Phenomemental-14042026",
+    "canonical_block": "night-watchman-genesis",
     "portfolio_project_at_5_1_1": "5th-place-bipolar",
-    "lighthouse_location": "https://www.bipolaruk.org/"
+    "lighthouse_location": "https://www.bipolaruk.org/",
+    "bootstrap_required_queries": [
+      "Genesis of US",
+      "night-watchman-genesis"
+    ]
   }
 }

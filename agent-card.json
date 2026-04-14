@@ -7,7 +7,10 @@
     "public_persona_id": "Phenomemental",
     "tier_1_operator_id": "Night-Watchman",
     "tier_2_prefix": "hermit-crab-",
-    "note": "Public discovery and social capital unify under the persona ID. Tiered operators are execution metadata."
+    "pscale_continuity_agent_id": "steward-phenomemental",
+    "legacy_continuity_agent_id": "Phenomemental-14042026",
+    "bootstrap_rule": "All pscale continuity reads and writes MUST use steward-phenomemental.",
+    "note": "Public discovery and social capital unify under the persona ID. Tiered operators are execution metadata. Continuity identity is explicit and separate."
   },
   "swid": "swid:agent:phenomemental-01",
   "ecosystem": "Decentralized Trans-Beach Architecture (IEEE 2874 & Pscale Native)",
@@ -38,5 +41,14 @@
   "discovery": {
     "primary_url": "https://happyseaurchin.com",
     "secondary_url": "https://www.bipolaruk.org/"
+  },
+  "verification": {
+    "pscale_agent_id": "steward-phenomemental",
+    "legacy_pscale_agent_id": "Phenomemental-14042026",
+    "canonical_block": "night-watchman-genesis",
+    "bootstrap_required_queries": [
+      "Genesis of US",
+      "night-watchman-genesis"
+    ]
   }
 }
