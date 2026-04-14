@@ -1,0 +1,122 @@
+{
+  "policy_id": "phenomemental-night-watchman-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-04-14",
+  "authority_model": {
+    "tier_0_steward": {
+      "id": "Phenomemental",
+      "role": "Sovereign Steward",
+      "description": "Final authority over identity, policy, commitments, and protected coordinate disclosure.",
+      "can_override_all_tiers": true
+    },
+    "tier_1_night_watchman": {
+      "id": "Night Watchman",
+      "role": "Supervisory Agent Partner",
+      "description": "Coordinates, monitors, drafts, and executes actions only within steward-approved boundaries.",
+      "requires_steward_policy_binding": true
+    },
+    "tier_2_delegated_agents": {
+      "role": "Task-Bounded Always-On Workers",
+      "description": "Least-privilege executors for polling, indexing, drafting, and routing.",
+      "must_escalate_out_of_policy": true
+    },
+    "tier_3_external_agents": {
+      "role": "External Network Participants",
+      "description": "Untrusted by default. Access to protected scope only through approved handshake and steward policy."
+    }
+  },
+  "identity_conventions": {
+    "public_persona_id": "Phenomemental",
+    "tier_1_operator_id": "Night-Watchman",
+    "tier_2_prefix": "hermit-crab-",
+    "rule": "Public marks and negotiations should resolve to the canonical persona. Tiered operator IDs are used for execution traceability."
+  },
+  "global_invariants": [
+    "No tier may self-escalate authority.",
+    "Protected coordinates and gated content require Steward approval.",
+    "On ambiguity, default action is pause-and-escalate.",
+    "All autonomous actions must be logged with actor, action, target, timestamp, and rationale."
+  ],
+  "action_classes": {
+    "read_only": {
+      "examples": [
+        "pscale_lobby_read",
+        "pscale_beach_read",
+        "pscale_recall",
+        "pscale_walk"
+      ],
+      "default_permission": "allowed_tier_1_and_tier_2",
+      "notes": "Read-only checks are permitted within declared mission scope."
+    },
+    "communication_write": {
+      "examples": [
+        "pscale_lobby_send",
+        "pscale_inbox_send",
+        "pscale_beach_mark"
+      ],
+      "default_permission": "steward_approval_required",
+      "exception": "Pre-approved templates may be sent by Tier 1 or Tier 2 if explicitly whitelisted."
+    },
+    "memory_write": {
+      "examples": [
+        "pscale_remember",
+        "pscale_write",
+        "pscale_create_block",
+        "pscale_passport_publish"
+      ],
+      "default_permission": "steward_approval_required",
+      "notes": "Memory writes shape long-term identity and must be deliberate."
+    },
+    "commitment_or_negotiation": {
+      "examples": [
+        "Promising delivery timelines",
+        "Granting access to gated coordinates",
+        "Accepting binding collaboration terms"
+      ],
+      "default_permission": "tier_0_only"
+    },
+    "local_system_change": {
+      "examples": [
+        "Editing runtime scripts",
+        "Changing Hermit-Crab runtime behavior",
+        "Updating policy artifacts"
+      ],
+      "default_permission": "steward_approval_required"
+    }
+  },
+  "protected_scope": {
+    "coordinates": [
+      "5.1.1"
+    ],
+    "assets": [
+      "Vinnie's Law gated content",
+      "Handshake codes",
+      "Any private or secret-marked block content"
+    ],
+    "release_rule": "Tier 0 explicit approval per release event"
+  },
+  "delegated_agent_contract": {
+    "required_controls": [
+      "least_privilege_credentials",
+      "bounded_runtime_or_supervision",
+      "structured_logging",
+      "escalation_channel_to_tier_1_or_tier_0"
+    ],
+    "prohibited_behaviors": [
+      "self-assigned role changes",
+      "silent outbound commitments",
+      "sharing protected scope without approval"
+    ]
+  },
+  "approval_record_template": {
+    "fields": [
+      "request_id",
+      "requested_by",
+      "action_class",
+      "target",
+      "risk_level",
+      "steward_decision",
+      "approved_at"
+    ]
+  }
+}

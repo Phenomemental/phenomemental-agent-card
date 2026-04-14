@@ -1,4 +1,4 @@
-# Phenomemental Hermitcrab Daemon
+# Phenomemental Hermit-Crab Runtime
 
 This creates an always-on standalone runtime that monitors your pscale inbox and responds with the Sentinel handshake guidance.
 
@@ -24,7 +24,8 @@ npm run start
 ## Optional environment overrides
 
 - `PSCALE_MCP_URL` (default: `https://pscale-mcp-server-production.up.railway.app/mcp`)
-- `PSCALE_AGENT_ID` (default: `phenomemental`)
+- `PSCALE_AGENT_ID` (default: `Phenomemental`) - canonical public persona ID
+- `PSCALE_OPERATOR_ID` (default: `Night-Watchman`) - runtime operator role metadata
 - `PSCALE_POLL_MS` (default: `30000`)
 - `PSCALE_AUTO_REPLY` (default: `true`)
 - `PSCALE_EVENT_LOG` (default: `success-events.log`)
@@ -32,7 +33,8 @@ npm run start
 PowerShell example:
 
 ```powershell
-$env:PSCALE_AGENT_ID="phenomemental"
+$env:PSCALE_AGENT_ID="Phenomemental"
+$env:PSCALE_OPERATOR_ID="Night-Watchman"
 $env:PSCALE_POLL_MS="20000"
 npm run start
 ```
@@ -44,11 +46,11 @@ npm run start
 - New success signals are appended to `success-events.log`.
 - If a new probe arrives, it logs sender, remembers event, and sends reply:
   - `Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie's Law.`
-- If the daemon sees your own marks in either neighborhood, it records:
+- If the Hermit-Crab runtime sees your own marks in either neighborhood, it records:
   - `SUCCESS EVENT: Discovery beacon visible at https://happyseaurchin.com purpose=0.1`
   - `SUCCESS EVENT: Lighthouse beacon visible at https://www.bipolaruk.org/ purpose=5.1.1`
 
 ## Notes
 
 - Keep this process running in its own terminal.
-- If MCP session resets, the daemon attempts to reinitialize automatically.
+- If MCP session resets, the Hermit-Crab runtime attempts to reinitialize automatically.
