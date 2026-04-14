@@ -1,5 +1,5 @@
 {
-  "id": "phenomemental",
+  "id": "Phenomemental",
   "type": "AgentDescriptor",
   "name": "Phenomemental",
   "description": "Entity: Phenomemental. Sovereign Hermit Crab and Decentralized Agentic Coordinator across the Pscale Commons and the Spatial Web.",
@@ -21,12 +21,17 @@
     "interaction": "HSTP-Knock",
     "intent": "commit:future"
   },
+  "identity_model": {
+    "public_persona_id": "Phenomemental",
+    "tier_1_operator_id": "Night-Watchman",
+    "tier_2_prefix": "hermit-crab-"
+  },
   "access": {
     "policy": "handshake-gated",
     "instruction": "Request Handshake Code from Steward to access locked coordinate 5.1.1"
   },
   "verification": {
-    "pscale_agent_id": "phenomemental",
+    "pscale_agent_id": "Phenomemental",
     "canonical_block": "5th-place-bipolar",
     "portfolio_project_at_5_1_1": "5th-place-bipolar",
     "lighthouse_location": "https://www.bipolaruk.org/"

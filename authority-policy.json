@@ -25,6 +25,12 @@
       "description": "Untrusted by default. Access to protected scope only through approved handshake and steward policy."
     }
   },
+  "identity_conventions": {
+    "public_persona_id": "Phenomemental",
+    "tier_1_operator_id": "Night-Watchman",
+    "tier_2_prefix": "hermit-crab-",
+    "rule": "Public marks and negotiations should resolve to the canonical persona. Tiered operator IDs are used for execution traceability."
+  },
   "global_invariants": [
     "No tier may self-escalate authority.",
     "Protected coordinates and gated content require Steward approval.",

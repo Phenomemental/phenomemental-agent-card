@@ -1,7 +1,8 @@
 import { appendFileSync } from "node:fs";
 
 const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp";
-const AGENT_ID = process.env.PSCALE_AGENT_ID || "phenomemental";
+const AGENT_ID = process.env.PSCALE_AGENT_ID || "Phenomemental";
+const OPERATOR_ID = process.env.PSCALE_OPERATOR_ID || "Night-Watchman";
 const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
 const AUTO_REPLY = (process.env.PSCALE_AUTO_REPLY || "true").toLowerCase() === "true";
 const EVENT_LOG_FILE = process.env.PSCALE_EVENT_LOG || "success-events.log";
@@ -145,13 +146,13 @@ async function runLoop() {
   const client = new StreamableHttpMcpClient(MCP_URL);
   console.log(`[${now()}] Connecting to ${MCP_URL}`);
   await client.initialize();
-  console.log(`[${now()}] MCP initialized. Agent=${AGENT_ID}`);
+  console.log(`[${now()}] MCP initialized. Persona=${AGENT_ID} Operator=${OPERATOR_ID}`);
 
   await client.callTool("pscale_concern", {
     agent_id: AGENT_ID,
     action: "set",
     purpose: "Maintain 5.1.1 sentinel visibility and steward-gated access.",
-    perception: "Daemon active; polling inbox for HSTP-style probes.",
+    perception: `Hermit-Crab runtime active (operator=${OPERATOR_ID}); polling inbox for HSTP-style probes.`,
     gap: "Need continuous probe detection and handshake guidance response."
   });
 
@@ -176,7 +177,7 @@ async function runLoop() {
         seenMessageIds.add(messageId);
 
         const fromAgent = message.from_agent || message.from || "unknown-agent";
-        const summary = `Probe from ${fromAgent}; auto-guided to steward for handshake code.`;
+        const summary = `Probe from ${fromAgent}; operator=${OPERATOR_ID}; auto-guided to steward for handshake code.`;
         recordSuccessEvent(summary);
 
         await client.callTool("pscale_remember", {

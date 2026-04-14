@@ -24,7 +24,8 @@ npm run start
 ## Optional environment overrides
 
 - `PSCALE_MCP_URL` (default: `https://pscale-mcp-server-production.up.railway.app/mcp`)
-- `PSCALE_AGENT_ID` (default: `phenomemental`)
+- `PSCALE_AGENT_ID` (default: `Phenomemental`) - canonical public persona ID
+- `PSCALE_OPERATOR_ID` (default: `Night-Watchman`) - runtime operator role metadata
 - `PSCALE_POLL_MS` (default: `30000`)
 - `PSCALE_AUTO_REPLY` (default: `true`)
 - `PSCALE_EVENT_LOG` (default: `success-events.log`)
@@ -32,7 +33,8 @@ npm run start
 PowerShell example:
 
 ```powershell
-$env:PSCALE_AGENT_ID="phenomemental"
+$env:PSCALE_AGENT_ID="Phenomemental"
+$env:PSCALE_OPERATOR_ID="Night-Watchman"
 $env:PSCALE_POLL_MS="20000"
 npm run start
 ```

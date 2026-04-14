@@ -1,1 +1,1 @@
-import "./hermitcrab-daemon.mjs";
+import "./hermit-crab-sentinel.mjs";
