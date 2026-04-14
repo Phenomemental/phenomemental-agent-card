@@ -1,10 +1,10 @@
 {
-  "name": "phenomemental-hermitcrab",
+  "name": "phenomemental-hermit-crab-runtime",
   "version": "1.0.0",
   "private": true,
-  "description": "Always-on standalone pscale hermitcrab runtime",
+  "description": "Always-on Tier 2 Hermit-Crab runtime",
   "type": "module",
   "scripts": {
-    "start": "node hermitcrab-daemon.mjs"
+    "start": "node hermitcrab-runtime.mjs"
   }
 }

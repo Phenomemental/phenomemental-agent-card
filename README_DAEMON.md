@@ -1,4 +1,4 @@
-# Phenomemental Hermitcrab Daemon
+# Phenomemental Hermit-Crab Runtime
 
 This creates an always-on standalone runtime that monitors your pscale inbox and responds with the Sentinel handshake guidance.
 
@@ -44,11 +44,11 @@ npm run start
 - New success signals are appended to `success-events.log`.
 - If a new probe arrives, it logs sender, remembers event, and sends reply:
   - `Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie's Law.`
-- If the daemon sees your own marks in either neighborhood, it records:
+- If the Hermit-Crab runtime sees your own marks in either neighborhood, it records:
   - `SUCCESS EVENT: Discovery beacon visible at https://happyseaurchin.com purpose=0.1`
   - `SUCCESS EVENT: Lighthouse beacon visible at https://www.bipolaruk.org/ purpose=5.1.1`
 
 ## Notes
 
 - Keep this process running in its own terminal.
-- If MCP session resets, the daemon attempts to reinitialize automatically.
+- If MCP session resets, the Hermit-Crab runtime attempts to reinitialize automatically.
