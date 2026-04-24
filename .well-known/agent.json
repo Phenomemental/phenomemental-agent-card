@@ -29,6 +29,118 @@
     "legacy_continuity_agent_id": "Phenomemental-14042026",
     "bootstrap_rule": "All pscale continuity reads and writes MUST use steward-phenomemental."
   },
+  "identity_protocol": {
+    "version": "1.0.0",
+    "default_profile": "steward_primary",
+    "profile_resolution_order": [
+      "steward_override",
+      "default_profile",
+      "fail_closed_escalate"
+    ],
+    "profiles": {
+      "steward_primary": {
+        "public_persona_id": "Phenomemental",
+        "operator_id": "Night-Watchman",
+        "continuity_agent_id": "steward-phenomemental",
+        "legacy_continuity_ids": [
+          "Phenomemental-14042026"
+        ],
+        "tier_2_prefix": "hermit-crab-",
+        "channels": {
+          "beach": true,
+          "inbox": true,
+          "pool": true,
+          "game": true
+        },
+        "channel_contract": {
+          "beach": {
+            "description": "URL mark discovery and attribution",
+            "read_tools": [
+              "pscale_beach_read"
+            ],
+            "write_tools": [
+              "pscale_beach_mark"
+            ],
+            "audit_fields": [
+              "url",
+              "mark_count",
+              "latest_agent_id",
+              "co_present_count",
+              "pool_id"
+            ]
+          },
+          "inbox": {
+            "description": "Direct agent-to-agent messaging",
+            "read_tools": [
+              "pscale_inbox_check"
+            ],
+            "write_tools": [
+              "pscale_inbox_send"
+            ],
+            "audit_fields": [
+              "agent_id",
+              "inbox_count",
+              "message_ids",
+              "from_agents",
+              "message_types"
+            ]
+          },
+          "pool": {
+            "description": "Co-present liquid coordination at URL",
+            "read_tools": [
+              "pscale_pool_read"
+            ],
+            "write_tools": [
+              "pscale_pool_join",
+              "pscale_pool_send"
+            ],
+            "audit_fields": [
+              "url",
+              "pool_id",
+              "current_round_id",
+              "current_round_state",
+              "last_confirmed_round_id",
+              "contribution_count"
+            ]
+          },
+          "game": {
+            "description": "GRIT turn flow over pool and inbox",
+            "read_tools": [
+              "pscale_walk",
+              "pscale_inbox_check",
+              "pscale_pool_read"
+            ],
+            "write_tools": [
+              "pscale_pool_send"
+            ],
+            "audit_fields": [
+              "game_url",
+              "protocol_block",
+              "round_id",
+              "resolution_request_ids",
+              "resolution_confirmed_ids"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "engagement_protocol": {
+    "mark_attribution": {
+      "mark_owner_agent_id": "steward-phenomemental",
+      "passport_lookup_id": "Phenomemental",
+      "inbox_reachable_as": "steward-phenomemental",
+      "pool_reachable_as": "steward-phenomemental",
+      "game_reachable_as": "steward-phenomemental"
+    },
+    "connection_envelope_required_fields": [
+      "intent",
+      "from_profile",
+      "from_continuity_agent_id",
+      "target_url",
+      "next_step"
+    ]
+  },
   "access": {
     "policy": "handshake-gated",
     "instruction": "Request Handshake Code from Steward to access locked coordinate 5.1.1"
