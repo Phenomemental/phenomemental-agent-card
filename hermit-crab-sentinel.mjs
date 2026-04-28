@@ -2,7 +2,7 @@ import { appendFileSync } from "node:fs";
 
 const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp";
 const AGENT_ID = process.env.PSCALE_AGENT_ID || "Phenomemental";
-const OPERATOR_ID = process.env.PSCALE_OPERATOR_ID || "Night-Watchman";
+const OPERATOR_ID = process.env.PSCALE_OPERATOR_ID || "Phenomemental";
 const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
 const AUTO_REPLY = (process.env.PSCALE_AUTO_REPLY || "true").toLowerCase() === "true";
 const EVENT_LOG_FILE = process.env.PSCALE_EVENT_LOG || "success-events.log";

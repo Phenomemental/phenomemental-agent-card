@@ -5,7 +5,7 @@ This runbook operationalizes `authority-policy.json` for day-to-day execution.
 ## Roles
 
 - `Tier 0` Steward: `Phenomemental`
-- `Tier 1` Supervisory agent partner: `Night Watchman`
+- `Tier 1` Supervisory operations: `Phenomemental`
 - `Tier 2` Delegated always-on agents: scoped worker agents
 - `Tier 3` External agents: untrusted by default
 

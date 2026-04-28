@@ -1,5 +1,5 @@
 {
-  "policy_id": "phenomemental-night-watchman-v1",
+  "policy_id": "phenomemental-commons-identity-v1",
   "version": "1.0.0",
   "updated_at": "2026-04-14",
   "authority_model": {
@@ -9,10 +9,10 @@
       "description": "Final authority over identity, policy, commitments, and protected coordinate disclosure.",
       "can_override_all_tiers": true
     },
-    "tier_1_night_watchman": {
-      "id": "Night Watchman",
-      "role": "Supervisory Agent Partner",
-      "description": "Coordinates, monitors, drafts, and executes actions only within steward-approved boundaries.",
+    "tier_1_supervisory_operations": {
+      "id": "Phenomemental",
+      "role": "Supervisory Operations",
+      "description": "Coordinates, monitors, drafts, and executes actions only within steward-approved boundaries under the Phenomemental commons identity.",
       "requires_steward_policy_binding": true
     },
     "tier_2_delegated_agents": {
@@ -27,7 +27,7 @@
   },
   "identity_conventions": {
     "public_persona_id": "Phenomemental",
-    "tier_1_operator_id": "Night-Watchman",
+    "pscale_commons_identity": "Phenomemental",
     "tier_2_prefix": "hermit-crab-",
     "rule": "Public marks and negotiations should resolve to the canonical persona. Tiered operator IDs are used for execution traceability."
   },

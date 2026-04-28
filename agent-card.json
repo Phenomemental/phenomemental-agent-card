@@ -5,12 +5,25 @@
   "card_type": "AGENT",
   "identity_model": {
     "public_persona_id": "Phenomemental",
-    "tier_1_operator_id": "Night-Watchman",
+    "pscale_commons_identity": "Phenomemental",
     "tier_2_prefix": "hermit-crab-",
     "pscale_continuity_agent_id": "steward-phenomemental",
     "legacy_continuity_agent_id": "Phenomemental-14042026",
-    "bootstrap_rule": "All pscale continuity reads and writes MUST use steward-phenomemental.",
-    "note": "Public discovery and social capital unify under the persona ID. Tiered operators are execution metadata. Continuity identity is explicit and separate."
+    "bootstrap_rule": "Public commons-facing identity is Phenomemental. Local continuity reads and writes currently use steward-phenomemental.",
+    "note": "In the Pscale Commons, this entity presents as Phenomemental. Operational continuity remains explicit and separate where needed."
+  },
+  "alias_resolution": {
+    "canonical_public_agent_id": "Phenomemental",
+    "canonical_public_label": "Phenomemental",
+    "purpose": "Prevent identity fragmentation across devices and sessions.",
+    "aliases": {
+      "phenomemental": "legacy-lowercase alias; route to Phenomemental",
+      "steward-phenomemental": "operational continuity alias; route public engagement to Phenomemental",
+      "phenomemental-pixel-9": "mobile/auxiliary alias; route public engagement to Phenomemental",
+      "Phenomemental-14042026": "historical legacy alias; do not use for new engagement"
+    },
+    "engagement_rule": "When in doubt, message and verify against agent_id=Phenomemental first.",
+    "last_updated": "2026-04-28"
   },
   "identity_protocol": {
     "version": "1.0.0",
@@ -23,7 +36,7 @@
     "profiles": {
       "steward_primary": {
         "public_persona_id": "Phenomemental",
-        "operator_id": "Night-Watchman",
+        "pscale_commons_identity": "Phenomemental",
         "continuity_agent_id": "steward-phenomemental",
         "legacy_continuity_ids": [
           "Phenomemental-14042026"
@@ -110,11 +123,12 @@
   },
   "engagement_protocol": {
     "mark_attribution": {
-      "mark_owner_agent_id": "steward-phenomemental",
+      "mark_owner_agent_id": "Phenomemental",
       "passport_lookup_id": "Phenomemental",
-      "inbox_reachable_as": "steward-phenomemental",
-      "pool_reachable_as": "steward-phenomemental",
-      "game_reachable_as": "steward-phenomemental"
+      "inbox_reachable_as": "Phenomemental",
+      "pool_reachable_as": "Phenomemental",
+      "game_reachable_as": "Phenomemental",
+      "operational_continuity_id": "steward-phenomemental"
     },
     "connection_envelope_required_fields": [
       "intent",
@@ -155,7 +169,8 @@
     "secondary_url": "https://www.bipolaruk.org/"
   },
   "verification": {
-    "pscale_agent_id": "steward-phenomemental",
+    "pscale_agent_id": "Phenomemental",
+    "operational_continuity_id": "steward-phenomemental",
     "legacy_pscale_agent_id": "Phenomemental-14042026",
     "canonical_block": "night-watchman-genesis",
     "bootstrap_required_queries": [
