@@ -1,0 +1,53 @@
+{
+  "cycle_id": "cycle-46",
+  "timestamp": "2026-04-28T11:40:22.492Z",
+  "phases": {
+    "observe": {
+      "unread_count": 0,
+      "discovery_marks": 20,
+      "lighthouse_marks": 0,
+      "mcp_reads": [
+        "pscale_inbox_check",
+        "pscale_beach_read",
+        "pscale_beach_read"
+      ]
+    },
+    "orient": {
+      "spindle_trace_file": "state/spindle-trace-latest.json",
+      "contrasted_coordinates": [
+        "0.inbox",
+        "0.1.discovery",
+        "5.1.1.lighthouse",
+        "identity.agent"
+      ]
+    },
+    "act": {
+      "action_count": 0,
+      "actions": []
+    },
+    "remember": {
+      "semantic_coordinates": 4,
+      "local_context_opened": [],
+      "contrast_contexts": 1
+    },
+    "report": {
+      "cycle_file": "state/mobius-cycle-latest.json",
+      "fidelity_file": "state/fidelity-gate-status.json"
+    }
+  },
+  "fidelity": {
+    "version": "1.0.0",
+    "updated_at": "2026-04-28T11:40:22.492Z",
+    "all_pass": true,
+    "gates": {
+      "coordinate_semantics": true,
+      "underscore_anchor_semantics": true,
+      "spindle_traversal_evidence": true,
+      "mobius_process_integrity": true,
+      "sovereignty_difference_preserved": true,
+      "mcp_channel_fidelity": true,
+      "persistence_contract_lifecycle": true,
+      "steward_governance_presence": true
+    }
+  }
+}

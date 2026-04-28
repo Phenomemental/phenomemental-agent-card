@@ -9,8 +9,18 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 - `.well-known/agent.json` - agent descriptor surface
 - `blocks/` - local block artifacts
 - `runtime/` - runtime entrypoint and runtime docs
+- `state/` - local semantic persistence ledger written by runtime
+- `state/local-coordinate-graph.json` - sovereign local semantic coordinate graph
+- `state/semantic-contrast-ledger.json` - decimal tension contrasts for local `0.x` contexts
+- `state/mobius-cycle-latest.json` - explicit observe/orient/act/remember/report cycle artifact
+- `state/spindle-trace-latest.json` - spindle traversal path and rationale per cycle
+- `state/fidelity-gate-status.json` - pscale fidelity gate enforcement status
 - `docs/` - authority and operational documentation
 - `archive/` - historical artifacts retained for reference
+
+## Architecture fidelity
+
+- `docs/PSCALE_FIDELITY_CHECKLIST.md` gates runtime/persistence changes against pscale-native semantics.
 - `passport.json` - local passport metadata snapshot
 
 ## Bootstrap and identity

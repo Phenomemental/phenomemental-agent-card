@@ -7,11 +7,13 @@ Canonical documentation surfaces for identity, authority, and migration.
 - `BOOTSTRAP.md`
 - `docs/IDENTITY_PROTOCOL_SPEC.md`
 - `docs/IDENTITY_MIGRATION_STRATEGY.md`
+- `docs/LOCAL_BLOCK_SCHEMA.md`
 
 ## Authority
 
 - `authority-policy.json`
 - `docs/AUTHORITY_RUNBOOK.md`
+- `docs/PSCALE_FIDELITY_CHECKLIST.md`
 
 ## Runtime ops
 

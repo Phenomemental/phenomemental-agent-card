@@ -1,0 +1,2 @@
+
+{"timestamp":"2026-04-28T11:17:13.342Z","coordinate":"system.fidelity","intent":"fidelity remediation required","evidence":{"coordinate_semantics":true,"underscore_anchor_semantics":true,"spindle_traversal_evidence":true,"mobius_process_integrity":true,"sovereignty_difference_preserved":true,"mcp_channel_fidelity":false,"persistence_contract_lifecycle":true,"steward_governance_presence":true},"before":{"all_pass":false},"after":{"all_pass":false},"steward_intent":"Pause and remediate failing gates before system promotion."}

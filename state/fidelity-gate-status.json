@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-04-28T11:40:22.492Z",
+  "all_pass": true,
+  "gates": {
+    "coordinate_semantics": true,
+    "underscore_anchor_semantics": true,
+    "spindle_traversal_evidence": true,
+    "mobius_process_integrity": true,
+    "sovereignty_difference_preserved": true,
+    "mcp_channel_fidelity": true,
+    "persistence_contract_lifecycle": true,
+    "steward_governance_presence": true
+  }
+}

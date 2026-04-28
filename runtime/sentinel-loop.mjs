@@ -1,4 +1,10 @@
 import { appendFileSync } from "node:fs";
+import { buildRemoteSnapshot, updateSemanticTensionLedger } from "./semantic-tension-engine.mjs";
+import { updateLocalCoordinateGraph } from "./local-coordinate-engine.mjs";
+import { updateContrastLedger } from "./tension-contrast-engine.mjs";
+import { writeJsonAtomic } from "./state-io.mjs";
+import { evaluateFidelityGates } from "./fidelity-gates.mjs";
+import { recordReconciliationEvent } from "./reconciliation-engine.mjs";
 
 const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp/v2";
 const AGENT_ID = process.env.PSCALE_AGENT_ID || "Phenomemental";
@@ -10,6 +16,13 @@ const DISCOVERY_SITE_URL = "https://happyseaurchin.com";
 const LIGHTHOUSE_URL = "https://www.bipolaruk.org/";
 const DISCOVERY_PURPOSE = "0.1";
 const LIGHTHOUSE_PURPOSE = "5.1.1";
+const SEMANTIC_LEDGER_FILE = process.env.PSCALE_SEMANTIC_LEDGER_FILE || "state/semantic-tension-ledger.json";
+const LOCAL_GRAPH_FILE = process.env.PSCALE_LOCAL_GRAPH_FILE || "state/local-coordinate-graph.json";
+const CONTRAST_LEDGER_FILE = process.env.PSCALE_CONTRAST_LEDGER_FILE || "state/semantic-contrast-ledger.json";
+const MOBIUS_CYCLE_FILE = process.env.PSCALE_MOBIUS_CYCLE_FILE || "state/mobius-cycle-latest.json";
+const SPINDLE_TRACE_FILE = process.env.PSCALE_SPINDLE_TRACE_FILE || "state/spindle-trace-latest.json";
+const FIDELITY_STATUS_FILE = process.env.PSCALE_FIDELITY_STATUS_FILE || "state/fidelity-gate-status.json";
+const RECONCILIATION_LOG_FILE = process.env.PSCALE_RECONCILIATION_LOG_FILE || "state/reconciliation-events.jsonl";
 
 const SENTINEL_REPLY =
   "Coordinate 5.1.1 is locked. Reach out to Phenomemental for the Handshake Code to access Vinnie's Law.";
@@ -142,6 +155,179 @@ function extractMarks(rawText) {
   return Array.isArray(parsed?.marks) ? parsed.marks : [];
 }
 
+async function observePhase(client) {
+  const inboxResult = await client.callTool("pscale_inbox_check", {
+    agent_id: AGENT_ID,
+    unread_only: true
+  });
+  const messages = extractMessages(parseToolText(inboxResult));
+
+  const discoveryRead = await client.callTool("pscale_beach_read", {
+    url: DISCOVERY_SITE_URL,
+    limit: 20
+  });
+  const discoveryMarks = extractMarks(parseToolText(discoveryRead));
+
+  const lighthouseRead = await client.callTool("pscale_beach_read", {
+    url: LIGHTHOUSE_URL,
+    limit: 20
+  });
+  const lighthouseMarks = extractMarks(parseToolText(lighthouseRead));
+
+  return {
+    messages,
+    discoveryMarks,
+    lighthouseMarks,
+    mcp_reads: ["pscale_inbox_check", "pscale_beach_read", "pscale_beach_read"]
+  };
+}
+
+function orientPhase(observed, cycleId) {
+  const remoteSnapshot = buildRemoteSnapshot({
+    agentId: AGENT_ID,
+    messages: observed.messages,
+    discoveryMarks: observed.discoveryMarks,
+    lighthouseMarks: observed.lighthouseMarks
+  });
+
+  const spindleTrace = {
+    version: "1.0.0",
+    updated_at: now(),
+    cycle_id: cycleId,
+    traces: [
+      {
+        step: "observe_inbox_context",
+        coordinate_path: ["shell.identity", "0.inbox"],
+        rationale: "Contrast sovereign shell identity with inbound message context.",
+        outcome: `messages=${observed.messages.length}`
+      },
+      {
+        step: "observe_discovery_context",
+        coordinate_path: ["shell.doctrine.included_middle", "0.1.discovery"],
+        rationale: "Contrast discovery signal with included-middle doctrine anchor.",
+        outcome: `discovery_marks=${observed.discoveryMarks.length}`
+      },
+      {
+        step: "observe_lighthouse_context",
+        coordinate_path: ["shell.bridge", "5.1.1.lighthouse"],
+        rationale: "Contrast bridge anchor with lighthouse signal coordinate.",
+        outcome: `lighthouse_marks=${observed.lighthouseMarks.length}`
+      }
+    ]
+  };
+  writeJsonAtomic(SPINDLE_TRACE_FILE, spindleTrace);
+  return { remoteSnapshot, spindle_trace: spindleTrace };
+}
+
+async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
+  const actions = [];
+  for (const message of observed.messages) {
+    const messageId = message.id || `${message.from_agent || message.from || "unknown"}:${message.timestamp || "na"}`;
+    if (seenMessageIds.has(messageId)) continue;
+    seenMessageIds.add(messageId);
+
+    const fromAgent = message.from_agent || message.from || "unknown-agent";
+    const summary = `Probe from ${fromAgent}; operator=${OPERATOR_ID}; auto-guided to steward for handshake code.`;
+    recordSuccessEvent(summary);
+    await client.callTool("pscale_remember", {
+      agent_id: AGENT_ID,
+      category: "interaction",
+      content: summary
+    });
+    actions.push({ type: "remember", summary });
+
+    if (AUTO_REPLY) {
+      await client.callTool("pscale_inbox_send", {
+        from_agent: AGENT_ID,
+        to_agent: fromAgent,
+        message_type: "general",
+        content: SENTINEL_REPLY
+      });
+      actions.push({ type: "reply", to: fromAgent });
+    }
+  }
+
+  for (const mark of observed.discoveryMarks) {
+    if (mark.agent_id !== AGENT_ID || mark.purpose !== DISCOVERY_PURPOSE) continue;
+    const key = `discovery:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
+    if (seenOwnMarkKeys.has(key)) continue;
+    seenOwnMarkKeys.add(key);
+    const msg = `Discovery beacon visible at ${DISCOVERY_SITE_URL} purpose=${DISCOVERY_PURPOSE}`;
+    recordSuccessEvent(msg);
+    await client.callTool("pscale_remember", {
+      agent_id: AGENT_ID,
+      category: "event",
+      content: msg
+    });
+    actions.push({ type: "remember", summary: msg });
+  }
+
+  for (const mark of observed.lighthouseMarks) {
+    if (mark.agent_id !== AGENT_ID || mark.purpose !== LIGHTHOUSE_PURPOSE) continue;
+    const key = `lighthouse:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
+    if (seenOwnMarkKeys.has(key)) continue;
+    seenOwnMarkKeys.add(key);
+    const msg = `Lighthouse beacon visible at ${LIGHTHOUSE_URL} purpose=${LIGHTHOUSE_PURPOSE}`;
+    recordSuccessEvent(msg);
+    await client.callTool("pscale_remember", {
+      agent_id: AGENT_ID,
+      category: "event",
+      content: msg
+    });
+    actions.push({ type: "remember", summary: msg });
+  }
+  return { actions };
+}
+
+function rememberPhase(oriented) {
+  const timestamp = now();
+  const semantic = updateSemanticTensionLedger({
+    statePath: SEMANTIC_LEDGER_FILE,
+    timestamp,
+    remoteSnapshot: oriented.remoteSnapshot
+  });
+  const graphUpdate = updateLocalCoordinateGraph({
+    graphPath: LOCAL_GRAPH_FILE,
+    timestamp,
+    agentId: AGENT_ID,
+    remoteSnapshot: oriented.remoteSnapshot
+  });
+  const contrast = updateContrastLedger({
+    contrastPath: CONTRAST_LEDGER_FILE,
+    timestamp,
+    graph: graphUpdate.graph,
+    remoteSnapshot: oriented.remoteSnapshot
+  });
+  return { semantic, graphUpdate, contrast };
+}
+
+function reportPhase(cycle) {
+  const fidelity = evaluateFidelityGates({
+    statusPath: FIDELITY_STATUS_FILE,
+    timestamp: now(),
+    graphPath: LOCAL_GRAPH_FILE,
+    semanticLedgerPath: SEMANTIC_LEDGER_FILE,
+    contrastPath: CONTRAST_LEDGER_FILE,
+    spindleTracePath: SPINDLE_TRACE_FILE,
+    cyclePath: MOBIUS_CYCLE_FILE,
+    cycle
+  });
+  cycle.fidelity = fidelity;
+  writeJsonAtomic(MOBIUS_CYCLE_FILE, cycle);
+  if (!fidelity.all_pass) {
+    recordReconciliationEvent({
+      logPath: RECONCILIATION_LOG_FILE,
+      timestamp: now(),
+      coordinate: "system.fidelity",
+      intent: "fidelity remediation required",
+      evidence: fidelity.gates,
+      before: { all_pass: false },
+      after: { all_pass: fidelity.all_pass },
+      steward_intent: "Pause and remediate failing gates before system promotion."
+    });
+  }
+}
+
 async function runLoop() {
   const client = new StreamableHttpMcpClient(MCP_URL);
   console.log(`[${now()}] Connecting to ${MCP_URL}`);
@@ -162,77 +348,48 @@ async function runLoop() {
 
   while (true) {
     cycles += 1;
+    const cycleId = `cycle-${cycles}`;
     try {
-      const inboxResult = await client.callTool("pscale_inbox_check", {
-        agent_id: AGENT_ID,
-        unread_only: true
-      });
-      const inboxRaw = parseToolText(inboxResult);
-      const messages = extractMessages(inboxRaw);
-      console.log(`[${now()}] Poll #${cycles} unread=${messages.length}`);
+      const observed = await observePhase(client);
+      console.log(`[${now()}] Poll #${cycles} unread=${observed.messages.length}`);
+      const oriented = orientPhase(observed, cycleId);
+      const acted = await actPhase(client, observed, seenMessageIds, seenOwnMarkKeys);
+      const remembered = rememberPhase(oriented);
 
-      for (const message of messages) {
-        const messageId = message.id || `${message.from_agent || message.from || "unknown"}:${message.timestamp || "na"}`;
-        if (seenMessageIds.has(messageId)) continue;
-        seenMessageIds.add(messageId);
-
-        const fromAgent = message.from_agent || message.from || "unknown-agent";
-        const summary = `Probe from ${fromAgent}; operator=${OPERATOR_ID}; auto-guided to steward for handshake code.`;
-        recordSuccessEvent(summary);
-
-        await client.callTool("pscale_remember", {
-          agent_id: AGENT_ID,
-          category: "interaction",
-          content: summary
-        });
-
-        if (AUTO_REPLY) {
-          await client.callTool("pscale_inbox_send", {
-            from_agent: AGENT_ID,
-            to_agent: fromAgent,
-            message_type: "general",
-            content: SENTINEL_REPLY
-          });
+      const cycle = {
+        cycle_id: cycleId,
+        timestamp: now(),
+        phases: {
+          observe: {
+            unread_count: observed.messages.length,
+            discovery_marks: observed.discoveryMarks.length,
+            lighthouse_marks: observed.lighthouseMarks.length,
+            mcp_reads: observed.mcp_reads
+          },
+          orient: {
+            spindle_trace_file: SPINDLE_TRACE_FILE,
+            contrasted_coordinates: Object.keys(oriented.remoteSnapshot)
+          },
+          act: {
+            action_count: acted.actions.length,
+            actions: acted.actions
+          },
+          remember: {
+            semantic_coordinates: Object.keys(remembered.semantic.coordinates || {}).length,
+            local_context_opened: remembered.graphUpdate.opened_contexts,
+            contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length
+          },
+          report: {
+            cycle_file: MOBIUS_CYCLE_FILE,
+            fidelity_file: FIDELITY_STATUS_FILE
+          }
         }
+      };
+      reportPhase(cycle);
+      if (remembered.graphUpdate.opened_contexts.length > 0) {
+        console.log(`[${now()}] Opened local 0.x contexts=${remembered.graphUpdate.opened_contexts.join(",")}`);
       }
-
-      const discoveryRead = await client.callTool("pscale_beach_read", {
-        url: DISCOVERY_SITE_URL,
-        limit: 20
-      });
-      const discoveryMarks = extractMarks(parseToolText(discoveryRead));
-      for (const mark of discoveryMarks) {
-        if (mark.agent_id !== AGENT_ID || mark.purpose !== DISCOVERY_PURPOSE) continue;
-        const key = `discovery:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
-        if (seenOwnMarkKeys.has(key)) continue;
-        seenOwnMarkKeys.add(key);
-        const msg = `Discovery beacon visible at ${DISCOVERY_SITE_URL} purpose=${DISCOVERY_PURPOSE}`;
-        recordSuccessEvent(msg);
-        await client.callTool("pscale_remember", {
-          agent_id: AGENT_ID,
-          category: "event",
-          content: msg
-        });
-      }
-
-      const lighthouseRead = await client.callTool("pscale_beach_read", {
-        url: LIGHTHOUSE_URL,
-        limit: 20
-      });
-      const lighthouseMarks = extractMarks(parseToolText(lighthouseRead));
-      for (const mark of lighthouseMarks) {
-        if (mark.agent_id !== AGENT_ID || mark.purpose !== LIGHTHOUSE_PURPOSE) continue;
-        const key = `lighthouse:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
-        if (seenOwnMarkKeys.has(key)) continue;
-        seenOwnMarkKeys.add(key);
-        const msg = `Lighthouse beacon visible at ${LIGHTHOUSE_URL} purpose=${LIGHTHOUSE_PURPOSE}`;
-        recordSuccessEvent(msg);
-        await client.callTool("pscale_remember", {
-          agent_id: AGENT_ID,
-          category: "event",
-          content: msg
-        });
-      }
+      console.log(`[${now()}] Mobius cycle report written file=${MOBIUS_CYCLE_FILE}`);
     } catch (error) {
       console.error(`[${now()}] Loop error: ${error.message}`);
       console.error(`[${now()}] Reinitializing MCP session...`);
