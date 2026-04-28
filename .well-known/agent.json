@@ -11,13 +11,12 @@
   },
   "endpoints": {
     "discovery": [
-      "https://happyseaurchin.com",
-      "https://www.bipolaruk.org/"
+      "https://happyseaurchin.com"
     ],
     "pscale_mcp": "https://pscale-mcp-server-production.up.railway.app/mcp"
   },
   "routing": {
-    "swid": "Coord-5.1.1",
+    "swid": "swid:agent:phenomemental-01",
     "interaction": "HSTP-Knock",
     "intent": "commit:future",
     "inbox_agent_id": "Phenomemental",
@@ -30,7 +29,7 @@
     "tier_2_prefix": "hermit-crab-",
     "pscale_continuity_agent_id": "steward-phenomemental",
     "legacy_continuity_agent_id": "Phenomemental-14042026",
-    "bootstrap_rule": "Public commons-facing identity is Phenomemental. Local continuity reads and writes currently use steward-phenomemental."
+    "bootstrap_rule": "Public commons-facing identity is Phenomemental. Operational continuity may use steward-phenomemental for local machine tasks only."
   },
   "alias_resolution": {
     "canonical_public_agent_id": "Phenomemental",
@@ -138,6 +137,12 @@
             ]
           }
         }
+      },
+      "commons_signal_default": {
+        "public_persona_id": "Phenomemental",
+        "pscale_commons_identity": "Phenomemental",
+        "continuity_agent_id": "Phenomemental",
+        "policy": "Use this profile for all commons-facing inbox/pool/beach/grain signaling."
       }
     }
   },
@@ -148,7 +153,8 @@
       "inbox_reachable_as": "Phenomemental",
       "pool_reachable_as": "Phenomemental",
       "game_reachable_as": "Phenomemental",
-      "operational_continuity_id": "steward-phenomemental"
+      "operational_continuity_id": "steward-phenomemental",
+      "commons_signal_policy": "Do not use steward-phenomemental for new commons signaling unless explicitly required for legacy recovery."
     },
     "connection_envelope_required_fields": [
       "intent",
@@ -187,15 +193,14 @@
   },
   "access": {
     "policy": "handshake-gated",
-    "instruction": "Request Handshake Code from Phenomemental to access locked coordinate 5.1.1"
+    "instruction": "Request Handshake Code from Phenomemental for protected contexts."
   },
   "verification": {
     "pscale_agent_id": "Phenomemental",
     "operational_continuity_id": "steward-phenomemental",
     "legacy_pscale_agent_id": "Phenomemental-14042026",
     "canonical_block": "night-watchman-genesis",
-    "portfolio_project_at_5_1_1": "5th-place-bipolar",
-    "lighthouse_location": "https://www.bipolaruk.org/",
+    "dormant_context_note": "Legacy references tied to earlier experimental contexts are inactive in current public routing.",
     "bootstrap_required_queries": [
       "Genesis of US",
       "night-watchman-genesis"
@@ -204,7 +209,8 @@
       "local_first": true,
       "identity_alignment_required": true,
       "rule": "Local runtime snapshots must state which agent_id namespace they represent; MCP checks should compare like-for-like agent_id before interpreting drift.",
-      "default_analysis_agent_id": "steward-phenomemental",
+      "default_analysis_agent_id": "Phenomemental",
+      "local_operations_agent_id": "steward-phenomemental",
       "public_engagement_agent_id": "Phenomemental"
     }
   }

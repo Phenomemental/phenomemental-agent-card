@@ -16,6 +16,8 @@ Legacy Continuity Agent ID (historical only): Phenomemental-14042026.
 Identity preflight (read-only, must PASS before writes):
 0) Resolve active profile by this order: Steward override -> default profile `steward_primary` -> fail closed and escalate.
 1) Report active profile fields: public_persona_id, pscale_commons_identity, continuity_agent_id, allowed channels with MCP tool contract.
+   - commons signal default agent_id = `Phenomemental`
+   - local operational continuity agent_id = `steward-phenomemental`
    - beach = read: pscale_beach_read, write: pscale_beach_mark
    - inbox = read: pscale_inbox_check, write: pscale_inbox_send
    - pool = read: pscale_pool_read, write: pscale_pool_join + pscale_pool_send
@@ -61,10 +63,12 @@ Bootstrap acceptance criteria (must be reported before proceeding):
 
 Run after bootstrap and report immediately if any signal is detected:
 
+- Commons signal checks should default to `agent_id=Phenomemental`.
+- Use `steward-phenomemental` only for local legacy recovery/audit checks.
 - `pscale_beach_read(...)` for latest marks tied to SWID/target beach context.
-- `pscale_inbox_check(...)` for direct knocks/messages.
-- `pscale_pool_read(...)` if currently joined to a relevant pool.
-- `pscale_network(...)` for trust-grid changes.
+- `pscale_inbox_check(agent_id="Phenomemental", ...)` for direct knocks/messages.
+- `pscale_pool_read(agent_id="Phenomemental", ...)` if currently joined to a relevant pool.
+- `pscale_network(agent_id="Phenomemental", ...)` for trust-grid changes.
 
 ## One-Shot Bootstrap Prompt (Strict Report Format)
 

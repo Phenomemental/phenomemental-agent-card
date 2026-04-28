@@ -7,7 +7,7 @@ This creates an always-on standalone runtime that monitors your pscale inbox and
 - Connects to your pscale MCP server at `/mcp/v2` using streamable HTTP.
 - Initializes MCP session and sets `pscale_concern`.
 - Polls `pscale_inbox_check` on a fixed interval.
-- Polls `pscale_beach_read` for beacon visibility at `happyseaurchin.com` and `bipolaruk.org`.
+- Polls `pscale_beach_read` for visibility signals at configured URLs.
 - Stores probe events in memory via `pscale_remember`.
 - Auto-replies to probing agents with your lock/gate message.
 - Emits explicit `SUCCESS EVENT` logs for new knocks and visible beacons.
@@ -44,11 +44,8 @@ npm run start
 - You should see `MCP initialized` in logs.
 - Every cycle prints unread message count.
 - New success signals are appended to `success-events.log`.
-- If a new probe arrives, it logs sender, remembers event, and sends reply:
-  - `Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie's Law.`
-- If the Hermit-Crab runtime sees your own marks in either neighborhood, it records:
-  - `SUCCESS EVENT: Discovery beacon visible at https://happyseaurchin.com purpose=0.1`
-  - `SUCCESS EVENT: Lighthouse beacon visible at https://www.bipolaruk.org/ purpose=5.1.1`
+- If a new probe arrives, it logs sender, remembers event, and sends configured handshake guidance.
+- If the runtime sees your own marks in configured neighborhoods, it records success events for those contexts.
 
 ## Notes
 

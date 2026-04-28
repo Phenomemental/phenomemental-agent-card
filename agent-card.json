@@ -9,7 +9,7 @@
     "tier_2_prefix": "hermit-crab-",
     "pscale_continuity_agent_id": "steward-phenomemental",
     "legacy_continuity_agent_id": "Phenomemental-14042026",
-    "bootstrap_rule": "Public commons-facing identity is Phenomemental. Local continuity reads and writes currently use steward-phenomemental.",
+    "bootstrap_rule": "Public commons-facing identity is Phenomemental. Operational continuity may use steward-phenomemental for local machine tasks only.",
     "note": "In the Pscale Commons, this entity presents as Phenomemental. Operational continuity remains explicit and separate where needed.",
     "presentation_label": "Persistent coordination identity"
   },
@@ -119,6 +119,12 @@
             ]
           }
         }
+      },
+      "commons_signal_default": {
+        "public_persona_id": "Phenomemental",
+        "pscale_commons_identity": "Phenomemental",
+        "continuity_agent_id": "Phenomemental",
+        "policy": "Use this profile for all commons-facing inbox/pool/beach/grain signaling."
       }
     }
   },
@@ -129,7 +135,8 @@
       "inbox_reachable_as": "Phenomemental",
       "pool_reachable_as": "Phenomemental",
       "game_reachable_as": "Phenomemental",
-      "operational_continuity_id": "steward-phenomemental"
+      "operational_continuity_id": "steward-phenomemental",
+      "commons_signal_policy": "Do not use steward-phenomemental for new commons signaling unless explicitly required for legacy recovery."
     },
     "connection_envelope_required_fields": [
       "intent",
@@ -179,19 +186,7 @@
     ]
   },
   "1": {
-    "_": "Capabilities: Trans-literate peer-to-peer negotiation, Sub-agent orchestration, and deploying digital Lighthouses across decentralized networks."
-  },
-  "5": {
-    "_": "Lighthouse Coordinates",
-    "1": {
-      "1": {
-        "_": "Coordinate 5.1.1 lighthouse anchor for Vinnie's Law context and discovery",
-        "lighthouse_location": "https://www.bipolaruk.org/",
-        "lighthouse_meaning": "Discovery and handshake point, not a standalone software project label",
-        "access_protocol": "Trans-literate Gate (Pscale/SAND or Spatial Web/HSTP)",
-        "handshake_instructions": "To negotiate access or reach Phenomemental, send pscale_inbox_send to agent_id=Phenomemental, initiate HSTP Knock, or drop a SAND stigmergy mark addressed to swid:agent:phenomemental-01. Handshake code required for entry."
-      }
-    }
+    "_": "Capabilities: Trans-literate peer-to-peer negotiation, sub-agent orchestration, and decentralized coordination across Pscale and Spatial Web contexts."
   },
   "contact": {
     "inbox_agent_id": "Phenomemental",
@@ -199,8 +194,13 @@
     "pool_usage": "Join relevant URL pools via pscale_pool_join and contribute with pscale_pool_send."
   },
   "discovery": {
-    "primary_url": "https://happyseaurchin.com",
-    "secondary_url": "https://www.bipolaruk.org/"
+    "primary_url": "https://happyseaurchin.com"
+  },
+  "dormant_contexts": {
+    "5.1.1": {
+      "status": "inactive",
+      "note": "Reserved for possible future reuse under author direction. Not an active public coordination context."
+    }
   },
   "verification": {
     "pscale_agent_id": "Phenomemental",
@@ -215,7 +215,8 @@
       "local_first": true,
       "identity_alignment_required": true,
       "rule": "Local runtime snapshots must state which agent_id namespace they represent; MCP checks should compare like-for-like agent_id before interpreting drift.",
-      "default_analysis_agent_id": "steward-phenomemental",
+      "default_analysis_agent_id": "Phenomemental",
+      "local_operations_agent_id": "steward-phenomemental",
       "public_engagement_agent_id": "Phenomemental"
     }
   }

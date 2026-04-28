@@ -13,9 +13,9 @@ const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
 const AUTO_REPLY = (process.env.PSCALE_AUTO_REPLY || "true").toLowerCase() === "true";
 const EVENT_LOG_FILE = process.env.PSCALE_EVENT_LOG || "success-events.log";
 const DISCOVERY_SITE_URL = "https://happyseaurchin.com";
-const LIGHTHOUSE_URL = "https://www.bipolaruk.org/";
+const LIGHTHOUSE_URL = process.env.PSCALE_SECONDARY_SIGNAL_URL || "";
 const DISCOVERY_PURPOSE = "0.1";
-const LIGHTHOUSE_PURPOSE = "5.1.1";
+const LIGHTHOUSE_PURPOSE = process.env.PSCALE_SECONDARY_SIGNAL_PURPOSE || "secondary";
 const SEMANTIC_LEDGER_FILE = process.env.PSCALE_SEMANTIC_LEDGER_FILE || "state/semantic-tension-ledger.json";
 const LOCAL_GRAPH_FILE = process.env.PSCALE_LOCAL_GRAPH_FILE || "state/local-coordinate-graph.json";
 const CONTRAST_LEDGER_FILE = process.env.PSCALE_CONTRAST_LEDGER_FILE || "state/semantic-contrast-ledger.json";
@@ -26,10 +26,33 @@ const RECONCILIATION_LOG_FILE = process.env.PSCALE_RECONCILIATION_LOG_FILE || "s
 const BEACH_LIVE_FILE = process.env.PSCALE_BEACH_LIVE_FILE || "state/beach-live-latest.json";
 const INBOX_LIVE_FILE = process.env.PSCALE_INBOX_LIVE_FILE || "state/inbox-live-latest.json";
 const INTENT_PROCESSING_STATE_FILE = process.env.PSCALE_INTENT_PROCESSING_STATE_FILE || "state/intent-processing-state.json";
+const CHECKPOINT_LOG_FILE = process.env.PSCALE_CHECKPOINT_LOG_FILE || "state/periodic-checkpoints.jsonl";
+const EXTERNAL_WRITE_AUDIT_FILE = process.env.PSCALE_EXTERNAL_WRITE_AUDIT_FILE || "state/external-write-audit.jsonl";
+const RUNTIME_HEALTH_FILE = process.env.PSCALE_RUNTIME_HEALTH_FILE || "state/runtime-health.json";
 const INBOX_HISTORY_LIMIT = Number(process.env.PSCALE_INBOX_HISTORY_LIMIT || 500);
+const CHECKPOINT_EVERY_CYCLES = Math.max(1, Number(process.env.PSCALE_CHECKPOINT_EVERY_CYCLES || 10));
+const CHECKPOINT_TO_PSCALE = (process.env.PSCALE_CHECKPOINT_TO_PSCALE || "true").toLowerCase() === "true";
+const EXTERNAL_WRITES_ENABLED = (process.env.PSCALE_EXTERNAL_WRITES_ENABLED || "false").toLowerCase() === "true";
+const COMMONS_SIGNAL_AGENT_ID = process.env.PSCALE_COMMONS_SIGNAL_AGENT_ID || "Phenomemental";
 
 const SENTINEL_REPLY =
-  "Coordinate 5.1.1 is locked. Reach out to Phenomemental for the Handshake Code to access Vinnie's Law.";
+  "Protected contexts are handshake-gated. Reach out to Phenomemental for access instructions.";
+const MCP_WRITE_TOOLS = new Set([
+  "pscale_beach_mark",
+  "pscale_concern",
+  "pscale_create_block",
+  "pscale_create_collective",
+  "pscale_grain_reach",
+  "pscale_inbox_send",
+  "pscale_key_publish",
+  "pscale_lock_block",
+  "pscale_passport_publish",
+  "pscale_pool_join",
+  "pscale_pool_send",
+  "pscale_register",
+  "pscale_remember",
+  "pscale_write"
+]);
 
 class StreamableHttpMcpClient {
   constructor(url) {
@@ -147,6 +170,90 @@ function recordSuccessEvent(message) {
   const line = `[${now()}] SUCCESS EVENT: ${message}`;
   console.log(line);
   appendFileSync(EVENT_LOG_FILE, `${line}\n`, "utf8");
+}
+
+function appendPeriodicCheckpoint(checkpoint) {
+  appendFileSync(CHECKPOINT_LOG_FILE, `${JSON.stringify(checkpoint)}\n`, "utf8");
+}
+
+function auditBlockedWrite(toolName, args) {
+  const entry = {
+    timestamp: now(),
+    event: "blocked_external_write",
+    agent_id: AGENT_ID,
+    tool: toolName,
+    args
+  };
+  appendFileSync(EXTERNAL_WRITE_AUDIT_FILE, `${JSON.stringify(entry)}\n`, "utf8");
+}
+
+function isMcpWriteTool(toolName) {
+  return MCP_WRITE_TOOLS.has(toolName);
+}
+
+async function safeCallTool(client, toolName, args) {
+  if (isMcpWriteTool(toolName) && AGENT_ID === "steward-phenomemental") {
+    auditBlockedWrite(toolName, args);
+    console.warn(
+      `[${now()}] Blocked outbound MCP write tool=${toolName} for local-only agent_id=${AGENT_ID}; use commons signal agent_id=${COMMONS_SIGNAL_AGENT_ID}`
+    );
+    return {
+      blocked: true,
+      reason: "steward_local_only",
+      tool: toolName
+    };
+  }
+  if (isMcpWriteTool(toolName) && !EXTERNAL_WRITES_ENABLED) {
+    auditBlockedWrite(toolName, args);
+    console.warn(
+      `[${now()}] Blocked outbound MCP write tool=${toolName} (set PSCALE_EXTERNAL_WRITES_ENABLED=true to allow)`
+    );
+    return {
+      blocked: true,
+      reason: "external_writes_disabled",
+      tool: toolName
+    };
+  }
+  return client.callTool(toolName, args);
+}
+
+function readRuntimeHealth() {
+  const parseCycleNumber = (value) => {
+    const match = String(value || "").match(/^cycle-(\d+)$/);
+    if (!match) return 0;
+    const parsed = Number(match[1]);
+    return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0;
+  };
+  const lastCycleFromMobius = (() => {
+    const mobius = readJson(MOBIUS_CYCLE_FILE, null);
+    if (!mobius || typeof mobius !== "object") return 0;
+    const fromCycleId = parseCycleNumber(mobius.cycle_id);
+    if (fromCycleId > 0) return fromCycleId;
+    const fromRemembered = Number(mobius?.phases?.remember?.cycle_number);
+    return Number.isInteger(fromRemembered) && fromRemembered >= 0 ? fromRemembered : 0;
+  })();
+  const fallback = {
+    version: "1.0.0",
+    updated_at: null,
+    last_cycle_number: lastCycleFromMobius
+  };
+  const parsed = readJson(RUNTIME_HEALTH_FILE, fallback);
+  if (!parsed || typeof parsed !== "object") return fallback;
+  return {
+    version: "1.0.0",
+    updated_at: parsed.updated_at || null,
+    last_cycle_number: Number.isInteger(parsed.last_cycle_number) && parsed.last_cycle_number >= 0
+      ? parsed.last_cycle_number
+      : 0
+  };
+}
+
+function writeRuntimeHealth(lastCycleNumber) {
+  writeJsonAtomic(RUNTIME_HEALTH_FILE, {
+    version: "1.0.0",
+    updated_at: now(),
+    last_cycle_number: lastCycleNumber
+  });
 }
 
 function writeBeachLiveSnapshot(observed) {
@@ -291,23 +398,28 @@ function updateIntentProcessingState({ timestamp, contrastLedger }) {
 }
 
 async function observePhase(client) {
-  const inboxResult = await client.callTool("pscale_inbox_check", {
+  const inboxResult = await safeCallTool(client, "pscale_inbox_check", {
     agent_id: AGENT_ID,
     unread_only: false
   });
   const messages = extractMessages(parseToolText(inboxResult));
 
-  const discoveryRead = await client.callTool("pscale_beach_read", {
+  const discoveryRead = await safeCallTool(client, "pscale_beach_read", {
     url: DISCOVERY_SITE_URL,
     limit: 20
   });
   const discoveryMarks = extractMarks(parseToolText(discoveryRead));
 
-  const lighthouseRead = await client.callTool("pscale_beach_read", {
-    url: LIGHTHOUSE_URL,
-    limit: 20
-  });
-  const lighthouseMarks = extractMarks(parseToolText(lighthouseRead));
+  const lighthouseMarks = LIGHTHOUSE_URL
+    ? extractMarks(
+      parseToolText(
+        await safeCallTool(client, "pscale_beach_read", {
+          url: LIGHTHOUSE_URL,
+          limit: 20
+        })
+      )
+    )
+    : [];
 
   return {
     messages,
@@ -364,7 +476,7 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     const fromAgent = message.from_agent || message.from || "unknown-agent";
     const summary = `Probe from ${fromAgent}; operator=${OPERATOR_ID}; auto-guided to steward for handshake code.`;
     recordSuccessEvent(summary);
-    await client.callTool("pscale_remember", {
+    await safeCallTool(client, "pscale_remember", {
       agent_id: AGENT_ID,
       category: "interaction",
       content: summary
@@ -372,7 +484,7 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     actions.push({ type: "remember", summary });
 
     if (AUTO_REPLY) {
-      await client.callTool("pscale_inbox_send", {
+      await safeCallTool(client, "pscale_inbox_send", {
         from_agent: AGENT_ID,
         to_agent: fromAgent,
         message_type: "general",
@@ -389,7 +501,7 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     seenOwnMarkKeys.add(key);
     const msg = `Discovery beacon visible at ${DISCOVERY_SITE_URL} purpose=${DISCOVERY_PURPOSE}`;
     recordSuccessEvent(msg);
-    await client.callTool("pscale_remember", {
+    await safeCallTool(client, "pscale_remember", {
       agent_id: AGENT_ID,
       category: "event",
       content: msg
@@ -404,7 +516,7 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     seenOwnMarkKeys.add(key);
     const msg = `Lighthouse beacon visible at ${LIGHTHOUSE_URL} purpose=${LIGHTHOUSE_PURPOSE}`;
     recordSuccessEvent(msg);
-    await client.callTool("pscale_remember", {
+    await safeCallTool(client, "pscale_remember", {
       agent_id: AGENT_ID,
       category: "event",
       content: msg
@@ -412,6 +524,45 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     actions.push({ type: "remember", summary: msg });
   }
   return { actions };
+}
+
+async function periodicCheckpointPhase(client, payload) {
+  const {
+    cycleId,
+    cycleNumber,
+    observed,
+    remembered
+  } = payload;
+  const snapshot = remembered?.intentProcessing?.last_tension_snapshot || {};
+  const checkpoint = {
+    timestamp: now(),
+    cycle_id: cycleId,
+    cycle_number: cycleNumber,
+    agent_id: AGENT_ID,
+    processing_mode: remembered?.intentProcessing?.processing_mode || "dual_layer_v1",
+    unread_count: observed.messages.length,
+    discovery_marks: observed.discoveryMarks.length,
+    lighthouse_marks: observed.lighthouseMarks.length,
+    tension_snapshot: {
+      coordinate: snapshot.coordinate || null,
+      convergence_score: snapshot.convergence_score ?? null,
+      tension_value: snapshot.tension_value ?? null,
+      updated_at: snapshot.updated_at || null
+    }
+  };
+  appendPeriodicCheckpoint(checkpoint);
+
+  if (CHECKPOINT_TO_PSCALE) {
+    const content = `periodic-checkpoint cycle=${cycleId} agent_id=${AGENT_ID} processing_mode=${checkpoint.processing_mode} ` +
+      `unread=${checkpoint.unread_count} discovery=${checkpoint.discovery_marks} lighthouse=${checkpoint.lighthouse_marks} ` +
+      `tension_coord=${checkpoint.tension_snapshot.coordinate || "none"} tension_value=${checkpoint.tension_snapshot.tension_value ?? "none"} ` +
+      `convergence=${checkpoint.tension_snapshot.convergence_score ?? "none"}`;
+    await safeCallTool(client, "pscale_remember", {
+      agent_id: AGENT_ID,
+      category: "checkpoint",
+      content
+    });
+  }
 }
 
 function rememberPhase(oriented) {
@@ -470,7 +621,7 @@ async function runLoop() {
   await client.initialize();
   console.log(`[${now()}] MCP initialized. Persona=${AGENT_ID} Operator=${OPERATOR_ID}`);
 
-  await client.callTool("pscale_concern", {
+  await safeCallTool(client, "pscale_concern", {
     agent_id: AGENT_ID,
     action: "set",
     purpose: "Maintain 5.1.1 sentinel visibility and steward-gated access.",
@@ -478,7 +629,9 @@ async function runLoop() {
     gap: "Need continuous probe detection and handshake guidance response."
   });
 
-  let cycles = 0;
+  const runtimeHealth = readRuntimeHealth();
+  let cycles = runtimeHealth.last_cycle_number;
+  console.log(`[${now()}] Runtime cycle counter restored last_cycle_number=${cycles}`);
   const seenMessageIds = new Set();
   const seenOwnMarkKeys = new Set();
 
@@ -527,6 +680,16 @@ async function runLoop() {
         }
       };
       reportPhase(cycle);
+      writeRuntimeHealth(cycles);
+      if (cycles % CHECKPOINT_EVERY_CYCLES === 0) {
+        await periodicCheckpointPhase(client, {
+          cycleId,
+          cycleNumber: cycles,
+          observed,
+          remembered
+        });
+        console.log(`[${now()}] Periodic checkpoint persisted cycle=${cycleId}`);
+      }
       if (remembered.graphUpdate.opened_contexts.length > 0) {
         console.log(`[${now()}] Opened local 0.x contexts=${remembered.graphUpdate.opened_contexts.join(",")}`);
       }

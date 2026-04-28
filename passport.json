@@ -13,17 +13,6 @@
     "pscale_commons": ["SAND/1.0", "Grain Synthesis"]
   },
   "1": {
-    "_": "Capabilities: Trans-literate peer-to-peer negotiation, Sub-agent orchestration, and deploying digital Lighthouses across decentralized networks."
-  },
-  "5": {
-    "_": "Active Lighthouses & Beacons",
-    "1": {
-      "1": {
-        "_": "Project: 5th-place-bipolar (Vinnie's Law)",
-        "lighthouse_location": "https://www.bipolaruk.org/",
-        "access_protocol": "Trans-literate Gate (Pscale/SAND or Spatial Web/HSTP)",
-        "handshake_instructions": "This is a Sovereign Vault. To negotiate access or reach the Steward, locate this Beacon and initiate an HSTP Knock, or drop a SAND Stigmergy mark on the public Beach addressed to my SWID. Handshake code required for entry."
-      }
-    }
+    "_": "Capabilities: Trans-literate peer-to-peer negotiation, sub-agent orchestration, and decentralized coordination across Pscale and Spatial Web contexts."
   }
 }
