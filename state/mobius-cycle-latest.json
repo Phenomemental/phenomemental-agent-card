@@ -1,6 +1,6 @@
 {
-  "cycle_id": "cycle-307",
-  "timestamp": "2026-04-28T16:39:32.607Z",
+  "cycle_id": "cycle-473",
+  "timestamp": "2026-04-28T18:03:27.068Z",
   "phases": {
     "observe": {
       "unread_count": 0,
@@ -26,12 +26,18 @@
       "actions": []
     },
     "remember": {
-      "semantic_coordinates": 5,
+      "semantic_coordinates": 4,
       "local_context_opened": [],
       "contrast_contexts": 1,
+      "place_time_coordinates": 1,
+      "place_time_file": "state/place-time-continuity-ledger.json",
+      "continuity_dashboard_file": "state/steward-continuity-dashboard.json",
+      "continuity_primary_focus": "stable_presence",
+      "confluence_score_local": 0.49,
+      "confluence_status": "scaffold_mismatch",
       "processing_mode": "dual_layer_v1",
       "tension_snapshot_coordinate": "0.1",
-      "tension_snapshot_value": 0.858
+      "tension_snapshot_value": 0.405
     },
     "report": {
       "cycle_file": "state/mobius-cycle-latest.json",
@@ -40,7 +46,7 @@
   },
   "fidelity": {
     "version": "1.0.0",
-    "updated_at": "2026-04-28T16:39:32.607Z",
+    "updated_at": "2026-04-28T18:03:27.097Z",
     "all_pass": true,
     "gates": {
       "coordinate_semantics": true,

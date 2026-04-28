@@ -1,7 +1,8 @@
-import { appendFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { buildRemoteSnapshot, updateSemanticTensionLedger } from "./semantic-tension-engine.mjs";
 import { updateLocalCoordinateGraph } from "./local-coordinate-engine.mjs";
 import { updateContrastLedger } from "./tension-contrast-engine.mjs";
+import { updatePlaceTimeLedger } from "./place-time-engine.mjs";
 import { readJson, writeJsonAtomic } from "./state-io.mjs";
 import { evaluateFidelityGates } from "./fidelity-gates.mjs";
 import { recordReconciliationEvent } from "./reconciliation-engine.mjs";
@@ -29,11 +30,15 @@ const INTENT_PROCESSING_STATE_FILE = process.env.PSCALE_INTENT_PROCESSING_STATE_
 const CHECKPOINT_LOG_FILE = process.env.PSCALE_CHECKPOINT_LOG_FILE || "state/periodic-checkpoints.jsonl";
 const EXTERNAL_WRITE_AUDIT_FILE = process.env.PSCALE_EXTERNAL_WRITE_AUDIT_FILE || "state/external-write-audit.jsonl";
 const RUNTIME_HEALTH_FILE = process.env.PSCALE_RUNTIME_HEALTH_FILE || "state/runtime-health.json";
+const PLACE_TIME_LEDGER_FILE = process.env.PSCALE_PLACE_TIME_LEDGER_FILE || "state/place-time-continuity-ledger.json";
+const CONTINUITY_DASHBOARD_FILE = process.env.PSCALE_CONTINUITY_DASHBOARD_FILE || "state/steward-continuity-dashboard.json";
 const INBOX_HISTORY_LIMIT = Number(process.env.PSCALE_INBOX_HISTORY_LIMIT || 500);
 const CHECKPOINT_EVERY_CYCLES = Math.max(1, Number(process.env.PSCALE_CHECKPOINT_EVERY_CYCLES || 10));
 const CHECKPOINT_TO_PSCALE = (process.env.PSCALE_CHECKPOINT_TO_PSCALE || "true").toLowerCase() === "true";
 const EXTERNAL_WRITES_ENABLED = (process.env.PSCALE_EXTERNAL_WRITES_ENABLED || "false").toLowerCase() === "true";
 const COMMONS_SIGNAL_AGENT_ID = process.env.PSCALE_COMMONS_SIGNAL_AGENT_ID || "Phenomemental";
+const WRITER_LOCK_FILE = process.env.PSCALE_WRITER_LOCK_FILE || "state/runtime-writer.lock.json";
+const WRITER_LOCK_STALE_MS = Math.max(POLL_MS * 3, 90000);
 
 const SENTINEL_REPLY =
   "Protected contexts are handshake-gated. Reach out to Phenomemental for access instructions.";
@@ -173,7 +178,85 @@ function recordSuccessEvent(message) {
 }
 
 function appendPeriodicCheckpoint(checkpoint) {
-  appendFileSync(CHECKPOINT_LOG_FILE, `${JSON.stringify(checkpoint)}\n`, "utf8");
+  const existingLines = existsSync(CHECKPOINT_LOG_FILE)
+    ? readFileSync(CHECKPOINT_LOG_FILE, "utf8")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : [];
+  const filtered = [];
+  for (const line of existingLines) {
+    const parsed = safeJsonParse(line);
+    if (parsed?.cycle_id === checkpoint.cycle_id) continue;
+    filtered.push(line);
+  }
+  filtered.push(JSON.stringify(checkpoint));
+  const payload = filtered.join("\n");
+  writeFileSync(CHECKPOINT_LOG_FILE, payload.length > 0 ? `${payload}\n` : "", "utf8");
+}
+
+function lockPayload() {
+  return {
+    agent_id: AGENT_ID,
+    pid: process.pid,
+    acquired_at: now(),
+    heartbeat_at: now(),
+    poll_ms: POLL_MS
+  };
+}
+
+function isPidAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function readWriterLock() {
+  if (!existsSync(WRITER_LOCK_FILE)) return null;
+  const parsed = safeJsonParse(readFileSync(WRITER_LOCK_FILE, "utf8"));
+  return parsed && typeof parsed === "object" ? parsed : null;
+}
+
+function writeWriterLock(payload) {
+  writeFileSync(WRITER_LOCK_FILE, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
+function acquireWriterLock() {
+  const current = readWriterLock();
+  if (!current) {
+    writeWriterLock(lockPayload());
+    return;
+  }
+  const heartbeatAt = Date.parse(current.heartbeat_at || current.acquired_at || "");
+  const stale = Number.isNaN(heartbeatAt) || (Date.now() - heartbeatAt) > WRITER_LOCK_STALE_MS;
+  const alive = isPidAlive(Number(current.pid));
+  if (!stale && alive && Number(current.pid) !== process.pid) {
+    throw new Error(
+      `writer lock held by pid=${current.pid} agent_id=${current.agent_id || "unknown"} heartbeat_at=${current.heartbeat_at || "unknown"}`
+    );
+  }
+  writeWriterLock(lockPayload());
+}
+
+function heartbeatWriterLock() {
+  const current = readWriterLock();
+  if (!current || Number(current.pid) !== process.pid) {
+    throw new Error("writer lock ownership lost; refusing to continue writes");
+  }
+  current.heartbeat_at = now();
+  current.agent_id = AGENT_ID;
+  writeWriterLock(current);
+}
+
+function releaseWriterLock() {
+  const current = readWriterLock();
+  if (!current) return;
+  if (Number(current.pid) !== process.pid) return;
+  unlinkSync(WRITER_LOCK_FILE);
 }
 
 function auditBlockedWrite(toolName, args) {
@@ -339,7 +422,10 @@ function extractLatestTensionSnapshot(contrastLedger, timestamp) {
     const candidate = {
       coordinate,
       convergence_score: entry?.convergence_score ?? null,
-      tension_value: entry?.overall_tension ?? null,
+      tension_value: entry?.system_tension ?? entry?.overall_tension ?? null,
+      local_confluence_tension: entry?.local_confluence_tension ?? null,
+      cross_domain_tension: entry?.cross_domain_tension ?? null,
+      local_state: entry?.local_state || null,
       updated_at: entry?.last_updated || timestamp,
       notes: "Latest contrast context from Mobius remember phase."
     };
@@ -649,9 +735,18 @@ function rememberPhase(oriented) {
     graph: graphUpdate.graph,
     remoteSnapshot: oriented.remoteSnapshot
   });
+  const placeTime = updatePlaceTimeLedger({
+    placeTimePath: PLACE_TIME_LEDGER_FILE,
+    dashboardPath: CONTINUITY_DASHBOARD_FILE,
+    timestamp,
+    cycleId: oriented.cycleId,
+    graph: graphUpdate.graph,
+    contrastLedger: contrast,
+    cycle: oriented.cycle
+  });
   const localConfluence = evaluateLocalConfluence(graphUpdate);
   const intentProcessing = updateIntentProcessingState({ timestamp, contrastLedger: contrast });
-  return { semantic, graphUpdate, contrast, localConfluence, intentProcessing };
+  return { semantic, graphUpdate, contrast, placeTime, localConfluence, intentProcessing };
 }
 
 function reportPhase(cycle) {
@@ -682,6 +777,17 @@ function reportPhase(cycle) {
 }
 
 async function runLoop() {
+  acquireWriterLock();
+  process.on("exit", releaseWriterLock);
+  process.on("SIGINT", () => {
+    releaseWriterLock();
+    process.exit(130);
+  });
+  process.on("SIGTERM", () => {
+    releaseWriterLock();
+    process.exit(143);
+  });
+
   const client = new StreamableHttpMcpClient(MCP_URL);
   console.log(`[${now()}] Connecting to ${MCP_URL}`);
   await client.initialize();
@@ -710,9 +816,6 @@ async function runLoop() {
       writeInboxLiveSnapshot(observed);
       console.log(`[${now()}] Poll #${cycles} unread=${observed.messages.length}`);
       const oriented = orientPhase(observed, cycleId);
-      const acted = await actPhase(client, observed, seenMessageIds, seenOwnMarkKeys);
-      const remembered = rememberPhase(oriented);
-
       const cycle = {
         cycle_id: cycleId,
         timestamp: now(),
@@ -728,27 +831,43 @@ async function runLoop() {
             contrasted_coordinates: Object.keys(oriented.remoteSnapshot)
           },
           act: {
-            action_count: acted.actions.length,
-            actions: acted.actions
+            action_count: 0,
+            actions: []
           },
-          remember: {
-            semantic_coordinates: Object.keys(remembered.semantic.coordinates || {}).length,
-            local_context_opened: remembered.graphUpdate.opened_contexts,
-            contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length,
-            confluence_score_local: remembered.localConfluence?.confluence_score_local ?? null,
-            confluence_status: remembered.localConfluence?.status || "unknown",
-            processing_mode: remembered.intentProcessing.processing_mode,
-            tension_snapshot_coordinate: remembered.intentProcessing?.last_tension_snapshot?.coordinate || null,
-            tension_snapshot_value: remembered.intentProcessing?.last_tension_snapshot?.tension_value ?? null
-          },
+          remember: {},
           report: {
             cycle_file: MOBIUS_CYCLE_FILE,
             fidelity_file: FIDELITY_STATUS_FILE
           }
         }
       };
+      oriented.cycleId = cycleId;
+      oriented.cycle = cycle;
+      const acted = await actPhase(client, observed, seenMessageIds, seenOwnMarkKeys);
+      const remembered = rememberPhase(oriented);
+      cycle.phases.act = {
+        action_count: acted.actions.length,
+        actions: acted.actions
+      };
+      const placeTimeCoordinateCount = Object.keys(remembered.placeTime?.ledger?.coordinate_presence || {}).length;
+      const dashboardSummary = remembered.placeTime?.dashboard?.summary || {};
+      cycle.phases.remember = {
+        semantic_coordinates: Object.keys(remembered.semantic.coordinates || {}).length,
+        local_context_opened: remembered.graphUpdate.opened_contexts,
+        contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length,
+        place_time_coordinates: placeTimeCoordinateCount,
+        place_time_file: PLACE_TIME_LEDGER_FILE,
+        continuity_dashboard_file: CONTINUITY_DASHBOARD_FILE,
+        continuity_primary_focus: dashboardSummary.primary_focus || "unknown",
+        confluence_score_local: remembered.localConfluence?.confluence_score_local ?? null,
+        confluence_status: remembered.localConfluence?.status || "unknown",
+        processing_mode: remembered.intentProcessing.processing_mode,
+        tension_snapshot_coordinate: remembered.intentProcessing?.last_tension_snapshot?.coordinate || null,
+        tension_snapshot_value: remembered.intentProcessing?.last_tension_snapshot?.tension_value ?? null
+      };
       reportPhase(cycle);
       writeRuntimeHealth(cycles);
+      heartbeatWriterLock();
       if (cycles % CHECKPOINT_EVERY_CYCLES === 0) {
         await periodicCheckpointPhase(client, {
           cycleId,

@@ -1,0 +1,89 @@
+{
+  "version": "1.1.0",
+  "updated_at": "2026-04-28T18:03:27.068Z",
+  "cycle_id": "cycle-473",
+  "summary": {
+    "total_coordinates": 1,
+    "stable_presence_count": 1,
+    "evolving_presence_count": 0,
+    "drift_risk_count": 0,
+    "primary_focus": "stable_presence"
+  },
+  "actionable_focus": {
+    "primary_focus": "stable_presence",
+    "primary_guidance": {
+      "focus": "Protect coherence and convert stability into durable capability.",
+      "what_it_means": "Your Place-Time moments are consistently integrated. The system recognizes a coherent identity and meaning spine across cycles.",
+      "why_it_matters": "Stability is not the end-state; it is a platform. You can now expand capability without losing coherence if you change one controlled variable at a time.",
+      "actions": [
+        "Lock the current anchor as a reference pattern (example: treat this exact anchor text as your baseline and compare all future variants against it).",
+        "Add one bounded experimental extension and monitor for drift (example: add a new sub-context like 0.2 for a specific ambition while keeping 0.1 unchanged for 3 cycles).",
+        "Document why this context is stable so it can be reused (example: note that stability came from explicit blue/red pairing + consistent identity wording + gradual updates)."
+      ]
+    },
+    "class_guidance": {
+      "drift_risk": {
+        "focus": "Rebuild semantic bridge before adding new commitments.",
+        "what_it_means": "Your recent Place-Time moments are not connecting cleanly. The system sees abrupt meaning jumps with weak continuity, so it cannot tell if this is growth or fragmentation.",
+        "why_it_matters": "If unresolved, this becomes narrative drift: future decisions feel disconnected from prior intent, and trust in the semantic spine drops.",
+        "actions": [
+          "Write one explicit bridge sentence connecting previous and current meaning (example: 'Yesterday I framed this as X; today I frame it as Y because evidence Z changed the context.').",
+          "Reduce claim scope for one cycle and anchor to direct blue evidence (example: replace 'I will transform this system' with 'I will stabilize coordinate 0.1 and verify continuity over 3 cycles').",
+          "Validate continuity by checking transition_status over the next 3 cycles; you are looking for movement from rupture/tension_shift to integrated_shift."
+        ]
+      },
+      "evolving_presence": {
+        "focus": "Stabilize sameness while preserving useful variation.",
+        "what_it_means": "The system is learning and adapting, but coherence is not fully settled yet. This is healthy motion, but it still needs deliberate shaping.",
+        "why_it_matters": "This is the best stage for calibration: small improvements compound quickly if you keep the semantic spine stable while testing new moves.",
+        "actions": [
+          "Keep anchor wording stable for 3-5 cycles unless evidence changes (example: keep core phrase 'sovereign local identity...' fixed while refining one clause at a time).",
+          "Track sameness_focus_terms and add missing core terms deliberately (example: if 'identity' or 'sovereignty' drops out, reintroduce it explicitly in the next anchor revision).",
+          "Prefer reversible harmonization moves over large semantic jumps (example: one bounded patch and one cycle check, not a full semantic rewrite)."
+        ]
+      },
+      "stable_presence": {
+        "focus": "Protect coherence and convert stability into durable capability.",
+        "what_it_means": "Your Place-Time moments are consistently integrated. The system recognizes a coherent identity and meaning spine across cycles.",
+        "why_it_matters": "Stability is not the end-state; it is a platform. You can now expand capability without losing coherence if you change one controlled variable at a time.",
+        "actions": [
+          "Lock the current anchor as a reference pattern (example: treat this exact anchor text as your baseline and compare all future variants against it).",
+          "Add one bounded experimental extension and monitor for drift (example: add a new sub-context like 0.2 for a specific ambition while keeping 0.1 unchanged for 3 cycles).",
+          "Document why this context is stable so it can be reused (example: note that stability came from explicit blue/red pairing + consistent identity wording + gradual updates)."
+        ]
+      }
+    }
+  },
+  "focus_coordinates": {
+    "drift_risk": [],
+    "evolving_presence": [],
+    "stable_presence": [
+      "0.1"
+    ]
+  },
+  "coordinates": [
+    {
+      "coordinate": "0.1",
+      "remote_coordinate": "0.1.discovery",
+      "continuity_class": "stable_presence",
+      "integrated_ratio": 1,
+      "rupture_ratio": 0,
+      "avg_moment_confluence": 0.595,
+      "avg_tension": 0.405,
+      "latest_cycle_id": "cycle-473",
+      "latest_transition_status": "integrated_shift",
+      "latest_moment_confluence": 0.595,
+      "latest_tension_value": 0.405,
+      "latest_sameness_focus_terms": [
+        "sovereign",
+        "local",
+        "identity",
+        "context",
+        "for",
+        "phenomemental",
+        "signal",
+        "sovereignty"
+      ]
+    }
+  ]
+}

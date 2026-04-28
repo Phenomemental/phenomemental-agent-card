@@ -58,6 +58,13 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 - open [http://localhost:8080/inbox-visualizer.html](http://localhost:8080/inbox-visualizer.html)
 - click `Start Live Mode` to poll `state/inbox-live-latest.json` every 3 seconds
 
+## Steward Continuity Dashboard (HTML)
+
+- open `steward-continuity-visualizer.html` to view continuity classes and focus coordinates
+- runtime writes `state/steward-continuity-dashboard.json` each cycle
+- open [http://localhost:8080/steward-continuity-visualizer.html](http://localhost:8080/steward-continuity-visualizer.html)
+- click `Start Live Mode` to poll the dashboard every 3 seconds
+
 ## Compatibility pointers
 
 Some root-level files are retained as lightweight pointers to canonical paths in `docs/` and `archive/` so older links do not break.

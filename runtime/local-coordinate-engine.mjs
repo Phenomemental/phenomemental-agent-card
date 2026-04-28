@@ -123,7 +123,21 @@ function openZeroXContext(graph, timestamp, candidate) {
   return address;
 }
 
-function normalizeContextNode(node, timestamp) {
+function canonicalDiscoveryAnchorV11({ agentId, actor, purpose }) {
+  return (
+    `Sovereign local identity context for ${agentId}: discovery signal from ${actor} at purpose ${purpose}; ` +
+    "local sovereignty bridges with MCP observations without forced collapse; " +
+    "difference is meaningful signal, and sameness and tension both carry value in the included middle."
+  );
+}
+
+function inferIdentityFromShell(coordinates) {
+  const shellIdentity = coordinates?.["shell.identity"]?._ || "";
+  const match = String(shellIdentity).match(/for\s+(.+)$/i);
+  return match?.[1]?.trim() || "Phenomemental";
+}
+
+function normalizeContextNode(node, timestamp, identityLabel) {
   if (!node || node?._meta?.kind !== "context") return node;
   const links = Array.isArray(node._meta.links) ? [...node._meta.links] : [];
   for (const required of ["shell.identity", "shell.bridge", "shell.doctrine.included_middle"]) {
@@ -132,19 +146,21 @@ function normalizeContextNode(node, timestamp) {
   node._meta.links = links;
   if (!node._meta.tension_intent) node._meta.tension_intent = "unknown";
 
-  // Local confluence v1: keep discovery anchors semantically aligned with bridge + doctrine wording.
+  // Local confluence v1.1: enforce canonical phrasing with identity + bridge + doctrine terms.
   if (node?._meta?.source_fingerprint?.startsWith("discovery:")) {
     const actor = node?._meta?.source_fingerprint?.split(":")[1] || "unknown-agent";
     const purpose = node?._meta?.source_fingerprint?.split(":")[2] || "unknown-purpose";
-    const normalized =
-      `Discovery signal from ${actor} at purpose ${purpose}; bridge to action without forced collapse, ` +
-      "difference retained as meaningful included-middle signal.";
+    const normalized = canonicalDiscoveryAnchorV11({
+      agentId: identityLabel,
+      actor,
+      purpose
+    });
     if (node._ !== normalized) {
       node._ = normalized;
       node._history = Array.isArray(node._history) ? node._history : [];
       node._history.push({
         timestamp,
-        event: "harmonized_anchor_v1",
+        event: "harmonized_anchor_v1_1",
         _: normalized
       });
     }
@@ -171,8 +187,9 @@ export function updateLocalCoordinateGraph({
     if (!graph.coordinates[address]) graph.coordinates[address] = node;
   }
 
+  const identityLabel = inferIdentityFromShell(graph.coordinates);
   for (const [address, node] of Object.entries(graph.coordinates)) {
-    graph.coordinates[address] = normalizeContextNode(node, timestamp);
+    graph.coordinates[address] = normalizeContextNode(node, timestamp, identityLabel);
   }
 
   const opened = [];

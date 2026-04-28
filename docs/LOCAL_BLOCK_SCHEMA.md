@@ -1,6 +1,7 @@
 # Local Block Schema
 
 This schema defines the sovereign local state format in pscale-like block form.
+Version note: runtime now emits `v1.1.0` semantics for Place-Time continuity tracing.
 
 ## Core Rule
 
@@ -49,6 +50,84 @@ File: `state/semantic-contrast-ledger.json`
   - `temporal_tension`
   - `overall_tension`
   - `convergence_score`
+
+## 4) Place-Time Continuity Ledger (v1.1)
+
+File: `state/place-time-continuity-ledger.json`
+
+- Coordinate-native continuity tracing for Included-Middle meaning work.
+- Stores per-cycle Place-Time moments for each local `0.x` context:
+  - `blue_observation` (what happened)
+  - `red_interpretation` (what it means)
+  - `moment_confluence`
+  - `transition_status` (`integrated_shift` | `tension_shift` | `rupture`)
+  - `sameness_focus_terms` (shared semantic spine terms)
+
+```json
+{
+  "version": "1.1.0",
+  "updated_at": "ISO-8601",
+  "coordinate_presence": {
+    "0.1": {
+      "coordinate": "0.1",
+      "remote_coordinate": "0.1.discovery",
+      "latest_place_time": {
+        "cycle_id": "cycle-390",
+        "timestamp": "ISO-8601",
+        "blue_observation": "Observed unread=0 ...",
+        "red_interpretation": "Meaning anchor at 0.1: ...",
+        "moment_confluence": 0.55,
+        "tension_value": 0.45,
+        "transition_status": "integrated_shift",
+        "transition_similarity": 0.74,
+        "continuity_signal": 0.56,
+        "sameness_focus_terms": ["sovereign", "identity", "difference"]
+      },
+      "history": []
+    }
+  }
+}
+```
+
+## 5) Steward Continuity Dashboard (v1.1)
+
+File: `state/steward-continuity-dashboard.json`
+
+- Compact stewardship view over recent Place-Time windows.
+- Classifies each `0.x` coordinate into:
+  - `stable_presence`
+  - `evolving_presence`
+  - `drift_risk`
+- Focuses on sameness trajectory quality, not only difference.
+
+```json
+{
+  "version": "1.1.0",
+  "updated_at": "ISO-8601",
+  "cycle_id": "cycle-440",
+  "summary": {
+    "total_coordinates": 1,
+    "stable_presence_count": 0,
+    "evolving_presence_count": 1,
+    "drift_risk_count": 0,
+    "primary_focus": "evolving_presence"
+  },
+  "actionable_focus": {
+    "primary_focus": "evolving_presence",
+    "primary_guidance": {
+      "focus": "Stabilize sameness while preserving useful variation.",
+      "actions": []
+    },
+    "class_guidance": {}
+  },
+  "focus_coordinates": {
+    "drift_risk": [],
+    "evolving_presence": ["0.1"],
+    "stable_presence": []
+  },
+  "coordinates": []
+}
+```
 
 ## Invariants
 

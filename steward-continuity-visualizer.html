@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Steward Continuity Dashboard</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f1220;
+        --panel: #171b2e;
+        --border: #2a335a;
+        --text: #ecf0ff;
+        --muted: #a5b2dc;
+        --ok: #5ee6a8;
+        --warn: #ffd37a;
+        --risk: #ff8f8f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      main {
+        max-width: 1120px;
+        margin: 24px auto;
+        padding: 0 16px 24px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+      .hint { color: var(--muted); font-size: 12px; }
+      .error { color: #ff9a9a; min-height: 18px; margin-top: 8px; }
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 8px 0 6px;
+      }
+      textarea, button {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #11162a;
+        color: var(--text);
+        padding: 10px;
+        font: inherit;
+      }
+      textarea { min-height: 180px; resize: vertical; }
+      .actions { display: flex; gap: 10px; margin-top: 10px; }
+      .actions button { width: auto; cursor: pointer; }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .stat {
+        background: #121834;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .k { color: var(--muted); font-size: 12px; }
+      .v { font-size: 20px; margin-top: 4px; }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th, td {
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        padding: 8px 6px;
+        vertical-align: top;
+      }
+      th { color: var(--muted); }
+      .chip {
+        display: inline-block;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 12px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+      }
+      .stable { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 40%, var(--border)); }
+      .evolving { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--border)); }
+      .risk { color: var(--risk); border-color: color-mix(in srgb, var(--risk) 40%, var(--border)); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Steward Continuity Dashboard</h1>
+      <p class="hint">Live mode reads <code>state/steward-continuity-dashboard.json</code>.</p>
+
+      <section class="card">
+        <label for="jsonInput">Dashboard JSON</label>
+        <textarea id="jsonInput" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="renderBtn" type="button">Render</button>
+          <button id="loadBtn" type="button">Load Current Snapshot</button>
+          <button id="liveBtn" type="button">Start Live Mode</button>
+          <button id="stopLiveBtn" type="button">Stop Live Mode</button>
+        </div>
+        <p class="hint" id="liveStatus">Live mode: OFF</p>
+        <div class="error" id="error"></div>
+      </section>
+
+      <section class="card">
+        <h2>Snapshot</h2>
+        <div class="stats">
+          <div class="stat"><div class="k">Cycle</div><div class="v" id="statCycle">-</div></div>
+          <div class="stat"><div class="k">Primary Focus</div><div class="v" id="statFocus">-</div></div>
+          <div class="stat"><div class="k">Stable</div><div class="v" id="statStable">0</div></div>
+          <div class="stat"><div class="k">Evolving</div><div class="v" id="statEvolving">0</div></div>
+          <div class="stat"><div class="k">Drift Risk</div><div class="v" id="statRisk">0</div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Coordinate Continuity</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Coordinate</th>
+              <th>Class</th>
+              <th>Integrated / Rupture</th>
+              <th>Confluence / Tension</th>
+              <th>Sameness Focus Terms</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Actionable Focus</h2>
+        <p class="hint" id="focusText">No guidance loaded.</p>
+        <p class="hint" id="focusMeaning"></p>
+        <p class="hint" id="focusWhy"></p>
+        <ul id="focusActions"></ul>
+      </section>
+    </main>
+
+    <script>
+      const els = {
+        jsonInput: document.getElementById("jsonInput"),
+        liveStatus: document.getElementById("liveStatus"),
+        error: document.getElementById("error"),
+        statCycle: document.getElementById("statCycle"),
+        statFocus: document.getElementById("statFocus"),
+        statStable: document.getElementById("statStable"),
+        statEvolving: document.getElementById("statEvolving"),
+        statRisk: document.getElementById("statRisk"),
+        rows: document.getElementById("rows"),
+        focusText: document.getElementById("focusText"),
+        focusMeaning: document.getElementById("focusMeaning"),
+        focusWhy: document.getElementById("focusWhy"),
+        focusActions: document.getElementById("focusActions")
+      };
+      let liveTimer = null;
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function classChip(value) {
+        if (value === "stable_presence") return '<span class="chip stable">stable_presence</span>';
+        if (value === "evolving_presence") return '<span class="chip evolving">evolving_presence</span>';
+        if (value === "drift_risk") return '<span class="chip risk">drift_risk</span>';
+        return '<span class="chip">' + escapeHtml(value || "unknown") + "</span>";
+      }
+
+      function render(payload) {
+        const summary = payload?.summary || {};
+        const coordinates = Array.isArray(payload?.coordinates) ? payload.coordinates : [];
+        const actionable = payload?.actionable_focus || {};
+        const primaryGuidance = actionable?.primary_guidance || null;
+
+        els.statCycle.textContent = String(payload?.cycle_id || "-");
+        els.statFocus.innerHTML = classChip(summary?.primary_focus);
+        els.statStable.textContent = String(summary?.stable_presence_count ?? 0);
+        els.statEvolving.textContent = String(summary?.evolving_presence_count ?? 0);
+        els.statRisk.textContent = String(summary?.drift_risk_count ?? 0);
+
+        els.rows.innerHTML = "";
+        for (const row of coordinates) {
+          const tr = document.createElement("tr");
+          const terms = Array.isArray(row?.latest_sameness_focus_terms) ? row.latest_sameness_focus_terms : [];
+          tr.innerHTML =
+            "<td>" + escapeHtml(row.coordinate || "-") + "</td>" +
+            "<td>" + classChip(row.continuity_class) + "</td>" +
+            "<td>" + escapeHtml((row.integrated_ratio ?? "-") + " / " + (row.rupture_ratio ?? "-")) + "</td>" +
+            "<td>" + escapeHtml((row.avg_moment_confluence ?? "-") + " / " + (row.avg_tension ?? "-")) + "</td>" +
+            "<td>" + escapeHtml(terms.join(", ")) + "</td>";
+          els.rows.appendChild(tr);
+        }
+
+        els.focusActions.innerHTML = "";
+        if (primaryGuidance && Array.isArray(primaryGuidance.actions)) {
+          els.focusText.textContent = primaryGuidance.focus || "Focus guidance available.";
+          els.focusMeaning.textContent = primaryGuidance.what_it_means || "";
+          els.focusWhy.textContent = primaryGuidance.why_it_matters || "";
+          for (const action of primaryGuidance.actions) {
+            const li = document.createElement("li");
+            li.textContent = action;
+            els.focusActions.appendChild(li);
+          }
+        } else {
+          els.focusText.textContent = "No actionable guidance in this snapshot.";
+          els.focusMeaning.textContent = "";
+          els.focusWhy.textContent = "";
+        }
+      }
+
+      function parseAndRender() {
+        els.error.textContent = "";
+        try {
+          const raw = els.jsonInput.value.trim();
+          if (!raw) throw new Error("Paste dashboard JSON first.");
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed?.coordinates)) throw new Error("Invalid format: expected `coordinates` array.");
+          render(parsed);
+        } catch (error) {
+          els.error.textContent = error.message || "Unable to render dashboard.";
+        }
+      }
+
+      async function fetchLive() {
+        const response = await fetch("state/steward-continuity-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) throw new Error("Live dashboard unavailable. Start runtime + local server.");
+        const parsed = await response.json();
+        render(parsed);
+        els.jsonInput.value = JSON.stringify(parsed, null, 2);
+        els.liveStatus.textContent = "Live mode: ON (polling every 3s)";
+      }
+
+      async function loadCurrentSnapshot() {
+        els.error.textContent = "";
+        try {
+          const response = await fetch("state/steward-continuity-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
+          if (!response.ok) throw new Error("Current dashboard unavailable.");
+          const parsed = await response.json();
+          render(parsed);
+          els.jsonInput.value = JSON.stringify(parsed, null, 2);
+        } catch (error) {
+          els.error.textContent = error.message || "Unable to load current snapshot.";
+        }
+      }
+
+      function startLive() {
+        if (liveTimer) return;
+        fetchLive().catch((error) => { els.error.textContent = error.message || "Live fetch failed."; });
+        liveTimer = setInterval(() => {
+          fetchLive().catch((error) => { els.error.textContent = error.message || "Live fetch failed."; });
+        }, 3000);
+      }
+
+      function stopLive() {
+        if (liveTimer) clearInterval(liveTimer);
+        liveTimer = null;
+        els.liveStatus.textContent = "Live mode: OFF";
+      }
+
+      document.getElementById("renderBtn").addEventListener("click", parseAndRender);
+      document.getElementById("loadBtn").addEventListener("click", loadCurrentSnapshot);
+      document.getElementById("liveBtn").addEventListener("click", startLive);
+      document.getElementById("stopLiveBtn").addEventListener("click", stopLive);
+      loadCurrentSnapshot();
+    </script>
+  </body>
+</html>

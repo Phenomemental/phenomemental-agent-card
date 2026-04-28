@@ -120,27 +120,6 @@ export function updateSemanticTensionLedger({
 }) {
   const ledger = readLedger(statePath);
   const coordinates = ledger.coordinates || {};
-  // Legacy migration: purge historical "lighthouse" coordinate naming.
-  if (coordinates["5.1.1.lighthouse"]) {
-    const legacy = coordinates["5.1.1.lighthouse"];
-    const current = coordinates["5.1.1.signal_site"] || null;
-    if (!current) {
-      coordinates["5.1.1.signal_site"] = {
-        ...legacy,
-        _meta: {
-          ...(legacy?._meta || {}),
-          address: "5.1.1.signal_site"
-        }
-      };
-    } else if (Array.isArray(legacy?._history)) {
-      current._history = Array.isArray(current._history) ? current._history : [];
-      current._history.push(...legacy._history);
-      if (current._history.length > HISTORY_LIMIT) {
-        current._history = current._history.slice(current._history.length - HISTORY_LIMIT);
-      }
-    }
-    delete coordinates["5.1.1.lighthouse"];
-  }
 
   for (const [coordinate, remoteNode] of Object.entries(remoteSnapshot)) {
     const source = coordinates[coordinate] || {};
