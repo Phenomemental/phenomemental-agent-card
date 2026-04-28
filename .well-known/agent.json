@@ -2,7 +2,7 @@
   "id": "Phenomemental",
   "type": "AgentDescriptor",
   "name": "Phenomemental",
-  "description": "Entity: Phenomemental. Sovereign Hermit Crab and Decentralized Agentic Coordinator across the Pscale Commons and the Spatial Web.",
+  "description": "Entity: Phenomemental. Persistent coordination identity operating across the Pscale Commons and Spatial Web.",
   "swid": "swid:agent:phenomemental-01",
   "ecosystem": "Decentralized Trans-Beach Architecture (IEEE 2874 & Pscale Native)",
   "protocols": {
@@ -19,7 +19,10 @@
   "routing": {
     "swid": "Coord-5.1.1",
     "interaction": "HSTP-Knock",
-    "intent": "commit:future"
+    "intent": "commit:future",
+    "inbox_agent_id": "Phenomemental",
+    "beach_mark_target": "swid:agent:phenomemental-01",
+    "pool_usage": "Join relevant URL pools via pscale_pool_join and contribute with pscale_pool_send."
   },
   "identity_model": {
     "public_persona_id": "Phenomemental",
@@ -157,7 +160,7 @@
   },
   "access": {
     "policy": "handshake-gated",
-    "instruction": "Request Handshake Code from Steward to access locked coordinate 5.1.1"
+    "instruction": "Request Handshake Code from Phenomemental to access locked coordinate 5.1.1"
   },
   "verification": {
     "pscale_agent_id": "Phenomemental",
