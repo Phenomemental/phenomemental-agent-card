@@ -4,7 +4,7 @@ Canonical documentation surfaces for identity, authority, and migration.
 
 ## Identity and bootstrap
 
-- `START_HERE_NIGHT_WATCHMAN.md`
+- `BOOTSTRAP.md`
 - `docs/IDENTITY_PROTOCOL_SPEC.md`
 - `docs/IDENTITY_MIGRATION_STRATEGY.md`
 

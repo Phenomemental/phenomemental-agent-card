@@ -15,7 +15,7 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 
 ## Bootstrap and identity
 
-- `START_HERE_NIGHT_WATCHMAN.md` contains deterministic bootstrap and reporting template
+- `BOOTSTRAP.md` contains deterministic bootstrap and reporting template
 - `agent-card.json` and `.well-known/agent.json` define canonical identity and channel contracts
 
 ## Runtime
