@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-28T12:43:14.608Z",
+  "updated_at": "2026-04-28T16:39:32.586Z",
   "contexts": {
     "0.1": {
       "history": [
         {
-          "timestamp": "2026-04-28T12:35:29.577Z",
+          "timestamp": "2026-04-28T16:15:44.192Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -13,7 +13,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:35:29.602Z",
+          "timestamp": "2026-04-28T16:15:53.298Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -21,7 +21,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:35:29.943Z",
+          "timestamp": "2026-04-28T16:16:11.564Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -29,7 +29,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:35:30.142Z",
+          "timestamp": "2026-04-28T16:16:14.890Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -37,7 +37,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:00.577Z",
+          "timestamp": "2026-04-28T16:16:23.847Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -45,7 +45,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:00.630Z",
+          "timestamp": "2026-04-28T16:16:42.496Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -53,7 +53,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:00.806Z",
+          "timestamp": "2026-04-28T16:16:45.600Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -61,7 +61,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:31.452Z",
+          "timestamp": "2026-04-28T16:16:54.437Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -69,7 +69,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:31.468Z",
+          "timestamp": "2026-04-28T16:17:13.553Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -77,7 +77,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:36:31.491Z",
+          "timestamp": "2026-04-28T16:17:16.544Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -85,7 +85,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:37:02.281Z",
+          "timestamp": "2026-04-28T16:17:24.980Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -93,7 +93,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:37:02.321Z",
+          "timestamp": "2026-04-28T16:18:34.596Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -101,7 +101,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:37:02.346Z",
+          "timestamp": "2026-04-28T16:19:05.204Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -109,7 +109,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:37:33.108Z",
+          "timestamp": "2026-04-28T16:19:36.057Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -117,7 +117,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:37:33.115Z",
+          "timestamp": "2026-04-28T16:20:06.702Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -125,7 +125,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:38:04.241Z",
+          "timestamp": "2026-04-28T16:20:37.440Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -133,7 +133,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:38:04.249Z",
+          "timestamp": "2026-04-28T16:22:36.820Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -141,7 +141,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:38:04.288Z",
+          "timestamp": "2026-04-28T16:23:07.466Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -149,7 +149,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:38:35.311Z",
+          "timestamp": "2026-04-28T16:23:38.236Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -157,7 +157,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:38:35.350Z",
+          "timestamp": "2026-04-28T16:24:08.806Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -165,7 +165,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:39:06.403Z",
+          "timestamp": "2026-04-28T16:24:39.505Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -173,7 +173,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:39:06.418Z",
+          "timestamp": "2026-04-28T16:25:10.080Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -181,7 +181,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:39:06.656Z",
+          "timestamp": "2026-04-28T16:25:40.783Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -189,7 +189,7 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:39:37.226Z",
+          "timestamp": "2026-04-28T16:26:11.408Z",
           "local_internal_tension": 0.955,
           "local_remote_tension": 0.889,
           "temporal_tension": 0,
@@ -197,222 +197,222 @@
           "convergence_score": 0.259
         },
         {
-          "timestamp": "2026-04-28T12:39:37.246Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:26:42.475Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:39:37.262Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:27:13.186Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:08.165Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:27:43.892Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:08.171Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:28:14.484Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:08.216Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:28:45.827Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:08.241Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:29:16.428Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:39.117Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:29:47.233Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:39.097Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:30:17.848Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:39.120Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:30:48.868Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:40:39.146Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:31:19.510Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:10.007Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:31:50.453Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:10.024Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:32:21.033Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:10.019Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:32:52.097Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:41.262Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:33:22.741Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:41.279Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:33:53.682Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:41.378Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:34:24.300Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:41:41.926Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:34:55.208Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:12.080Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:35:25.823Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:12.091Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:35:56.555Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:12.646Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:36:27.152Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:42.896Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:36:57.849Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:42.938Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:37:28.498Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:42:43.336Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:37:59.230Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:43:14.554Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:38:30.941Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:43:14.574Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:39:01.899Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         },
         {
-          "timestamp": "2026-04-28T12:43:14.608Z",
-          "local_internal_tension": 0.955,
-          "local_remote_tension": 0.889,
-          "temporal_tension": 0,
-          "overall_tension": 0.741,
-          "convergence_score": 0.259
+          "timestamp": "2026-04-28T16:39:32.586Z",
+          "local_internal_tension": 0.868,
+          "local_remote_tension": 0.9,
+          "temporal_tension": 0.762,
+          "overall_tension": 0.858,
+          "convergence_score": 0.142
         }
       ],
-      "local_anchor": "Discovery context from happyseaurchin at purpose 5.1.1.",
+      "local_anchor": "Discovery signal from happyseaurchin at purpose 5.1.1; bridge to action without forced collapse, difference retained as meaningful included-middle signal.",
       "remote_coordinate": "0.1.discovery",
-      "local_internal_tension": 0.955,
-      "local_remote_tension": 0.889,
-      "temporal_tension": 0,
-      "overall_tension": 0.741,
-      "convergence_score": 0.259,
-      "last_updated": "2026-04-28T12:43:14.608Z"
+      "local_internal_tension": 0.868,
+      "local_remote_tension": 0.9,
+      "temporal_tension": 0.762,
+      "overall_tension": 0.858,
+      "convergence_score": 0.142,
+      "last_updated": "2026-04-28T16:39:32.586Z"
     }
   }
 }

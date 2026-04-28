@@ -1,11 +1,11 @@
 {
-  "cycle_id": "cycle-148",
-  "timestamp": "2026-04-28T12:43:14.619Z",
+  "cycle_id": "cycle-307",
+  "timestamp": "2026-04-28T16:39:32.607Z",
   "phases": {
     "observe": {
       "unread_count": 0,
       "discovery_marks": 20,
-      "lighthouse_marks": 0,
+      "signal_site_marks": 0,
       "mcp_reads": [
         "pscale_inbox_check",
         "pscale_beach_read",
@@ -17,7 +17,7 @@
       "contrasted_coordinates": [
         "0.inbox",
         "0.1.discovery",
-        "5.1.1.lighthouse",
+        "5.1.1.signal_site",
         "identity.agent"
       ]
     },
@@ -26,9 +26,12 @@
       "actions": []
     },
     "remember": {
-      "semantic_coordinates": 4,
+      "semantic_coordinates": 5,
       "local_context_opened": [],
-      "contrast_contexts": 1
+      "contrast_contexts": 1,
+      "processing_mode": "dual_layer_v1",
+      "tension_snapshot_coordinate": "0.1",
+      "tension_snapshot_value": 0.858
     },
     "report": {
       "cycle_file": "state/mobius-cycle-latest.json",
@@ -37,7 +40,7 @@
   },
   "fidelity": {
     "version": "1.0.0",
-    "updated_at": "2026-04-28T12:43:14.619Z",
+    "updated_at": "2026-04-28T16:39:32.607Z",
     "all_pass": true,
     "gates": {
       "coordinate_semantics": true,

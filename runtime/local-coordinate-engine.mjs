@@ -88,14 +88,14 @@ function deriveContextCandidates(agentId, remoteSnapshot) {
     });
   }
 
-  const lighthouse = remoteSnapshot["5.1.1.lighthouse"];
-  if (lighthouse && Number(lighthouse.signal_count || 0) > 0 && String(lighthouse.latest_actor) !== String(agentId)) {
-    const actor = lighthouse.latest_actor || "unknown-agent";
-    const purpose = lighthouse.latest_type || "unknown-purpose";
+  const signalSite = remoteSnapshot["5.1.1.signal_site"];
+  if (signalSite && Number(signalSite.signal_count || 0) > 0 && String(signalSite.latest_actor) !== String(agentId)) {
+    const actor = signalSite.latest_actor || "unknown-agent";
+    const purpose = signalSite.latest_type || "unknown-purpose";
     candidates.push({
-      source_fingerprint: `lighthouse:${actor}:${purpose}`,
-      remote_coordinate: "5.1.1.lighthouse",
-      anchor: `Lighthouse context from ${actor} at purpose ${purpose}.`
+      source_fingerprint: `signal_site:${actor}:${purpose}`,
+      remote_coordinate: "5.1.1.signal_site",
+      anchor: `Signal-site context from ${actor} at purpose ${purpose}.`
     });
   }
 
@@ -109,9 +109,10 @@ function openZeroXContext(graph, timestamp, candidate) {
     _meta: {
       address,
       kind: "context",
-      links: ["shell.identity", "shell.doctrine.included_middle"],
+      links: ["shell.identity", "shell.bridge", "shell.doctrine.included_middle"],
       remote_coordinate: candidate.remote_coordinate,
       source_fingerprint: candidate.source_fingerprint,
+      tension_intent: "unknown",
       opened_at: timestamp,
       updated_at: timestamp
     },
@@ -120,6 +121,36 @@ function openZeroXContext(graph, timestamp, candidate) {
     ]
   };
   return address;
+}
+
+function normalizeContextNode(node, timestamp) {
+  if (!node || node?._meta?.kind !== "context") return node;
+  const links = Array.isArray(node._meta.links) ? [...node._meta.links] : [];
+  for (const required of ["shell.identity", "shell.bridge", "shell.doctrine.included_middle"]) {
+    if (!links.includes(required)) links.push(required);
+  }
+  node._meta.links = links;
+  if (!node._meta.tension_intent) node._meta.tension_intent = "unknown";
+
+  // Local confluence v1: keep discovery anchors semantically aligned with bridge + doctrine wording.
+  if (node?._meta?.source_fingerprint?.startsWith("discovery:")) {
+    const actor = node?._meta?.source_fingerprint?.split(":")[1] || "unknown-agent";
+    const purpose = node?._meta?.source_fingerprint?.split(":")[2] || "unknown-purpose";
+    const normalized =
+      `Discovery signal from ${actor} at purpose ${purpose}; bridge to action without forced collapse, ` +
+      "difference retained as meaningful included-middle signal.";
+    if (node._ !== normalized) {
+      node._ = normalized;
+      node._history = Array.isArray(node._history) ? node._history : [];
+      node._history.push({
+        timestamp,
+        event: "harmonized_anchor_v1",
+        _: normalized
+      });
+    }
+  }
+  node._meta.updated_at = timestamp;
+  return node;
 }
 
 export function updateLocalCoordinateGraph({
@@ -138,6 +169,10 @@ export function updateLocalCoordinateGraph({
 
   for (const [address, node] of Object.entries(fallback.coordinates)) {
     if (!graph.coordinates[address]) graph.coordinates[address] = node;
+  }
+
+  for (const [address, node] of Object.entries(graph.coordinates)) {
+    graph.coordinates[address] = normalizeContextNode(node, timestamp);
   }
 
   const opened = [];

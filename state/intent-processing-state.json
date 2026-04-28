@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated_at": null,
+  "updated_at": "2026-04-28T16:39:32.586Z",
   "processing_mode": "dual_layer_v1",
   "governance": {
     "safety_logic": "excluded_middle",
@@ -13,9 +13,11 @@
     }
   },
   "last_tension_snapshot": {
-    "convergence_score": null,
-    "tension_value": null,
-    "notes": "No snapshot recorded yet."
+    "coordinate": "0.1",
+    "convergence_score": 0.142,
+    "tension_value": 0.858,
+    "updated_at": "2026-04-28T16:39:32.586Z",
+    "notes": "Latest contrast context from Mobius remember phase."
   },
   "intent_reference": {
     "record_path": "docs/SOVEREIGN_INTENT_RECORD.md",

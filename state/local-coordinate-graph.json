@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-28T12:43:14.608Z",
+  "updated_at": "2026-04-28T16:39:32.586Z",
   "coordinates": {
     "shell.identity": {
       "_": "Sovereign local identity context for Phenomemental",
@@ -58,18 +58,20 @@
       ]
     },
     "0.1": {
-      "_": "Discovery context from happyseaurchin at purpose 5.1.1.",
+      "_": "Discovery signal from happyseaurchin at purpose 5.1.1; bridge to action without forced collapse, difference retained as meaningful included-middle signal.",
       "_meta": {
         "address": "0.1",
         "kind": "context",
         "links": [
           "shell.identity",
+          "shell.bridge",
           "shell.doctrine.included_middle"
         ],
         "remote_coordinate": "0.1.discovery",
         "source_fingerprint": "discovery:happyseaurchin:5.1.1",
+        "tension_intent": "intentional",
         "opened_at": "2026-04-28T11:37:44.441Z",
-        "updated_at": "2026-04-28T11:37:44.441Z"
+        "updated_at": "2026-04-28T16:26:30.000Z"
       },
       "_history": [
         {
@@ -77,6 +79,11 @@
           "event": "opened",
           "_": "Discovery context from happyseaurchin at purpose 5.1.1.",
           "source_fingerprint": "discovery:happyseaurchin:5.1.1"
+        },
+        {
+          "timestamp": "2026-04-28T16:26:30.000Z",
+          "event": "harmonized_anchor_v1",
+          "_": "Discovery signal from happyseaurchin at purpose 5.1.1; bridge to action without forced collapse, difference retained as meaningful included-middle signal."
         }
       ]
     }

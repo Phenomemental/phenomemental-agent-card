@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-28T12:43:14.604Z",
-  "cycle_id": "cycle-148",
+  "updated_at": "2026-04-28T16:39:32.584Z",
+  "cycle_id": "cycle-307",
   "traces": [
     {
       "step": "observe_inbox_context",
@@ -22,13 +22,13 @@
       "outcome": "discovery_marks=20"
     },
     {
-      "step": "observe_lighthouse_context",
+      "step": "observe_signal_site_context",
       "coordinate_path": [
         "shell.bridge",
-        "5.1.1.lighthouse"
+        "5.1.1.signal_site"
       ],
-      "rationale": "Contrast bridge anchor with lighthouse signal coordinate.",
-      "outcome": "lighthouse_marks=0"
+      "rationale": "Contrast bridge anchor with signal-site coordinate.",
+      "outcome": "signal_site_marks=0"
     }
   ]
 }

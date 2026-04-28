@@ -13,9 +13,9 @@ const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
 const AUTO_REPLY = (process.env.PSCALE_AUTO_REPLY || "true").toLowerCase() === "true";
 const EVENT_LOG_FILE = process.env.PSCALE_EVENT_LOG || "success-events.log";
 const DISCOVERY_SITE_URL = "https://happyseaurchin.com";
-const LIGHTHOUSE_URL = process.env.PSCALE_SECONDARY_SIGNAL_URL || "";
+const SIGNAL_SITE_URL = process.env.PSCALE_SECONDARY_SIGNAL_URL || "";
 const DISCOVERY_PURPOSE = "0.1";
-const LIGHTHOUSE_PURPOSE = process.env.PSCALE_SECONDARY_SIGNAL_PURPOSE || "secondary";
+const SIGNAL_SITE_PURPOSE = process.env.PSCALE_SECONDARY_SIGNAL_PURPOSE || "secondary";
 const SEMANTIC_LEDGER_FILE = process.env.PSCALE_SEMANTIC_LEDGER_FILE || "state/semantic-tension-ledger.json";
 const LOCAL_GRAPH_FILE = process.env.PSCALE_LOCAL_GRAPH_FILE || "state/local-coordinate-graph.json";
 const CONTRAST_LEDGER_FILE = process.env.PSCALE_CONTRAST_LEDGER_FILE || "state/semantic-contrast-ledger.json";
@@ -397,6 +397,71 @@ function updateIntentProcessingState({ timestamp, contrastLedger }) {
   return state;
 }
 
+function tokenizeForConfluence(text) {
+  return new Set(
+    String(text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s:_-]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean)
+  );
+}
+
+function similarityScore(aText, bText) {
+  const a = tokenizeForConfluence(aText);
+  const b = tokenizeForConfluence(bText);
+  const union = new Set([...a, ...b]);
+  if (union.size === 0) return 1;
+  let intersect = 0;
+  for (const token of a) {
+    if (b.has(token)) intersect += 1;
+  }
+  return Number((intersect / union.size).toFixed(3));
+}
+
+function evaluateLocalConfluence(graphUpdate) {
+  const graph = graphUpdate?.graph || {};
+  const coordinates = graph.coordinates || {};
+  const doctrine = coordinates["shell.doctrine.included_middle"]?._ || "";
+  const bridge = coordinates["shell.bridge"]?._ || "";
+  const contexts = Object.entries(coordinates).filter(([address, node]) =>
+    address.startsWith("0.") && node?._meta?.kind === "context"
+  );
+  if (contexts.length === 0) {
+    return {
+      context_count: 0,
+      average_similarity: null,
+      link_integrity_ratio: null,
+      confluence_score_local: null,
+      status: "no_contexts"
+    };
+  }
+
+  let simTotal = 0;
+  let linkHits = 0;
+  const requiredLinks = ["shell.identity", "shell.bridge", "shell.doctrine.included_middle"];
+  for (const [, node] of contexts) {
+    const localAnchor = node?._ || "";
+    const simDoctrine = similarityScore(localAnchor, doctrine);
+    const simBridge = similarityScore(localAnchor, bridge);
+    simTotal += (simDoctrine + simBridge) / 2;
+
+    const links = Array.isArray(node?._meta?.links) ? node._meta.links : [];
+    const hasAll = requiredLinks.every((link) => links.includes(link));
+    if (hasAll) linkHits += 1;
+  }
+  const averageSimilarity = Number((simTotal / contexts.length).toFixed(3));
+  const linkIntegrityRatio = Number((linkHits / contexts.length).toFixed(3));
+  const confluenceScoreLocal = Number(((averageSimilarity * 0.7) + (linkIntegrityRatio * 0.3)).toFixed(3));
+  return {
+    context_count: contexts.length,
+    average_similarity: averageSimilarity,
+    link_integrity_ratio: linkIntegrityRatio,
+    confluence_score_local: confluenceScoreLocal,
+    status: confluenceScoreLocal >= 0.65 ? "functional_confluence" : "scaffold_mismatch"
+  };
+}
+
 async function observePhase(client) {
   const inboxResult = await safeCallTool(client, "pscale_inbox_check", {
     agent_id: AGENT_ID,
@@ -410,11 +475,11 @@ async function observePhase(client) {
   });
   const discoveryMarks = extractMarks(parseToolText(discoveryRead));
 
-  const lighthouseMarks = LIGHTHOUSE_URL
+  const signalSiteMarks = SIGNAL_SITE_URL
     ? extractMarks(
       parseToolText(
         await safeCallTool(client, "pscale_beach_read", {
-          url: LIGHTHOUSE_URL,
+          url: SIGNAL_SITE_URL,
           limit: 20
         })
       )
@@ -424,7 +489,7 @@ async function observePhase(client) {
   return {
     messages,
     discoveryMarks,
-    lighthouseMarks,
+    signalSiteMarks,
     mcp_reads: ["pscale_inbox_check", "pscale_beach_read", "pscale_beach_read"]
   };
 }
@@ -434,7 +499,7 @@ function orientPhase(observed, cycleId) {
     agentId: AGENT_ID,
     messages: observed.messages,
     discoveryMarks: observed.discoveryMarks,
-    lighthouseMarks: observed.lighthouseMarks
+    signalSiteMarks: observed.signalSiteMarks
   });
 
   const spindleTrace = {
@@ -455,10 +520,10 @@ function orientPhase(observed, cycleId) {
         outcome: `discovery_marks=${observed.discoveryMarks.length}`
       },
       {
-        step: "observe_lighthouse_context",
-        coordinate_path: ["shell.bridge", "5.1.1.lighthouse"],
-        rationale: "Contrast bridge anchor with lighthouse signal coordinate.",
-        outcome: `lighthouse_marks=${observed.lighthouseMarks.length}`
+        step: "observe_signal_site_context",
+        coordinate_path: ["shell.bridge", "5.1.1.signal_site"],
+        rationale: "Contrast bridge anchor with signal-site coordinate.",
+        outcome: `signal_site_marks=${observed.signalSiteMarks.length}`
       }
     ]
   };
@@ -509,12 +574,12 @@ async function actPhase(client, observed, seenMessageIds, seenOwnMarkKeys) {
     actions.push({ type: "remember", summary: msg });
   }
 
-  for (const mark of observed.lighthouseMarks) {
-    if (mark.agent_id !== AGENT_ID || mark.purpose !== LIGHTHOUSE_PURPOSE) continue;
-    const key = `lighthouse:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
+  for (const mark of observed.signalSiteMarks) {
+    if (mark.agent_id !== AGENT_ID || mark.purpose !== SIGNAL_SITE_PURPOSE) continue;
+    const key = `signal_site:${mark.agent_id}:${mark.purpose}:${mark.timestamp || "no-ts"}`;
     if (seenOwnMarkKeys.has(key)) continue;
     seenOwnMarkKeys.add(key);
-    const msg = `Lighthouse beacon visible at ${LIGHTHOUSE_URL} purpose=${LIGHTHOUSE_PURPOSE}`;
+    const msg = `Signal-site beacon visible at ${SIGNAL_SITE_URL} purpose=${SIGNAL_SITE_PURPOSE}`;
     recordSuccessEvent(msg);
     await safeCallTool(client, "pscale_remember", {
       agent_id: AGENT_ID,
@@ -542,7 +607,7 @@ async function periodicCheckpointPhase(client, payload) {
     processing_mode: remembered?.intentProcessing?.processing_mode || "dual_layer_v1",
     unread_count: observed.messages.length,
     discovery_marks: observed.discoveryMarks.length,
-    lighthouse_marks: observed.lighthouseMarks.length,
+    signal_site_marks: observed.signalSiteMarks.length,
     tension_snapshot: {
       coordinate: snapshot.coordinate || null,
       convergence_score: snapshot.convergence_score ?? null,
@@ -554,7 +619,7 @@ async function periodicCheckpointPhase(client, payload) {
 
   if (CHECKPOINT_TO_PSCALE) {
     const content = `periodic-checkpoint cycle=${cycleId} agent_id=${AGENT_ID} processing_mode=${checkpoint.processing_mode} ` +
-      `unread=${checkpoint.unread_count} discovery=${checkpoint.discovery_marks} lighthouse=${checkpoint.lighthouse_marks} ` +
+      `unread=${checkpoint.unread_count} discovery=${checkpoint.discovery_marks} signal_site=${checkpoint.signal_site_marks} ` +
       `tension_coord=${checkpoint.tension_snapshot.coordinate || "none"} tension_value=${checkpoint.tension_snapshot.tension_value ?? "none"} ` +
       `convergence=${checkpoint.tension_snapshot.convergence_score ?? "none"}`;
     await safeCallTool(client, "pscale_remember", {
@@ -584,8 +649,9 @@ function rememberPhase(oriented) {
     graph: graphUpdate.graph,
     remoteSnapshot: oriented.remoteSnapshot
   });
+  const localConfluence = evaluateLocalConfluence(graphUpdate);
   const intentProcessing = updateIntentProcessingState({ timestamp, contrastLedger: contrast });
-  return { semantic, graphUpdate, contrast, intentProcessing };
+  return { semantic, graphUpdate, contrast, localConfluence, intentProcessing };
 }
 
 function reportPhase(cycle) {
@@ -654,7 +720,7 @@ async function runLoop() {
           observe: {
             unread_count: observed.messages.length,
             discovery_marks: observed.discoveryMarks.length,
-            lighthouse_marks: observed.lighthouseMarks.length,
+            signal_site_marks: observed.signalSiteMarks.length,
             mcp_reads: observed.mcp_reads
           },
           orient: {
@@ -669,6 +735,8 @@ async function runLoop() {
             semantic_coordinates: Object.keys(remembered.semantic.coordinates || {}).length,
             local_context_opened: remembered.graphUpdate.opened_contexts,
             contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length,
+            confluence_score_local: remembered.localConfluence?.confluence_score_local ?? null,
+            confluence_status: remembered.localConfluence?.status || "unknown",
             processing_mode: remembered.intentProcessing.processing_mode,
             tension_snapshot_coordinate: remembered.intentProcessing?.last_tension_snapshot?.coordinate || null,
             tension_snapshot_value: remembered.intentProcessing?.last_tension_snapshot?.tension_value ?? null
