@@ -89,7 +89,7 @@ Inbox messages used for beach-to-collaboration handoff SHOULD include:
 All behavior in this spec is subordinate to:
 
 - `authority-policy.json`
-- `AUTHORITY_RUNBOOK.md`
+- `docs/AUTHORITY_RUNBOOK.md`
 
 On ambiguity:
 
