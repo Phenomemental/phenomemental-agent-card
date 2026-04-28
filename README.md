@@ -20,8 +20,8 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 
 ## Runtime
 
-- `npm run start` launches `runtime/hermitcrab-runtime.mjs`
-- runtime implementation currently loads `hermit-crab-sentinel.mjs`
+- `npm run start` launches `runtime/start.mjs`
+- runtime implementation currently loads `runtime/sentinel-loop.mjs`
 
 ## Compatibility pointers
 

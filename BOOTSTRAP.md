@@ -53,7 +53,7 @@ Bootstrap acceptance criteria (must be reported before proceeding):
 
 - Confirm branch and repo context.
 - Confirm policy files: `authority-policy.json`, `docs/AUTHORITY_RUNBOOK.md`.
-- Confirm runtime entrypoints: `runtime/hermitcrab-runtime.mjs` -> `hermit-crab-sentinel.mjs`.
+- Confirm runtime entrypoints: `runtime/start.mjs` -> `runtime/sentinel-loop.mjs`.
 - Confirm handshake posture: "Steward-gated, handshake required for protected access."
 - Ask Steward what to prioritize next.
 

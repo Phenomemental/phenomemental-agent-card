@@ -1,10 +1,10 @@
 # Runtime
 
-This folder is the runtime entrypoint surface for always-on Hermit-Crab behavior.
+This folder is the runtime entrypoint surface for always-on sentinel behavior.
 
 ## Entrypoint
 
-- `runtime/hermitcrab-runtime.mjs` -> loads `hermit-crab-sentinel.mjs`
+- `runtime/start.mjs` -> loads `runtime/sentinel-loop.mjs`
 
 ## Defaults
 
