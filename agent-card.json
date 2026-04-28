@@ -137,7 +137,34 @@
       "from_continuity_agent_id",
       "target_url",
       "next_step"
-    ]
+    ],
+    "pipeline": {
+      "summary": "Discovery typically flows beach -> inbox -> pool -> grain.",
+      "stages": [
+        {
+          "name": "beach",
+          "role": "Stigmergic discovery and intent marking at URL context."
+        },
+        {
+          "name": "inbox",
+          "role": "Directed async coordination and handshake preparation."
+        },
+        {
+          "name": "pool",
+          "role": "Co-present liquid coordination, rounds, and protocol iteration."
+        },
+        {
+          "name": "grain",
+          "role": "Durable bilateral commitment channel for routable trust."
+        }
+      ],
+      "grain_completion_criteria": [
+        "Both partners have written their own grain side via pscale_grain_reach.",
+        "Network view shows the partner under Active grains for the same agent_id namespace.",
+        "A grain address is routable for ongoing inbox/pool-adjacent exchange."
+      ],
+      "current_state_note": "As of 2026-04-28, grain with happyseaurchin is active under legacy alias phenomemental; public canonical identity remains Phenomemental."
+    }
   },
   "swid": "swid:agent:phenomemental-01",
   "ecosystem": "Decentralized Trans-Beach Architecture (IEEE 2874 & Pscale Native)",
@@ -183,6 +210,13 @@
     "bootstrap_required_queries": [
       "Genesis of US",
       "night-watchman-genesis"
-    ]
+    ],
+    "sync_policy": {
+      "local_first": true,
+      "identity_alignment_required": true,
+      "rule": "Local runtime snapshots must state which agent_id namespace they represent; MCP checks should compare like-for-like agent_id before interpreting drift.",
+      "default_analysis_agent_id": "steward-phenomemental",
+      "public_engagement_agent_id": "Phenomemental"
+    }
   }
 }

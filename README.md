@@ -28,6 +28,14 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 - `BOOTSTRAP.md` contains deterministic bootstrap and reporting template
 - `agent-card.json` and `.well-known/agent.json` define canonical identity and channel contracts
 
+## Pipeline and identity namespaces
+
+- Published coordination pipeline: `beach -> inbox -> pool -> grain`
+- Canonical public identity: `Phenomemental`
+- Operational continuity identity: `steward-phenomemental` (internal continuity/audit)
+- Legacy compatibility alias: `phenomemental`
+- Sync rule: compare local snapshots and MCP reads only within the same `agent_id` namespace before declaring drift
+
 ## Runtime
 
 - `npm run start` launches `runtime/start.mjs`
