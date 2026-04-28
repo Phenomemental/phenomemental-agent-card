@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "updated_at": null,
+  "processing_mode": "dual_layer_v1",
+  "governance": {
+    "safety_logic": "excluded_middle",
+    "meaning_logic": "included_middle_harmonization",
+    "numeric_signal_policy": {
+      "scores_are_advisory": true,
+      "allow_high_impact_autonomy_from_scores_only": false,
+      "require_blue_red_pairing_for_material_decisions": true,
+      "thresholds_trigger_review_not_auto_write": true
+    }
+  },
+  "last_tension_snapshot": {
+    "convergence_score": null,
+    "tension_value": null,
+    "notes": "No snapshot recorded yet."
+  },
+  "intent_reference": {
+    "record_path": "docs/SOVEREIGN_INTENT_RECORD.md",
+    "record_version": "1.1.0"
+  }
+}

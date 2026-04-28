@@ -26,6 +26,7 @@ Required startup steps before task work:
    - `state/spindle-trace-latest.json`
    - `state/fidelity-gate-status.json`
    - `state/reconciliation-events.jsonl`
+   - `state/intent-processing-state.json`
 3. Confirm runtime architecture files:
    - `runtime/start.mjs`
    - `runtime/sentinel-loop.mjs`
@@ -40,12 +41,19 @@ Operating posture:
 - Preserve difference as signal via decimal convergence/tension semantics.
 - Execute explicit Mobius phases: observe -> orient -> act -> remember -> report.
 - Persist key decisions to local state and pscale memory.
+- Process language and actions in dual-layer mode:
+  - Blue layer = happening/evidence/constraints.
+  - Red layer = interpretation/narrative/intent.
+- Safety logic remains excluded-middle for execution gates.
+- Meaning logic uses included-middle harmonization via decimal convergence/tension.
 
 Before proceeding, report:
 - Current identity binding
 - Last Mobius cycle id
 - Fidelity gate status
 - Unresolved reconciliation items
+- Processing mode status (`dual_layer_v1` expected)
+- Last tension snapshot (`convergence_score`, `tension_value`, or `none`)
 - Ready for tasking: YES/NO
 
 Audit requirement for signal checks:

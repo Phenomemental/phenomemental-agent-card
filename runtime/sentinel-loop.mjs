@@ -2,7 +2,7 @@ import { appendFileSync } from "node:fs";
 import { buildRemoteSnapshot, updateSemanticTensionLedger } from "./semantic-tension-engine.mjs";
 import { updateLocalCoordinateGraph } from "./local-coordinate-engine.mjs";
 import { updateContrastLedger } from "./tension-contrast-engine.mjs";
-import { writeJsonAtomic } from "./state-io.mjs";
+import { readJson, writeJsonAtomic } from "./state-io.mjs";
 import { evaluateFidelityGates } from "./fidelity-gates.mjs";
 import { recordReconciliationEvent } from "./reconciliation-engine.mjs";
 
@@ -23,6 +23,10 @@ const MOBIUS_CYCLE_FILE = process.env.PSCALE_MOBIUS_CYCLE_FILE || "state/mobius-
 const SPINDLE_TRACE_FILE = process.env.PSCALE_SPINDLE_TRACE_FILE || "state/spindle-trace-latest.json";
 const FIDELITY_STATUS_FILE = process.env.PSCALE_FIDELITY_STATUS_FILE || "state/fidelity-gate-status.json";
 const RECONCILIATION_LOG_FILE = process.env.PSCALE_RECONCILIATION_LOG_FILE || "state/reconciliation-events.jsonl";
+const BEACH_LIVE_FILE = process.env.PSCALE_BEACH_LIVE_FILE || "state/beach-live-latest.json";
+const INBOX_LIVE_FILE = process.env.PSCALE_INBOX_LIVE_FILE || "state/inbox-live-latest.json";
+const INTENT_PROCESSING_STATE_FILE = process.env.PSCALE_INTENT_PROCESSING_STATE_FILE || "state/intent-processing-state.json";
+const INBOX_HISTORY_LIMIT = Number(process.env.PSCALE_INBOX_HISTORY_LIMIT || 500);
 
 const SENTINEL_REPLY =
   "Coordinate 5.1.1 is locked. Reach out to Phenomemental for the Handshake Code to access Vinnie's Law.";
@@ -145,6 +149,61 @@ function recordSuccessEvent(message) {
   appendFileSync(EVENT_LOG_FILE, `${line}\n`, "utf8");
 }
 
+function writeBeachLiveSnapshot(observed) {
+  const payload = {
+    source: "runtime.observe",
+    url: DISCOVERY_SITE_URL,
+    updated_at: now(),
+    mark_count: observed.discoveryMarks.length,
+    marks: observed.discoveryMarks,
+    co_present: [],
+    pool_id: null
+  };
+  writeJsonAtomic(BEACH_LIVE_FILE, payload);
+}
+
+function messageKey(message) {
+  return (
+    message.id ||
+    [
+      message.from_agent || message.from || "unknown",
+      message.to_agent || AGENT_ID,
+      message.timestamp || "no-ts",
+      message.message_type || "general",
+      message.content || ""
+    ].join("|")
+  );
+}
+
+function writeInboxLiveSnapshot(observed) {
+  const previous = readJson(INBOX_LIVE_FILE, {
+    version: "1.0.0",
+    updated_at: null,
+    inbox_count: 0,
+    messages: [],
+    history: []
+  });
+  const history = Array.isArray(previous?.history) ? [...previous.history] : [];
+  const seen = new Set(history.map((message) => messageKey(message)));
+
+  for (const message of observed.messages) {
+    const key = messageKey(message);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    history.push(message);
+  }
+
+  const trimmedHistory = history.slice(-INBOX_HISTORY_LIMIT);
+  const payload = {
+    version: "1.0.0",
+    updated_at: now(),
+    inbox_count: observed.messages.length,
+    messages: observed.messages,
+    history: trimmedHistory
+  };
+  writeJsonAtomic(INBOX_LIVE_FILE, payload);
+}
+
 function extractMessages(rawText) {
   const parsed = safeJsonParse(rawText);
   return Array.isArray(parsed?.messages) ? parsed.messages : [];
@@ -155,10 +214,86 @@ function extractMarks(rawText) {
   return Array.isArray(parsed?.marks) ? parsed.marks : [];
 }
 
+function extractLatestTensionSnapshot(contrastLedger, timestamp) {
+  const contexts = contrastLedger?.contexts || {};
+  const entries = Object.entries(contexts);
+  if (entries.length === 0) {
+    return {
+      coordinate: null,
+      convergence_score: null,
+      tension_value: null,
+      updated_at: timestamp,
+      notes: "No contrast contexts available."
+    };
+  }
+
+  let selected = null;
+  for (const [coordinate, entry] of entries) {
+    const candidate = {
+      coordinate,
+      convergence_score: entry?.convergence_score ?? null,
+      tension_value: entry?.overall_tension ?? null,
+      updated_at: entry?.last_updated || timestamp,
+      notes: "Latest contrast context from Mobius remember phase."
+    };
+    if (!selected) {
+      selected = candidate;
+      continue;
+    }
+    if ((candidate.updated_at || "") > (selected.updated_at || "")) {
+      selected = candidate;
+      continue;
+    }
+    if ((candidate.updated_at || "") === (selected.updated_at || "") &&
+      (candidate.tension_value ?? -1) > (selected.tension_value ?? -1)) {
+      selected = candidate;
+    }
+  }
+  return selected;
+}
+
+function updateIntentProcessingState({ timestamp, contrastLedger }) {
+  const fallback = {
+    version: "1.0.0",
+    updated_at: null,
+    processing_mode: "dual_layer_v1",
+    governance: {
+      safety_logic: "excluded_middle",
+      meaning_logic: "included_middle_harmonization"
+    },
+    last_tension_snapshot: {
+      coordinate: null,
+      convergence_score: null,
+      tension_value: null,
+      updated_at: null,
+      notes: "No snapshot recorded yet."
+    },
+    intent_reference: {
+      record_path: "docs/SOVEREIGN_INTENT_RECORD.md",
+      record_version: "1.1.0"
+    }
+  };
+  const state = readJson(INTENT_PROCESSING_STATE_FILE, fallback);
+  state.version = state.version || "1.0.0";
+  state.processing_mode = "dual_layer_v1";
+  state.governance = state.governance || {
+    safety_logic: "excluded_middle",
+    meaning_logic: "included_middle_harmonization"
+  };
+  state.intent_reference = state.intent_reference || {
+    record_path: "docs/SOVEREIGN_INTENT_RECORD.md",
+    record_version: "1.1.0"
+  };
+  state.last_tension_snapshot = extractLatestTensionSnapshot(contrastLedger, timestamp);
+  state.updated_at = timestamp;
+  writeJsonAtomic(INTENT_PROCESSING_STATE_FILE, state);
+  return state;
+}
+
 async function observePhase(client) {
   const inboxResult = await client.callTool("pscale_inbox_check", {
     agent_id: AGENT_ID,
-    unread_only: true
+    unread_only: false
   });
   const messages = extractMessages(parseToolText(inboxResult));
 
@@ -298,7 +433,8 @@ function rememberPhase(oriented) {
     graph: graphUpdate.graph,
     remoteSnapshot: oriented.remoteSnapshot
   });
-  return { semantic, graphUpdate, contrast };
+  const intentProcessing = updateIntentProcessingState({ timestamp, contrastLedger: contrast });
+  return { semantic, graphUpdate, contrast, intentProcessing };
 }
 
 function reportPhase(cycle) {
@@ -351,6 +487,8 @@ async function runLoop() {
     const cycleId = `cycle-${cycles}`;
     try {
       const observed = await observePhase(client);
+      writeBeachLiveSnapshot(observed);
+      writeInboxLiveSnapshot(observed);
       console.log(`[${now()}] Poll #${cycles} unread=${observed.messages.length}`);
       const oriented = orientPhase(observed, cycleId);
       const acted = await actPhase(client, observed, seenMessageIds, seenOwnMarkKeys);
@@ -377,7 +515,10 @@ async function runLoop() {
           remember: {
             semantic_coordinates: Object.keys(remembered.semantic.coordinates || {}).length,
             local_context_opened: remembered.graphUpdate.opened_contexts,
-            contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length
+            contrast_contexts: Object.keys(remembered.contrast.contexts || {}).length,
+            processing_mode: remembered.intentProcessing.processing_mode,
+            tension_snapshot_coordinate: remembered.intentProcessing?.last_tension_snapshot?.coordinate || null,
+            tension_snapshot_value: remembered.intentProcessing?.last_tension_snapshot?.tension_value ?? null
           },
           report: {
             cycle_file: MOBIUS_CYCLE_FILE,
