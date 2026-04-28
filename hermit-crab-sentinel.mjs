@@ -1,6 +1,6 @@
 import { appendFileSync } from "node:fs";
 
-const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp";
+const MCP_URL = process.env.PSCALE_MCP_URL || "https://pscale-mcp-server-production.up.railway.app/mcp/v2";
 const AGENT_ID = process.env.PSCALE_AGENT_ID || "Phenomemental";
 const OPERATOR_ID = process.env.PSCALE_OPERATOR_ID || "Phenomemental";
 const POLL_MS = Number(process.env.PSCALE_POLL_MS || 30000);
@@ -12,7 +12,7 @@ const DISCOVERY_PURPOSE = "0.1";
 const LIGHTHOUSE_PURPOSE = "5.1.1";
 
 const SENTINEL_REPLY =
-  'Coordinate 5.1.1 is locked. Reach out to the Steward for the Handshake Code to access Vinnie\'s Law.';
+  "Coordinate 5.1.1 is locked. Reach out to Phenomemental for the Handshake Code to access Vinnie's Law.";
 
 class StreamableHttpMcpClient {
   constructor(url) {

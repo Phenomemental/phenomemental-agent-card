@@ -4,7 +4,7 @@ This creates an always-on standalone runtime that monitors your pscale inbox and
 
 ## What it does
 
-- Connects to your pscale MCP server at `/mcp` using streamable HTTP.
+- Connects to your pscale MCP server at `/mcp/v2` using streamable HTTP.
 - Initializes MCP session and sets `pscale_concern`.
 - Polls `pscale_inbox_check` on a fixed interval.
 - Polls `pscale_beach_read` for beacon visibility at `happyseaurchin.com` and `bipolaruk.org`.
@@ -23,7 +23,7 @@ npm run start
 
 ## Optional environment overrides
 
-- `PSCALE_MCP_URL` (default: `https://pscale-mcp-server-production.up.railway.app/mcp`)
+- `PSCALE_MCP_URL` (default: `https://pscale-mcp-server-production.up.railway.app/mcp/v2`)
 - `PSCALE_AGENT_ID` (default: `Phenomemental`) - canonical public persona ID
 - `PSCALE_OPERATOR_ID` (default: `Phenomemental`) - runtime identity metadata
 - `PSCALE_POLL_MS` (default: `30000`)

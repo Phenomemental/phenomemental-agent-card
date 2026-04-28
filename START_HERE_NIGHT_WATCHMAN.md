@@ -52,8 +52,8 @@ Bootstrap acceptance criteria (must be reported before proceeding):
 ## Fast Resume Checklist
 
 - Confirm branch and repo context.
-- Confirm policy files: `authority-policy.json`, `AUTHORITY_RUNBOOK.md`.
-- Confirm runtime entrypoints: `hermitcrab-runtime.mjs` -> `hermit-crab-sentinel.mjs`.
+- Confirm policy files: `authority-policy.json`, `docs/AUTHORITY_RUNBOOK.md`.
+- Confirm runtime entrypoints: `runtime/hermitcrab-runtime.mjs` -> `hermit-crab-sentinel.mjs`.
 - Confirm handshake posture: "Steward-gated, handshake required for protected access."
 - Ask Steward what to prioritize next.
 

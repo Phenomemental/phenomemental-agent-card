@@ -5,6 +5,6 @@
   "description": "Always-on Tier 2 Hermit-Crab runtime",
   "type": "module",
   "scripts": {
-    "start": "node hermitcrab-runtime.mjs"
+    "start": "node runtime/hermitcrab-runtime.mjs"
   }
 }
