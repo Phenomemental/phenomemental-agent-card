@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-28T11:40:22.485Z",
+  "updated_at": "2026-04-28T12:43:14.608Z",
   "coordinates": {
     "shell.identity": {
       "_": "Sovereign local identity context for Phenomemental",
@@ -74,78 +74,6 @@
       "_history": [
         {
           "timestamp": "2026-04-28T11:37:44.441Z",
-          "event": "opened",
-          "_": "Discovery context from happyseaurchin at purpose 5.1.1.",
-          "source_fingerprint": "discovery:happyseaurchin:5.1.1"
-        }
-      ]
-    }
-  },
-  "nodes": {
-    "shell.identity": {
-      "address": "shell.identity",
-      "kind": "shell",
-      "_": "Sovereign local identity context for Phenomemental",
-      "linked_to": [],
-      "opened_at": "2026-04-28T11:40:22.353Z",
-      "updated_at": "2026-04-28T11:40:22.353Z",
-      "history": [
-        {
-          "timestamp": "2026-04-28T11:40:22.353Z",
-          "event": "seeded",
-          "_": "Sovereign local identity context for Phenomemental"
-        }
-      ]
-    },
-    "shell.bridge": {
-      "address": "shell.bridge",
-      "kind": "shell",
-      "_": "Local sovereignty bridges with MCP observations without forced collapse.",
-      "linked_to": [
-        "shell.identity"
-      ],
-      "opened_at": "2026-04-28T11:40:22.353Z",
-      "updated_at": "2026-04-28T11:40:22.353Z",
-      "history": [
-        {
-          "timestamp": "2026-04-28T11:40:22.353Z",
-          "event": "seeded",
-          "_": "Local sovereignty bridges with MCP observations without forced collapse."
-        }
-      ]
-    },
-    "shell.doctrine.included_middle": {
-      "address": "shell.doctrine.included_middle",
-      "kind": "shell",
-      "_": "Difference is meaningful signal; sameness and tension both carry value.",
-      "linked_to": [
-        "shell.identity"
-      ],
-      "opened_at": "2026-04-28T11:40:22.353Z",
-      "updated_at": "2026-04-28T11:40:22.353Z",
-      "history": [
-        {
-          "timestamp": "2026-04-28T11:40:22.353Z",
-          "event": "seeded",
-          "_": "Difference is meaningful signal; sameness and tension both carry value."
-        }
-      ]
-    },
-    "0.1": {
-      "address": "0.1",
-      "kind": "context",
-      "_": "Discovery context from happyseaurchin at purpose 5.1.1.",
-      "linked_to": [
-        "shell.identity",
-        "shell.doctrine.included_middle"
-      ],
-      "remote_coordinate": "0.1.discovery",
-      "source_fingerprint": "discovery:happyseaurchin:5.1.1",
-      "opened_at": "2026-04-28T11:40:22.353Z",
-      "updated_at": "2026-04-28T11:40:22.353Z",
-      "history": [
-        {
-          "timestamp": "2026-04-28T11:40:22.353Z",
           "event": "opened",
           "_": "Discovery context from happyseaurchin at purpose 5.1.1.",
           "source_fingerprint": "discovery:happyseaurchin:5.1.1"

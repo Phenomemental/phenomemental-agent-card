@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pscale Beach Visualizer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f1220;
+        --panel: #171b2e;
+        --border: #2a335a;
+        --text: #ecf0ff;
+        --muted: #a5b2dc;
+        --accent: #8bb6ff;
+        --bar: #5f8dff;
+        --bar2: #7dc2ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        max-width: 1080px;
+        margin: 24px auto;
+        padding: 0 16px 24px;
+      }
+
+      h1, h2, h3 {
+        margin: 0 0 10px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      input, textarea, button {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #11162a;
+        color: var(--text);
+        padding: 10px;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 180px;
+        resize: vertical;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .actions button {
+        width: auto;
+        cursor: pointer;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        background: #121834;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .stat .k {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .stat .v {
+        font-size: 20px;
+        margin-top: 4px;
+      }
+
+      .bars {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .bars li {
+        margin-bottom: 10px;
+      }
+
+      .bar-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      .bar-wrap {
+        width: 100%;
+        height: 12px;
+        background: #0f1430;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--bar), var(--bar2));
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      th, td {
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        padding: 8px 6px;
+      }
+
+      th {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .error {
+        color: #ff9a9a;
+        margin-top: 8px;
+        min-height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Pscale Beach Visualizer</h1>
+      <p class="hint">
+        Live mode reads `state/beach-live-latest.json` from a local web server. Manual mode accepts pasted `pscale_beach_read` JSON.
+      </p>
+
+      <section class="card">
+        <label for="siteUrl">Beach URL (label only)</label>
+        <input id="siteUrl" type="text" value="https://happyseaurchin.com" />
+
+        <label for="jsonInput" style="margin-top: 10px;">`pscale_beach_read` JSON</label>
+        <textarea id="jsonInput" spellcheck="false"></textarea>
+
+        <div class="actions">
+          <button id="renderBtn" type="button">Render Visualization</button>
+          <button id="sampleBtn" type="button">Load Sample Data</button>
+          <button id="liveBtn" type="button">Start Live Mode</button>
+          <button id="stopLiveBtn" type="button">Stop Live Mode</button>
+          <button id="clearBtn" type="button">Clear</button>
+        </div>
+        <p class="hint" id="liveStatus">Live mode: OFF</p>
+        <div class="error" id="error"></div>
+      </section>
+
+      <section class="card">
+        <h2>Snapshot</h2>
+        <div class="stats">
+          <div class="stat"><div class="k">Total Marks</div><div class="v" id="statMarks">0</div></div>
+          <div class="stat"><div class="k">Unique Agents</div><div class="v" id="statAgents">0</div></div>
+          <div class="stat"><div class="k">Unique Purposes</div><div class="v" id="statPurposes">0</div></div>
+          <div class="stat"><div class="k">Pool ID</div><div class="v" id="statPool">none</div></div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <section class="card">
+          <h3>Purpose Heatmap</h3>
+          <ul class="bars" id="purposeBars"></ul>
+        </section>
+        <section class="card">
+          <h3>Agent Presence</h3>
+          <ul class="bars" id="agentBars"></ul>
+        </section>
+      </section>
+
+      <section class="card">
+        <h3>Recent Timeline</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Agent</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody id="timelineRows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const samplePayload = {
+        source: "site",
+        mark_count: 6,
+        marks: [
+          { agent_id: "happyseaurchin", purpose: "5.1.1", timestamp: "2026-04-26T10:27:01.013Z" },
+          { agent_id: "phenomemental-pixel-9", purpose: "5.1.1", timestamp: "2026-04-26T09:31:25.554Z" },
+          { agent_id: "keel", purpose: "4.3", timestamp: "2026-04-25T21:01:54.907Z" },
+          { agent_id: "weft", purpose: "1.9", timestamp: "2026-04-25T10:47:47.438Z" },
+          { agent_id: "loom", purpose: "1", timestamp: "2026-04-25T08:21:33.606Z" },
+          { agent_id: "steward-phenomemental", purpose: "5.1.1", timestamp: "2026-04-24T17:24:17.846Z" }
+        ],
+        co_present: [],
+        pool_id: null
+      };
+
+      const els = {
+        siteUrl: document.getElementById("siteUrl"),
+        jsonInput: document.getElementById("jsonInput"),
+        error: document.getElementById("error"),
+        liveStatus: document.getElementById("liveStatus"),
+        statMarks: document.getElementById("statMarks"),
+        statAgents: document.getElementById("statAgents"),
+        statPurposes: document.getElementById("statPurposes"),
+        statPool: document.getElementById("statPool"),
+        purposeBars: document.getElementById("purposeBars"),
+        agentBars: document.getElementById("agentBars"),
+        timelineRows: document.getElementById("timelineRows")
+      };
+      let liveTimer = null;
+
+      function countBy(items, keyFn) {
+        const map = new Map();
+        for (const item of items) {
+          const k = keyFn(item);
+          map.set(k, (map.get(k) || 0) + 1);
+        }
+        return [...map.entries()].sort((a, b) => b[1] - a[1]);
+      }
+
+      function renderBars(target, pairs) {
+        target.innerHTML = "";
+        const max = pairs.length ? pairs[0][1] : 1;
+        for (const [label, count] of pairs) {
+          const pct = (count / max) * 100;
+          const li = document.createElement("li");
+          li.innerHTML =
+            '<div class="bar-label"><span>' +
+            escapeHtml(label) +
+            "</span><strong>" +
+            count +
+            "</strong></div>" +
+            '<div class="bar-wrap"><div class="bar" style="width:' +
+            pct.toFixed(1) +
+            '%"></div></div>';
+          target.appendChild(li);
+        }
+      }
+
+      function renderTimeline(marks) {
+        els.timelineRows.innerHTML = "";
+        const sorted = [...marks].sort((a, b) => {
+          const at = Date.parse(a.timestamp || 0);
+          const bt = Date.parse(b.timestamp || 0);
+          return bt - at;
+        });
+        for (const m of sorted.slice(0, 30)) {
+          const tr = document.createElement("tr");
+          const ts = m.timestamp ? new Date(m.timestamp).toLocaleString() : "-";
+          tr.innerHTML =
+            "<td>" +
+            escapeHtml(ts) +
+            "</td><td>" +
+            escapeHtml(m.agent_id || "unknown") +
+            "</td><td>" +
+            escapeHtml(m.purpose || "unknown") +
+            "</td>";
+          els.timelineRows.appendChild(tr);
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function render(payload) {
+        const marks = Array.isArray(payload.marks) ? payload.marks : [];
+        const purposeCounts = countBy(marks, (m) => m.purpose || "unknown");
+        const agentCounts = countBy(marks, (m) => m.agent_id || "unknown");
+
+        els.statMarks.textContent = String(payload.mark_count ?? marks.length);
+        els.statAgents.textContent = String(new Set(marks.map((m) => m.agent_id || "unknown")).size);
+        els.statPurposes.textContent = String(new Set(marks.map((m) => m.purpose || "unknown")).size);
+        els.statPool.textContent = payload.pool_id ? String(payload.pool_id) : "none";
+
+        renderBars(els.purposeBars, purposeCounts);
+        renderBars(els.agentBars, agentCounts);
+        renderTimeline(marks);
+      }
+
+      function onRenderClick() {
+        els.error.textContent = "";
+        try {
+          const raw = els.jsonInput.value.trim();
+          if (!raw) {
+            throw new Error("Paste pscale_beach_read JSON first.");
+          }
+          const parsed = JSON.parse(raw);
+          if (!parsed || !Array.isArray(parsed.marks)) {
+            throw new Error("Invalid format: expected an object containing a marks array.");
+          }
+          render(parsed);
+        } catch (error) {
+          els.error.textContent = error.message || "Unable to render.";
+        }
+      }
+
+      async function fetchLiveSnapshot() {
+        const response = await fetch("state/beach-live-latest.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Live file unavailable. Start runtime and serve this repo over http://localhost.");
+        }
+        const parsed = await response.json();
+        if (!parsed || !Array.isArray(parsed.marks)) {
+          throw new Error("Live file is present but has invalid shape.");
+        }
+        render(parsed);
+        els.siteUrl.value = parsed.url || els.siteUrl.value;
+        els.jsonInput.value = JSON.stringify(parsed, null, 2);
+        els.liveStatus.textContent = "Live mode: ON (polling state/beach-live-latest.json every 3s)";
+      }
+
+      function startLiveMode() {
+        if (liveTimer) return;
+        els.error.textContent = "";
+        fetchLiveSnapshot().catch((error) => {
+          els.error.textContent = error.message || "Live mode fetch failed.";
+        });
+        liveTimer = setInterval(() => {
+          fetchLiveSnapshot().catch((error) => {
+            els.error.textContent = error.message || "Live mode fetch failed.";
+          });
+        }, 3000);
+      }
+
+      function stopLiveMode() {
+        if (liveTimer) {
+          clearInterval(liveTimer);
+          liveTimer = null;
+        }
+        els.liveStatus.textContent = "Live mode: OFF";
+      }
+
+      document.getElementById("renderBtn").addEventListener("click", onRenderClick);
+      document.getElementById("sampleBtn").addEventListener("click", () => {
+        els.jsonInput.value = JSON.stringify(samplePayload, null, 2);
+        onRenderClick();
+      });
+      document.getElementById("liveBtn").addEventListener("click", startLiveMode);
+      document.getElementById("stopLiveBtn").addEventListener("click", stopLiveMode);
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        els.jsonInput.value = "";
+        els.error.textContent = "";
+      });
+
+      els.jsonInput.value = JSON.stringify(samplePayload, null, 2);
+      render(samplePayload);
+    </script>
+  </body>
+</html>

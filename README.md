@@ -32,6 +32,22 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 
 - `npm run start` launches `runtime/start.mjs`
 - runtime implementation currently loads `runtime/sentinel-loop.mjs`
+- live beach snapshot writes to `state/beach-live-latest.json`
+
+## Live Beach Visualizer
+
+- open `beach-visualizer.html` to visualize beach marks
+- run runtime loop in one terminal: `npm run start`
+- run local server in another terminal: `npm run serve:visual` (or `npm run serve:visual:py3`)
+- open [http://localhost:8080/beach-visualizer.html](http://localhost:8080/beach-visualizer.html)
+- click `Start Live Mode` to poll `state/beach-live-latest.json` every 3 seconds
+
+## Live Inbox Visualizer
+
+- open `inbox-visualizer.html` to visualize inbox and message history
+- runtime writes `state/inbox-live-latest.json` each cycle
+- open [http://localhost:8080/inbox-visualizer.html](http://localhost:8080/inbox-visualizer.html)
+- click `Start Live Mode` to poll `state/inbox-live-latest.json` every 3 seconds
 
 ## Compatibility pointers
 

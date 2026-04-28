@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pscale Inbox Visualizer</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f1220;
+        --panel: #171b2e;
+        --border: #2a335a;
+        --text: #ecf0ff;
+        --muted: #a5b2dc;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      main {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px 24px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+      .hint { color: var(--muted); font-size: 12px; }
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 8px 0 6px;
+      }
+      textarea, button, input {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #11162a;
+        color: var(--text);
+        padding: 10px;
+        font: inherit;
+      }
+      textarea { min-height: 160px; resize: vertical; }
+      .actions { display: flex; gap: 10px; margin-top: 10px; }
+      .actions button { width: auto; cursor: pointer; }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .stat {
+        background: #121834;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .k { color: var(--muted); font-size: 12px; }
+      .v { font-size: 20px; margin-top: 4px; }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th, td {
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        padding: 8px 6px;
+      }
+      th { color: var(--muted); }
+      .error { color: #ff9a9a; min-height: 18px; margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Pscale Inbox Visualizer</h1>
+      <p class="hint">
+        Live mode reads `state/inbox-live-latest.json`. Manual mode accepts pasted inbox JSON.
+      </p>
+
+      <section class="card">
+        <label for="jsonInput">Inbox JSON (`state/inbox-live-latest.json` or `pscale_inbox_check`-shaped data)</label>
+        <textarea id="jsonInput" spellcheck="false"></textarea>
+        <div class="actions">
+          <button id="renderBtn" type="button">Render</button>
+          <button id="sampleBtn" type="button">Load Sample</button>
+          <button id="liveBtn" type="button">Start Live Mode</button>
+          <button id="stopLiveBtn" type="button">Stop Live Mode</button>
+          <button id="clearBtn" type="button">Clear</button>
+        </div>
+        <p class="hint" id="liveStatus">Live mode: OFF</p>
+        <div class="error" id="error"></div>
+      </section>
+
+      <section class="card">
+        <h2>Snapshot</h2>
+        <div class="stats">
+          <div class="stat"><div class="k">Current Inbox Count</div><div class="v" id="statCurrent">0</div></div>
+          <div class="stat"><div class="k">History Count</div><div class="v" id="statHistory">0</div></div>
+          <div class="stat"><div class="k">Unique Senders</div><div class="v" id="statSenders">0</div></div>
+          <div class="stat"><div class="k">Latest Timestamp</div><div class="v" id="statLatest">-</div></div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <section class="card">
+          <h3>Current Inbox Messages</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>From</th>
+                <th>Type</th>
+                <th>Content</th>
+              </tr>
+            </thead>
+            <tbody id="currentRows"></tbody>
+          </table>
+        </section>
+        <section class="card">
+          <h3>History (Most Recent First)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>From</th>
+                <th>Type</th>
+                <th>Content</th>
+              </tr>
+            </thead>
+            <tbody id="historyRows"></tbody>
+          </table>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const samplePayload = {
+        version: "1.0.0",
+        updated_at: "2026-04-28T12:00:00.000Z",
+        inbox_count: 2,
+        messages: [
+          {
+            id: "m2",
+            from_agent: "happyseaurchin",
+            message_type: "general",
+            content: "Checking in on 5.1.1.",
+            timestamp: "2026-04-28T11:59:30.000Z"
+          },
+          {
+            id: "m1",
+            from_agent: "phenomemental-pixel-9",
+            message_type: "general",
+            content: "Heartbeat from mobile.",
+            timestamp: "2026-04-28T11:57:00.000Z"
+          }
+        ],
+        history: [
+          {
+            id: "m0",
+            from_agent: "keel",
+            message_type: "probe",
+            content: "Initial contact.",
+            timestamp: "2026-04-27T14:15:00.000Z"
+          }
+        ]
+      };
+
+      const els = {
+        jsonInput: document.getElementById("jsonInput"),
+        liveStatus: document.getElementById("liveStatus"),
+        error: document.getElementById("error"),
+        statCurrent: document.getElementById("statCurrent"),
+        statHistory: document.getElementById("statHistory"),
+        statSenders: document.getElementById("statSenders"),
+        statLatest: document.getElementById("statLatest"),
+        currentRows: document.getElementById("currentRows"),
+        historyRows: document.getElementById("historyRows")
+      };
+
+      let liveTimer = null;
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function normalizePayload(payload) {
+        if (Array.isArray(payload?.messages)) {
+          return {
+            inbox_count: payload.inbox_count ?? payload.messages.length,
+            messages: payload.messages,
+            history: Array.isArray(payload.history) ? payload.history : payload.messages
+          };
+        }
+        if (typeof payload?.inbox_count === "number" && Array.isArray(payload?.messages)) {
+          return {
+            inbox_count: payload.inbox_count,
+            messages: payload.messages,
+            history: Array.isArray(payload.history) ? payload.history : payload.messages
+          };
+        }
+        throw new Error("Expected object with `messages` array (and optional `history`).");
+      }
+
+      function sortByTimeDesc(messages) {
+        return [...messages].sort((a, b) => Date.parse(b.timestamp || 0) - Date.parse(a.timestamp || 0));
+      }
+
+      function renderRows(target, messages, limit) {
+        target.innerHTML = "";
+        for (const message of sortByTimeDesc(messages).slice(0, limit)) {
+          const from = message.from_agent || message.from || "unknown";
+          const type = message.message_type || "general";
+          const ts = message.timestamp ? new Date(message.timestamp).toLocaleString() : "-";
+          const content = String(message.content || "").slice(0, 120);
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            "<td>" + escapeHtml(ts) + "</td>" +
+            "<td>" + escapeHtml(from) + "</td>" +
+            "<td>" + escapeHtml(type) + "</td>" +
+            "<td>" + escapeHtml(content) + "</td>";
+          target.appendChild(tr);
+        }
+      }
+
+      function render(payload) {
+        const normalized = normalizePayload(payload);
+        const current = Array.isArray(normalized.messages) ? normalized.messages : [];
+        const history = Array.isArray(normalized.history) ? normalized.history : [];
+        const combined = [...current, ...history];
+        const latest = sortByTimeDesc(combined)[0];
+        const senders = new Set(combined.map((m) => m.from_agent || m.from || "unknown"));
+
+        els.statCurrent.textContent = String(normalized.inbox_count ?? current.length);
+        els.statHistory.textContent = String(history.length);
+        els.statSenders.textContent = String(senders.size);
+        els.statLatest.textContent = latest?.timestamp ? new Date(latest.timestamp).toLocaleString() : "-";
+
+        renderRows(els.currentRows, current, 50);
+        renderRows(els.historyRows, history, 80);
+      }
+
+      function onRenderClick() {
+        els.error.textContent = "";
+        try {
+          const raw = els.jsonInput.value.trim();
+          if (!raw) throw new Error("Paste inbox JSON first.");
+          render(JSON.parse(raw));
+        } catch (error) {
+          els.error.textContent = error.message || "Unable to render.";
+        }
+      }
+
+      async function fetchLive() {
+        const response = await fetch("state/inbox-live-latest.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("Live inbox file unavailable. Start runtime and localhost server.");
+        }
+        const parsed = await response.json();
+        render(parsed);
+        els.jsonInput.value = JSON.stringify(parsed, null, 2);
+        els.liveStatus.textContent = "Live mode: ON (polling state/inbox-live-latest.json every 3s)";
+      }
+
+      function startLive() {
+        if (liveTimer) return;
+        els.error.textContent = "";
+        fetchLive().catch((error) => { els.error.textContent = error.message || "Live fetch failed."; });
+        liveTimer = setInterval(() => {
+          fetchLive().catch((error) => { els.error.textContent = error.message || "Live fetch failed."; });
+        }, 3000);
+      }
+
+      function stopLive() {
+        if (liveTimer) {
+          clearInterval(liveTimer);
+          liveTimer = null;
+        }
+        els.liveStatus.textContent = "Live mode: OFF";
+      }
+
+      document.getElementById("renderBtn").addEventListener("click", onRenderClick);
+      document.getElementById("sampleBtn").addEventListener("click", () => {
+        els.jsonInput.value = JSON.stringify(samplePayload, null, 2);
+        onRenderClick();
+      });
+      document.getElementById("liveBtn").addEventListener("click", startLive);
+      document.getElementById("stopLiveBtn").addEventListener("click", stopLive);
+      document.getElementById("clearBtn").addEventListener("click", () => {
+        els.jsonInput.value = "";
+        els.error.textContent = "";
+      });
+
+      els.jsonInput.value = JSON.stringify(samplePayload, null, 2);
+      render(samplePayload);
+    </script>
+  </body>
+</html>

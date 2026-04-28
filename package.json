@@ -5,6 +5,8 @@
   "description": "Always-on Tier 2 Hermit-Crab runtime",
   "type": "module",
   "scripts": {
-    "start": "node runtime/start.mjs"
+    "start": "node runtime/start.mjs",
+    "serve:visual": "py -m http.server 8080",
+    "serve:visual:py3": "python -m http.server 8080"
   }
 }
