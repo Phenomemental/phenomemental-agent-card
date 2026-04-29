@@ -3,6 +3,7 @@ import { buildRemoteSnapshot, updateSemanticTensionLedger } from "./semantic-ten
 import { updateLocalCoordinateGraph } from "./local-coordinate-engine.mjs";
 import { updateContrastLedger } from "./tension-contrast-engine.mjs";
 import { updatePlaceTimeLedger } from "./place-time-engine.mjs";
+import { writePublicConfluenceSnapshot } from "./public-confluence-engine.mjs";
 import { readJson, writeJsonAtomic } from "./state-io.mjs";
 import { evaluateFidelityGates } from "./fidelity-gates.mjs";
 import { recordReconciliationEvent } from "./reconciliation-engine.mjs";
@@ -32,6 +33,7 @@ const EXTERNAL_WRITE_AUDIT_FILE = process.env.PSCALE_EXTERNAL_WRITE_AUDIT_FILE |
 const RUNTIME_HEALTH_FILE = process.env.PSCALE_RUNTIME_HEALTH_FILE || "state/runtime-health.json";
 const PLACE_TIME_LEDGER_FILE = process.env.PSCALE_PLACE_TIME_LEDGER_FILE || "state/place-time-continuity-ledger.json";
 const CONTINUITY_DASHBOARD_FILE = process.env.PSCALE_CONTINUITY_DASHBOARD_FILE || "state/steward-continuity-dashboard.json";
+const PUBLIC_CONFLUENCE_DASHBOARD_FILE = process.env.PSCALE_PUBLIC_CONFLUENCE_DASHBOARD_FILE || "public-confluence-dashboard.json";
 const INBOX_HISTORY_LIMIT = Number(process.env.PSCALE_INBOX_HISTORY_LIMIT || 500);
 const CHECKPOINT_EVERY_CYCLES = Math.max(1, Number(process.env.PSCALE_CHECKPOINT_EVERY_CYCLES || 10));
 const CHECKPOINT_TO_PSCALE = (process.env.PSCALE_CHECKPOINT_TO_PSCALE || "true").toLowerCase() === "true";
@@ -422,9 +424,11 @@ function extractLatestTensionSnapshot(contrastLedger, timestamp) {
     const candidate = {
       coordinate,
       convergence_score: entry?.convergence_score ?? null,
+      nested_confluence_score: entry?.nested_confluence_score ?? entry?.convergence_score ?? null,
       tension_value: entry?.system_tension ?? entry?.overall_tension ?? null,
       local_confluence_tension: entry?.local_confluence_tension ?? null,
       cross_domain_tension: entry?.cross_domain_tension ?? null,
+      weakest_relation_type: entry?.weakest_relation_type || null,
       local_state: entry?.local_state || null,
       updated_at: entry?.last_updated || timestamp,
       notes: "Latest contrast context from Mobius remember phase."
@@ -483,68 +487,49 @@ function updateIntentProcessingState({ timestamp, contrastLedger }) {
   return state;
 }
 
-function tokenizeForConfluence(text) {
-  return new Set(
-    String(text || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9\s:_-]/g, " ")
-      .split(/\s+/)
-      .filter(Boolean)
-  );
-}
-
-function similarityScore(aText, bText) {
-  const a = tokenizeForConfluence(aText);
-  const b = tokenizeForConfluence(bText);
-  const union = new Set([...a, ...b]);
-  if (union.size === 0) return 1;
-  let intersect = 0;
-  for (const token of a) {
-    if (b.has(token)) intersect += 1;
-  }
-  return Number((intersect / union.size).toFixed(3));
-}
-
-function evaluateLocalConfluence(graphUpdate) {
-  const graph = graphUpdate?.graph || {};
-  const coordinates = graph.coordinates || {};
-  const doctrine = coordinates["shell.doctrine.included_middle"]?._ || "";
-  const bridge = coordinates["shell.bridge"]?._ || "";
-  const contexts = Object.entries(coordinates).filter(([address, node]) =>
-    address.startsWith("0.") && node?._meta?.kind === "context"
-  );
+function evaluateLocalConfluence(contrastLedger) {
+  const contexts = Object.entries(contrastLedger?.contexts || {});
   if (contexts.length === 0) {
     return {
       context_count: 0,
-      average_similarity: null,
-      link_integrity_ratio: null,
-      confluence_score_local: null,
+      nested_confluence_score_local: null,
+      weakest_relation_type: null,
+      primary_confluence_gap: null,
       status: "no_contexts"
     };
   }
 
-  let simTotal = 0;
-  let linkHits = 0;
-  const requiredLinks = ["shell.identity", "shell.bridge", "shell.doctrine.included_middle"];
-  for (const [, node] of contexts) {
-    const localAnchor = node?._ || "";
-    const simDoctrine = similarityScore(localAnchor, doctrine);
-    const simBridge = similarityScore(localAnchor, bridge);
-    simTotal += (simDoctrine + simBridge) / 2;
-
-    const links = Array.isArray(node?._meta?.links) ? node._meta.links : [];
-    const hasAll = requiredLinks.every((link) => links.includes(link));
-    if (hasAll) linkHits += 1;
+  const totals = {
+    nested: 0,
+    node_confluence: 0,
+    vertical_confluence: 0,
+    sibling_confluence: 0,
+    path_confluence: 0
+  };
+  for (const [, entry] of contexts) {
+    totals.nested += Number(entry?.nested_confluence_score ?? entry?.convergence_score ?? 0);
+    totals.node_confluence += Number(entry?.node_confluence ?? 0);
+    totals.vertical_confluence += Number(entry?.vertical_confluence ?? 0);
+    totals.sibling_confluence += Number(entry?.sibling_confluence ?? 0);
+    totals.path_confluence += Number(entry?.path_confluence ?? 0);
   }
-  const averageSimilarity = Number((simTotal / contexts.length).toFixed(3));
-  const linkIntegrityRatio = Number((linkHits / contexts.length).toFixed(3));
-  const confluenceScoreLocal = Number(((averageSimilarity * 0.7) + (linkIntegrityRatio * 0.3)).toFixed(3));
+  const contextCount = contexts.length;
+  const relationAverages = {
+    node_confluence: Number((totals.node_confluence / contextCount).toFixed(3)),
+    vertical_confluence: Number((totals.vertical_confluence / contextCount).toFixed(3)),
+    sibling_confluence: Number((totals.sibling_confluence / contextCount).toFixed(3)),
+    path_confluence: Number((totals.path_confluence / contextCount).toFixed(3))
+  };
+  const weakestRelationType = Object.entries(relationAverages)
+    .sort((left, right) => left[1] - right[1])[0]?.[0] || null;
+  const nestedConfluenceScoreLocal = Number((totals.nested / contextCount).toFixed(3));
   return {
-    context_count: contexts.length,
-    average_similarity: averageSimilarity,
-    link_integrity_ratio: linkIntegrityRatio,
-    confluence_score_local: confluenceScoreLocal,
-    status: confluenceScoreLocal >= 0.65 ? "functional_confluence" : "scaffold_mismatch"
+    context_count: contextCount,
+    nested_confluence_score_local: nestedConfluenceScoreLocal,
+    weakest_relation_type: weakestRelationType,
+    primary_confluence_gap: weakestRelationType ? Number((1 - relationAverages[weakestRelationType]).toFixed(3)) : null,
+    relation_averages: relationAverages,
+    status: nestedConfluenceScoreLocal >= 0.65 ? "functional_confluence" : "scaffold_mismatch"
   };
 }
 
@@ -744,9 +729,17 @@ function rememberPhase(oriented) {
     contrastLedger: contrast,
     cycle: oriented.cycle
   });
-  const localConfluence = evaluateLocalConfluence(graphUpdate);
+  const publicConfluence = writePublicConfluenceSnapshot({
+    outputPath: PUBLIC_CONFLUENCE_DASHBOARD_FILE,
+    timestamp,
+    cycleId: oriented.cycleId,
+    graph: graphUpdate.graph,
+    contrastLedger: contrast,
+    continuityDashboard: placeTime.dashboard
+  });
+  const localConfluence = evaluateLocalConfluence(contrast);
   const intentProcessing = updateIntentProcessingState({ timestamp, contrastLedger: contrast });
-  return { semantic, graphUpdate, contrast, placeTime, localConfluence, intentProcessing };
+  return { semantic, graphUpdate, contrast, placeTime, publicConfluence, localConfluence, intentProcessing };
 }
 
 function reportPhase(cycle) {
@@ -858,9 +851,12 @@ async function runLoop() {
         place_time_coordinates: placeTimeCoordinateCount,
         place_time_file: PLACE_TIME_LEDGER_FILE,
         continuity_dashboard_file: CONTINUITY_DASHBOARD_FILE,
+        public_confluence_dashboard_file: PUBLIC_CONFLUENCE_DASHBOARD_FILE,
         continuity_primary_focus: dashboardSummary.primary_focus || "unknown",
-        confluence_score_local: remembered.localConfluence?.confluence_score_local ?? null,
-        confluence_status: remembered.localConfluence?.status || "unknown",
+        nested_confluence_score_local: remembered.localConfluence?.nested_confluence_score_local ?? null,
+        nested_confluence_status: remembered.localConfluence?.status || "unknown",
+        weakest_relation_type: remembered.localConfluence?.weakest_relation_type || null,
+        primary_confluence_gap: remembered.localConfluence?.primary_confluence_gap ?? null,
         processing_mode: remembered.intentProcessing.processing_mode,
         tension_snapshot_coordinate: remembered.intentProcessing?.last_tension_snapshot?.coordinate || null,
         tension_snapshot_value: remembered.intentProcessing?.last_tension_snapshot?.tension_value ?? null

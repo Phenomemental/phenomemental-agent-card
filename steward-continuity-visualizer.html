@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Steward Continuity Dashboard</title>
+    <title>Phenomemental Confluence Dashboard</title>
     <style>
       :root {
         color-scheme: dark;
@@ -57,7 +57,7 @@
       .actions button { width: auto; cursor: pointer; }
       .stats {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: 10px;
       }
       .stat {
@@ -96,43 +96,54 @@
   </head>
   <body>
     <main>
-      <h1>Steward Continuity Dashboard</h1>
-      <p class="hint">Live mode reads <code>state/steward-continuity-dashboard.json</code>.</p>
+      <h1>Phenomemental Confluence Dashboard</h1>
+      <p class="hint">Published mode reads <code>public-confluence-dashboard.json</code>. Local steward-only traces remain in runtime state files.</p>
 
       <section class="card">
-        <label for="jsonInput">Dashboard JSON</label>
+        <label for="jsonInput">Published Dashboard JSON</label>
         <textarea id="jsonInput" spellcheck="false"></textarea>
         <div class="actions">
           <button id="renderBtn" type="button">Render</button>
-          <button id="loadBtn" type="button">Load Current Snapshot</button>
-          <button id="liveBtn" type="button">Start Live Mode</button>
-          <button id="stopLiveBtn" type="button">Stop Live Mode</button>
+          <button id="loadBtn" type="button">Load Published Snapshot</button>
+          <button id="liveBtn" type="button">Start Refresh Mode</button>
+          <button id="stopLiveBtn" type="button">Stop Refresh Mode</button>
         </div>
-        <p class="hint" id="liveStatus">Live mode: OFF</p>
+        <p class="hint" id="liveStatus">Refresh mode: OFF</p>
         <div class="error" id="error"></div>
       </section>
 
       <section class="card">
-        <h2>Snapshot</h2>
+        <h2>Published Snapshot</h2>
         <div class="stats">
           <div class="stat"><div class="k">Cycle</div><div class="v" id="statCycle">-</div></div>
+          <div class="stat"><div class="k">Published At</div><div class="v" id="statPublished">-</div></div>
+          <div class="stat"><div class="k">Avg Nested</div><div class="v" id="statNested">-</div></div>
+          <div class="stat"><div class="k">Avg System</div><div class="v" id="statSystem">-</div></div>
           <div class="stat"><div class="k">Primary Focus</div><div class="v" id="statFocus">-</div></div>
-          <div class="stat"><div class="k">Stable</div><div class="v" id="statStable">0</div></div>
-          <div class="stat"><div class="k">Evolving</div><div class="v" id="statEvolving">0</div></div>
-          <div class="stat"><div class="k">Drift Risk</div><div class="v" id="statRisk">0</div></div>
+          <div class="stat"><div class="k">Relation Focus</div><div class="v" id="statRelation">-</div></div>
         </div>
       </section>
 
       <section class="card">
-        <h2>Coordinate Continuity</h2>
+        <h2>What The Relations Mean</h2>
+        <ul>
+          <li><strong>Node coherence</strong>: whether the context anchor clearly expresses the intended identity, bridge, and doctrine.</li>
+          <li><strong>Vertical containment</strong>: whether the context still fits with its parent and children.</li>
+          <li><strong>Sibling differentiation</strong>: whether nearby contexts stay distinct without semantic rupture.</li>
+          <li><strong>Path continuity</strong>: whether the full route into the context still reads as one meaning trace.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Coordinate Confluence</h2>
         <table>
           <thead>
             <tr>
               <th>Coordinate</th>
-              <th>Class</th>
-              <th>Integrated / Rupture</th>
-              <th>Confluence / Tension</th>
-              <th>Sameness Focus Terms</th>
+              <th>Nested Breakdown</th>
+              <th>Continuity</th>
+              <th>Weakest Relation</th>
+              <th>What To Watch</th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
@@ -155,9 +166,10 @@
         error: document.getElementById("error"),
         statCycle: document.getElementById("statCycle"),
         statFocus: document.getElementById("statFocus"),
-        statStable: document.getElementById("statStable"),
-        statEvolving: document.getElementById("statEvolving"),
-        statRisk: document.getElementById("statRisk"),
+        statPublished: document.getElementById("statPublished"),
+        statNested: document.getElementById("statNested"),
+        statSystem: document.getElementById("statSystem"),
+        statRelation: document.getElementById("statRelation"),
         rows: document.getElementById("rows"),
         focusText: document.getElementById("focusText"),
         focusMeaning: document.getElementById("focusMeaning"),
@@ -182,28 +194,79 @@
         return '<span class="chip">' + escapeHtml(value || "unknown") + "</span>";
       }
 
+      function relationLabel(value) {
+        const labels = {
+          node_confluence: "node",
+          vertical_confluence: "vertical",
+          sibling_confluence: "sibling",
+          path_confluence: "path"
+        };
+        return labels[value] || String(value || "-");
+      }
+
       function render(payload) {
         const summary = payload?.summary || {};
         const coordinates = Array.isArray(payload?.coordinates) ? payload.coordinates : [];
-        const actionable = payload?.actionable_focus || {};
-        const primaryGuidance = actionable?.primary_guidance || null;
+        const primaryFocus = summary?.primary_focus || payload?.summary?.primary_focus || "stable_presence";
+        const relationFocus = summary?.primary_relation_focus || "node_confluence";
+        const guidance = {
+          drift_risk: {
+            focus: "Rebuild semantic bridge before expanding scope.",
+            what_it_means: "Recent meaning traces are unstable enough that new commitments would amplify fragmentation rather than growth.",
+            why_it_matters: "The best next move is to reconnect current meaning to previous meaning before broadening the system further.",
+            actions: [
+              "Write one explicit bridge statement between the previous and current framing.",
+              "Reduce the next move to one bounded repair on the weakest relation.",
+              "Recheck the same coordinate over the next 3 published cycles for improvement."
+            ]
+          },
+          evolving_presence: {
+            focus: "Stabilize sameness while preserving useful variation.",
+            what_it_means: "The system is changing productively, but one relation family still needs deliberate harmonization.",
+            why_it_matters: "This is where calibration work compounds fastest: make one contained improvement and keep the rest stable.",
+            actions: [
+              "Keep the anchor wording mostly stable while repairing the weakest relation.",
+              "Use the published weakest relation as the main focus for the next refinement.",
+              "Prefer small reversible changes over broad rewrites."
+            ]
+          },
+          stable_presence: {
+            focus: "Protect coherence and convert stability into durable capability.",
+            what_it_means: "The current Place-Time line is coherent enough to support disciplined expansion.",
+            why_it_matters: "You can build from this, as long as you change one controlled variable at a time.",
+            actions: [
+              "Keep this anchor as the reference pattern for future comparisons.",
+              "Extend capability in one bounded direction while preserving the current semantic spine.",
+              "Document why the current coherence holds so it can be reused."
+            ]
+          }
+        };
+        const primaryGuidance = guidance[primaryFocus] || guidance.stable_presence;
 
         els.statCycle.textContent = String(payload?.cycle_id || "-");
-        els.statFocus.innerHTML = classChip(summary?.primary_focus);
-        els.statStable.textContent = String(summary?.stable_presence_count ?? 0);
-        els.statEvolving.textContent = String(summary?.evolving_presence_count ?? 0);
-        els.statRisk.textContent = String(summary?.drift_risk_count ?? 0);
+        els.statPublished.textContent = String(payload?.published_at || "-");
+        els.statNested.textContent = String(summary?.average_nested_confluence ?? "-");
+        els.statSystem.textContent = String(summary?.average_system_convergence ?? "-");
+        els.statFocus.innerHTML = classChip(primaryFocus);
+        els.statRelation.textContent = relationLabel(relationFocus);
 
         els.rows.innerHTML = "";
         for (const row of coordinates) {
           const tr = document.createElement("tr");
-          const terms = Array.isArray(row?.latest_sameness_focus_terms) ? row.latest_sameness_focus_terms : [];
+          const confluence = row?.confluence || {};
+          const continuity = row?.continuity || {};
           tr.innerHTML =
-            "<td>" + escapeHtml(row.coordinate || "-") + "</td>" +
-            "<td>" + classChip(row.continuity_class) + "</td>" +
-            "<td>" + escapeHtml((row.integrated_ratio ?? "-") + " / " + (row.rupture_ratio ?? "-")) + "</td>" +
-            "<td>" + escapeHtml((row.avg_moment_confluence ?? "-") + " / " + (row.avg_tension ?? "-")) + "</td>" +
-            "<td>" + escapeHtml(terms.join(", ")) + "</td>";
+            "<td>" + escapeHtml(row.coordinate || "-") + "<div class='hint'>" +
+              escapeHtml(((row?.hierarchy?.path_coordinates) || []).join(" -> ")) + "</div></td>" +
+            "<td>" + escapeHtml((confluence.nested_confluence_score ?? "-")) +
+              "<div class='hint'>node " + escapeHtml(confluence.node_confluence ?? "-") +
+              " | vertical " + escapeHtml(confluence.vertical_confluence ?? "-") +
+              " | sibling " + escapeHtml(confluence.sibling_confluence ?? "-") +
+              " | path " + escapeHtml(confluence.path_confluence ?? "-") + "</div></td>" +
+            "<td>" + classChip(continuity.continuity_class) +
+              "<div class='hint'>" + escapeHtml((continuity.latest_transition_status || "-") + " / " + (continuity.trend || "-")) + "</div></td>" +
+            "<td>" + escapeHtml(row?.guidance?.focus_relation || relationLabel(relationFocus)) + "</td>" +
+            "<td>" + escapeHtml(row?.guidance?.what_to_watch || "-") + "</td>";
           els.rows.appendChild(tr);
         }
 
@@ -228,7 +291,7 @@
         els.error.textContent = "";
         try {
           const raw = els.jsonInput.value.trim();
-          if (!raw) throw new Error("Paste dashboard JSON first.");
+          if (!raw) throw new Error("Paste published dashboard JSON first.");
           const parsed = JSON.parse(raw);
           if (!Array.isArray(parsed?.coordinates)) throw new Error("Invalid format: expected `coordinates` array.");
           render(parsed);
@@ -238,19 +301,19 @@
       }
 
       async function fetchLive() {
-        const response = await fetch("state/steward-continuity-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
-        if (!response.ok) throw new Error("Live dashboard unavailable. Start runtime + local server.");
+        const response = await fetch("public-confluence-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!response.ok) throw new Error("Published confluence snapshot unavailable.");
         const parsed = await response.json();
         render(parsed);
         els.jsonInput.value = JSON.stringify(parsed, null, 2);
-        els.liveStatus.textContent = "Live mode: ON (polling every 3s)";
+        els.liveStatus.textContent = "Refresh mode: ON (polling every 3s)";
       }
 
       async function loadCurrentSnapshot() {
         els.error.textContent = "";
         try {
-          const response = await fetch("state/steward-continuity-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
-          if (!response.ok) throw new Error("Current dashboard unavailable.");
+          const response = await fetch("public-confluence-dashboard.json?ts=" + Date.now(), { cache: "no-store" });
+          if (!response.ok) throw new Error("Published dashboard unavailable.");
           const parsed = await response.json();
           render(parsed);
           els.jsonInput.value = JSON.stringify(parsed, null, 2);
@@ -270,7 +333,7 @@
       function stopLive() {
         if (liveTimer) clearInterval(liveTimer);
         liveTimer = null;
-        els.liveStatus.textContent = "Live mode: OFF";
+        els.liveStatus.textContent = "Refresh mode: OFF";
       }
 
       document.getElementById("renderBtn").addEventListener("click", parseAndRender);

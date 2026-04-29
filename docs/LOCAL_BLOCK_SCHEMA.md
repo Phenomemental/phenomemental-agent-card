@@ -13,6 +13,13 @@ Version note: runtime now emits `v1.1.0` semantics for Place-Time continuity tra
 
 File: `state/local-coordinate-graph.json`
 
+- Local `0.x` contexts now persist hierarchy metadata for nested confluence:
+  - `parent_coordinate`
+  - `child_coordinates`
+  - `sibling_coordinates`
+  - `path_coordinates`
+  - `depth`
+
 ```json
 {
   "version": "1.0.0",
@@ -45,11 +52,18 @@ File: `state/semantic-tension-ledger.json`
 File: `state/semantic-contrast-ledger.json`
 
 - Tracks decimal tension dimensions for local `0.x` contexts:
+  - `node_confluence`
+  - `vertical_confluence`
+  - `sibling_confluence`
+  - `path_confluence`
+  - `nested_confluence_score`
+  - `nested_confluence_tension`
   - `local_internal_tension`
   - `local_remote_tension`
   - `temporal_tension`
   - `overall_tension`
   - `convergence_score`
+- `local_confluence_tension` remains the canonical local tension field, now sourced from `nested_confluence_tension`.
 
 ## 4) Place-Time Continuity Ledger (v1.1)
 
@@ -60,7 +74,9 @@ File: `state/place-time-continuity-ledger.json`
   - `blue_observation` (what happened)
   - `red_interpretation` (what it means)
   - `moment_confluence`
+  - `nested_components`
   - `transition_status` (`integrated_shift` | `tension_shift` | `rupture`)
+  - `sameness_focus_relation`
   - `sameness_focus_terms` (shared semantic spine terms)
 
 ```json
@@ -81,6 +97,13 @@ File: `state/place-time-continuity-ledger.json`
         "transition_status": "integrated_shift",
         "transition_similarity": 0.74,
         "continuity_signal": 0.56,
+        "sameness_focus_relation": "path_confluence",
+        "nested_components": {
+          "node_confluence": 0.71,
+          "vertical_confluence": 0.66,
+          "sibling_confluence": 1,
+          "path_confluence": 0.62
+        },
         "sameness_focus_terms": ["sovereign", "identity", "difference"]
       },
       "history": []
@@ -99,6 +122,7 @@ File: `state/steward-continuity-dashboard.json`
   - `evolving_presence`
   - `drift_risk`
 - Focuses on sameness trajectory quality, not only difference.
+- Includes `primary_relation_focus` so stewardship can see whether node, vertical, sibling, or path containment is weakest overall.
 
 ```json
 {

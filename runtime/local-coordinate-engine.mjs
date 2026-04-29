@@ -137,6 +137,54 @@ function inferIdentityFromShell(coordinates) {
   return match?.[1]?.trim() || "Phenomemental";
 }
 
+function isLocalContextAddress(address) {
+  return /^0\.\d+(?:\.\d+)*$/.test(String(address || ""));
+}
+
+function parentLocalContextAddress(address) {
+  if (!isLocalContextAddress(address)) return null;
+  const parts = String(address).split(".");
+  if (parts.length <= 2) return null;
+  return parts.slice(0, -1).join(".");
+}
+
+function localContextDepth(address) {
+  if (!isLocalContextAddress(address)) return null;
+  return String(address).split(".").length - 1;
+}
+
+function pathCoordinates(address) {
+  if (!isLocalContextAddress(address)) return [];
+  const parts = String(address).split(".");
+  const path = [];
+  for (let index = 2; index <= parts.length; index += 1) {
+    path.push(parts.slice(0, index).join("."));
+  }
+  return path;
+}
+
+function annotateHierarchy(graph) {
+  const coordinates = graph?.coordinates || {};
+  const contextAddresses = Object.keys(coordinates).filter((address) => isLocalContextAddress(address));
+  for (const address of contextAddresses) {
+    const node = coordinates[address];
+    const meta = node._meta || {};
+    const parentCoordinate = parentLocalContextAddress(address);
+    const childCoordinates = contextAddresses.filter((candidate) => parentLocalContextAddress(candidate) === address);
+    const siblingCoordinates = contextAddresses.filter((candidate) =>
+      candidate !== address && parentLocalContextAddress(candidate) === parentCoordinate
+    );
+    meta.parent_coordinate = parentCoordinate;
+    meta.child_coordinates = childCoordinates;
+    meta.sibling_coordinates = siblingCoordinates;
+    meta.path_coordinates = pathCoordinates(address);
+    meta.depth = localContextDepth(address);
+    meta.hierarchy_root = "0";
+    node._meta = meta;
+  }
+  return graph;
+}
+
 function normalizeContextNode(node, timestamp, identityLabel) {
   if (!node || node?._meta?.kind !== "context") return node;
   const links = Array.isArray(node._meta.links) ? [...node._meta.links] : [];
@@ -198,6 +246,8 @@ export function updateLocalCoordinateGraph({
     if (contextFingerprintExists(graph.coordinates, candidate.source_fingerprint)) continue;
     opened.push(openZeroXContext(graph, timestamp, candidate));
   }
+
+  annotateHierarchy(graph);
 
   graph.updated_at = timestamp;
   writeJsonAtomic(graphPath, graph);

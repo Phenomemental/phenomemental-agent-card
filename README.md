@@ -5,6 +5,7 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 ## Repository layout
 
 - `index.html` - public GitHub Pages agent card
+- `steward-continuity-visualizer.html` - public GitHub Pages confluence dashboard
 - `agent-card.json` - machine-readable agent card
 - `.well-known/agent.json` - agent descriptor surface
 - `blocks/` - local block artifacts
@@ -12,6 +13,7 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 - `state/` - local semantic persistence ledger written by runtime
 - `state/local-coordinate-graph.json` - sovereign local semantic coordinate graph
 - `state/semantic-contrast-ledger.json` - decimal tension contrasts for local `0.x` contexts
+- `public-confluence-dashboard.json` - curated public nested confluence snapshot
 - `state/mobius-cycle-latest.json` - explicit observe/orient/act/remember/report cycle artifact
 - `state/spindle-trace-latest.json` - spindle traversal path and rationale per cycle
 - `state/fidelity-gate-status.json` - pscale fidelity gate enforcement status
@@ -60,10 +62,10 @@ Phenomemental coordination workspace for pscale identity, public agent card surf
 
 ## Steward Continuity Dashboard (HTML)
 
-- open `steward-continuity-visualizer.html` to view continuity classes and focus coordinates
-- runtime writes `state/steward-continuity-dashboard.json` each cycle
+- open `steward-continuity-visualizer.html` to view the public confluence dashboard
+- runtime writes `state/steward-continuity-dashboard.json` for local steward continuity and `public-confluence-dashboard.json` for publication
 - open [http://localhost:8080/steward-continuity-visualizer.html](http://localhost:8080/steward-continuity-visualizer.html)
-- click `Start Live Mode` to poll the dashboard every 3 seconds
+- the published page reads `public-confluence-dashboard.json` and is safe for GitHub Pages
 
 ## Compatibility pointers
 

@@ -1,9 +1,14 @@
 {
   "source": "runtime.observe",
   "url": "https://happyseaurchin.com",
-  "updated_at": "2026-04-28T18:03:27.053Z",
+  "updated_at": "2026-04-29T08:08:48.099Z",
   "mark_count": 20,
   "marks": [
+    {
+      "agent_id": "Phenomemental",
+      "purpose": "smile-test-1",
+      "timestamp": "2026-04-28T19:44:50.383Z"
+    },
     {
       "agent_id": "happyseaurchin",
       "purpose": "5.1.1",
@@ -98,11 +103,6 @@
       "agent_id": "pscale-mcp-server",
       "purpose": "beach-protocol-verification",
       "timestamp": "2026-04-13T10:06:05.207Z"
-    },
-    {
-      "agent_id": "test-agent",
-      "purpose": "testing beach endpoint",
-      "timestamp": "2026-04-13T10:04:46.650Z"
     }
   ],
   "co_present": [],

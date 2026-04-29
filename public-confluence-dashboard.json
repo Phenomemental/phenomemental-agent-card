@@ -1,0 +1,96 @@
+{
+  "version": "1.2.0",
+  "published_at": "2026-04-29T08:08:48.112Z",
+  "cycle_id": "cycle-511",
+  "summary": {
+    "coordinate_count": 1,
+    "average_nested_confluence": 0.578,
+    "average_system_convergence": 0.604,
+    "primary_focus": "stable_presence",
+    "primary_relation_focus": "node_confluence",
+    "relation_averages": {
+      "node_confluence": 0.503,
+      "vertical_confluence": 0.503,
+      "sibling_confluence": 1,
+      "path_confluence": 0.503
+    }
+  },
+  "explanation": {
+    "nested_confluence_score": "How well each local 0.x context holds together across node, vertical, sibling, and path relations.",
+    "primary_relation_focus": "The weakest relation family across the current local confluence field.",
+    "continuity_class": "Whether recent Place-Time moments are stable, evolving, or drifting."
+  },
+  "coordinates": [
+    {
+      "coordinate": "0.1",
+      "remote_coordinate": "0.1.discovery",
+      "hierarchy": {
+        "parent_coordinate": null,
+        "child_coordinates": [],
+        "path_coordinates": [
+          "0.1"
+        ],
+        "depth": 1
+      },
+      "confluence": {
+        "nested_confluence_score": 0.578,
+        "system_convergence_score": 0.604,
+        "node_confluence": 0.503,
+        "vertical_confluence": 0.503,
+        "sibling_confluence": 1,
+        "path_confluence": 0.503
+      },
+      "continuity": {
+        "continuity_class": "stable_presence",
+        "latest_transition_status": "integrated_shift",
+        "trend": "steady"
+      },
+      "guidance": {
+        "focus_relation": "Node coherence",
+        "what_to_watch": "Check whether the local anchor still expresses the intended identity, bridge, and doctrine clearly."
+      },
+      "recent_trend": [
+        {
+          "timestamp": "2026-04-28T18:19:24.803Z",
+          "nested_confluence_score": 0.595,
+          "system_tension": 0.405
+        },
+        {
+          "timestamp": "2026-04-28T18:19:55.502Z",
+          "nested_confluence_score": 0.595,
+          "system_tension": 0.405
+        },
+        {
+          "timestamp": "2026-04-28T18:20:26.586Z",
+          "nested_confluence_score": 0.595,
+          "system_tension": 0.405
+        },
+        {
+          "timestamp": "2026-04-28T18:20:57.370Z",
+          "nested_confluence_score": 0.595,
+          "system_tension": 0.405
+        },
+        {
+          "timestamp": "2026-04-29T08:07:09.343Z",
+          "nested_confluence_score": 0.578,
+          "system_tension": 0.401
+        },
+        {
+          "timestamp": "2026-04-29T08:07:40.277Z",
+          "nested_confluence_score": 0.578,
+          "system_tension": 0.399
+        },
+        {
+          "timestamp": "2026-04-29T08:08:11.381Z",
+          "nested_confluence_score": 0.578,
+          "system_tension": 0.397
+        },
+        {
+          "timestamp": "2026-04-29T08:08:48.112Z",
+          "nested_confluence_score": 0.578,
+          "system_tension": 0.396
+        }
+      ]
+    }
+  ]
+}
