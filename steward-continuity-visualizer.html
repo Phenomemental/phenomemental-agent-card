@@ -66,8 +66,80 @@
         border-radius: 10px;
         padding: 10px;
       }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 14px;
+      }
       .k { color: var(--muted); font-size: 12px; }
       .v { font-size: 20px; margin-top: 4px; }
+      .big {
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      .focus-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .focus-box {
+        background: #121834;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .signal-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .signal {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-size: 12px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .green { background: rgba(94, 230, 168, 0.12); color: var(--ok); }
+      .amber { background: rgba(255, 211, 122, 0.12); color: var(--warn); }
+      .red { background: rgba(255, 143, 143, 0.12); color: var(--risk); }
+      .unknown { background: rgba(165, 178, 220, 0.12); color: var(--muted); }
+      .dot.green { background: var(--ok); }
+      .dot.amber { background: var(--warn); }
+      .dot.red { background: var(--risk); }
+      .dot.unknown { background: var(--muted); }
+      .bar-group {
+        display: grid;
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .bar-line {
+        display: grid;
+        grid-template-columns: 64px 1fr 40px;
+        align-items: center;
+        gap: 8px;
+      }
+      .bar-track {
+        height: 8px;
+        border-radius: 999px;
+        background: #0f1530;
+        overflow: hidden;
+        border: 1px solid var(--border);
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 999px;
+      }
       table {
         width: 100%;
         border-collapse: collapse;
@@ -125,6 +197,36 @@
       </section>
 
       <section class="card">
+        <div class="hero">
+          <div>
+            <div class="k">Emerging Meaning</div>
+            <div class="big" id="emergenceHeadline">No emergence reading loaded.</div>
+            <p id="emergenceInterpretation"></p>
+            <p class="hint" id="emergenceCommons"></p>
+            <p class="hint" id="emergenceExperiment"></p>
+          </div>
+          <div>
+            <div class="k">Confluence Compass</div>
+            <div class="focus-grid">
+              <div class="focus-box">
+                <div class="k">Protect</div>
+                <div id="focusProtect"></div>
+              </div>
+              <div class="focus-box">
+                <div class="k">Repair</div>
+                <div id="focusRepair"></div>
+              </div>
+              <div class="focus-box">
+                <div class="k">Test</div>
+                <div id="focusTest"></div>
+              </div>
+            </div>
+            <div class="signal-row" id="summarySignals"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
         <h2>What The Relations Mean</h2>
         <ul>
           <li><strong>Node coherence</strong>: whether the context anchor clearly expresses the intended identity, bridge, and doctrine.</li>
@@ -171,6 +273,14 @@
         statSystem: document.getElementById("statSystem"),
         statRelation: document.getElementById("statRelation"),
         rows: document.getElementById("rows"),
+        emergenceHeadline: document.getElementById("emergenceHeadline"),
+        emergenceInterpretation: document.getElementById("emergenceInterpretation"),
+        emergenceCommons: document.getElementById("emergenceCommons"),
+        emergenceExperiment: document.getElementById("emergenceExperiment"),
+        focusProtect: document.getElementById("focusProtect"),
+        focusRepair: document.getElementById("focusRepair"),
+        focusTest: document.getElementById("focusTest"),
+        summarySignals: document.getElementById("summarySignals"),
         focusText: document.getElementById("focusText"),
         focusMeaning: document.getElementById("focusMeaning"),
         focusWhy: document.getElementById("focusWhy"),
@@ -204,11 +314,30 @@
         return labels[value] || String(value || "-");
       }
 
+      function signalChip(label, tone) {
+        const normalized = ["green", "amber", "red"].includes(tone) ? tone : "unknown";
+        return "<span class='signal " + normalized + "'><span class='dot " + normalized + "'></span>" + escapeHtml(label) + "</span>";
+      }
+
+      function barFill(value, tone) {
+        const normalized = ["green", "amber", "red"].includes(tone) ? tone : "unknown";
+        const width = Math.max(0, Math.min(100, Number(value || 0) * 100));
+        const color = normalized === "green" ? "var(--ok)" : normalized === "amber" ? "var(--warn)" : normalized === "red" ? "var(--risk)" : "var(--muted)";
+        return "<div class='bar-track'><div class='bar-fill' style='width:" + width + "%; background:" + color + ";'></div></div>";
+      }
+
+      function trendArrow(value) {
+        if (value === "strengthening") return "up";
+        if (value === "softening") return "down";
+        return "flat";
+      }
+
       function render(payload) {
         const summary = payload?.summary || {};
         const coordinates = Array.isArray(payload?.coordinates) ? payload.coordinates : [];
         const primaryFocus = summary?.primary_focus || payload?.summary?.primary_focus || "stable_presence";
         const relationFocus = summary?.primary_relation_focus || "node_confluence";
+        const emergence = payload?.emergence || {};
         const guidance = {
           drift_risk: {
             focus: "Rebuild semantic bridge before expanding scope.",
@@ -249,22 +378,39 @@
         els.statSystem.textContent = String(summary?.average_system_convergence ?? "-");
         els.statFocus.innerHTML = classChip(primaryFocus);
         els.statRelation.textContent = relationLabel(relationFocus);
+        els.emergenceHeadline.textContent = emergence.headline || "No emergence reading loaded.";
+        els.emergenceInterpretation.textContent = emergence.interpretation || "";
+        els.emergenceCommons.textContent = emergence.commons_interpretation || "";
+        els.emergenceExperiment.textContent = emergence.experiment || "";
+        els.focusProtect.textContent = summary?.attention?.protect || "";
+        els.focusRepair.textContent = summary?.attention?.repair || "";
+        els.focusTest.textContent = summary?.attention?.test || "";
+        els.summarySignals.innerHTML = "";
+        const relationLights = summary?.relation_traffic_lights || {};
+        for (const key of ["node_confluence", "vertical_confluence", "sibling_confluence", "path_confluence"]) {
+          els.summarySignals.insertAdjacentHTML("beforeend", signalChip(relationLabel(key), relationLights[key]));
+        }
 
         els.rows.innerHTML = "";
         for (const row of coordinates) {
           const tr = document.createElement("tr");
           const confluence = row?.confluence || {};
           const continuity = row?.continuity || {};
+          const lights = confluence.traffic_lights || {};
+          const breakdown =
+            "<div><strong>" + escapeHtml((confluence.nested_confluence_score ?? "-")) + "</strong></div>" +
+            "<div class='bar-group'>" +
+              "<div class='bar-line'><span>node</span>" + barFill(confluence.node_confluence, lights.node_confluence) + "<span>" + escapeHtml(confluence.node_confluence ?? "-") + "</span></div>" +
+              "<div class='bar-line'><span>vertical</span>" + barFill(confluence.vertical_confluence, lights.vertical_confluence) + "<span>" + escapeHtml(confluence.vertical_confluence ?? "-") + "</span></div>" +
+              "<div class='bar-line'><span>sibling</span>" + barFill(confluence.sibling_confluence, lights.sibling_confluence) + "<span>" + escapeHtml(confluence.sibling_confluence ?? "-") + "</span></div>" +
+              "<div class='bar-line'><span>path</span>" + barFill(confluence.path_confluence, lights.path_confluence) + "<span>" + escapeHtml(confluence.path_confluence ?? "-") + "</span></div>" +
+            "</div>";
           tr.innerHTML =
             "<td>" + escapeHtml(row.coordinate || "-") + "<div class='hint'>" +
               escapeHtml(((row?.hierarchy?.path_coordinates) || []).join(" -> ")) + "</div></td>" +
-            "<td>" + escapeHtml((confluence.nested_confluence_score ?? "-")) +
-              "<div class='hint'>node " + escapeHtml(confluence.node_confluence ?? "-") +
-              " | vertical " + escapeHtml(confluence.vertical_confluence ?? "-") +
-              " | sibling " + escapeHtml(confluence.sibling_confluence ?? "-") +
-              " | path " + escapeHtml(confluence.path_confluence ?? "-") + "</div></td>" +
+            "<td>" + breakdown + "</td>" +
             "<td>" + classChip(continuity.continuity_class) +
-              "<div class='hint'>" + escapeHtml((continuity.latest_transition_status || "-") + " / " + (continuity.trend || "-")) + "</div></td>" +
+              "<div class='hint'>" + escapeHtml((continuity.latest_transition_status || "-") + " / " + trendArrow(continuity.trend || "-")) + "</div></td>" +
             "<td>" + escapeHtml(row?.guidance?.focus_relation || relationLabel(relationFocus)) + "</td>" +
             "<td>" + escapeHtml(row?.guidance?.what_to_watch || "-") + "</td>";
           els.rows.appendChild(tr);

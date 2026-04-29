@@ -1,31 +1,9 @@
 {
   "version": "1.1.0",
-  "updated_at": "2026-04-29T08:08:48.112Z",
+  "updated_at": "2026-04-29T08:22:32.200Z",
   "coordinate_presence": {
     "0.1": {
       "history": [
-        {
-          "cycle_id": "cycle-452",
-          "timestamp": "2026-04-28T17:52:46.243Z",
-          "blue_observation": "Observed unread=0, discovery_marks=20, signal_site_marks=0.",
-          "red_interpretation": "Meaning anchor at 0.1: Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
-          "anchor_text": "Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
-          "moment_confluence": 0.595,
-          "tension_value": 0.405,
-          "transition_status": "integrated_shift",
-          "transition_similarity": 1,
-          "continuity_signal": 0.564,
-          "sameness_focus_terms": [
-            "sovereign",
-            "local",
-            "identity",
-            "context",
-            "for",
-            "phenomemental",
-            "signal",
-            "sovereignty"
-          ]
-        },
         {
           "cycle_id": "cycle-453",
           "timestamp": "2026-04-28T17:53:17.067Z",
@@ -1355,18 +1333,48 @@
             "sibling_confluence": 1,
             "path_confluence": 0.503
           }
+        },
+        {
+          "cycle_id": "cycle-512",
+          "timestamp": "2026-04-29T08:22:32.200Z",
+          "blue_observation": "Observed unread=0, discovery_marks=20, signal_site_marks=0.",
+          "red_interpretation": "Meaning anchor at 0.1: Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
+          "anchor_text": "Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
+          "moment_confluence": 0.605,
+          "tension_value": 0.395,
+          "transition_status": "integrated_shift",
+          "transition_similarity": 1,
+          "continuity_signal": 0.578,
+          "sameness_focus_terms": [
+            "sovereign",
+            "local",
+            "identity",
+            "context",
+            "for",
+            "phenomemental",
+            "signal",
+            "sovereignty"
+          ],
+          "sameness_focus_relation": "node_confluence",
+          "weakest_relation_type": "node_confluence",
+          "nested_components": {
+            "node_confluence": 0.503,
+            "vertical_confluence": 0.503,
+            "sibling_confluence": 1,
+            "path_confluence": 0.503
+          }
         }
       ],
       "coordinate": "0.1",
       "remote_coordinate": "0.1.discovery",
       "latest_place_time": {
-        "cycle_id": "cycle-511",
-        "timestamp": "2026-04-29T08:08:48.112Z",
+        "cycle_id": "cycle-512",
+        "timestamp": "2026-04-29T08:22:32.200Z",
         "blue_observation": "Observed unread=0, discovery_marks=20, signal_site_marks=0.",
         "red_interpretation": "Meaning anchor at 0.1: Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
         "anchor_text": "Sovereign local identity context for Phenomemental: discovery signal from happyseaurchin at purpose 5.1.1; local sovereignty bridges with MCP observations without forced collapse; difference is meaningful signal, and sameness and tension both carry value in the included middle.",
-        "moment_confluence": 0.604,
-        "tension_value": 0.396,
+        "moment_confluence": 0.605,
+        "tension_value": 0.395,
         "transition_status": "integrated_shift",
         "transition_similarity": 1,
         "continuity_signal": 0.578,

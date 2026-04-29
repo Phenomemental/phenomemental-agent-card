@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-29T08:08:48.112Z",
+  "updated_at": "2026-04-29T08:22:32.200Z",
   "coordinates": {
     "0.inbox": {
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "0.inbox",
-        "updated_at": "2026-04-29T08:08:48.112Z"
+        "updated_at": "2026-04-29T08:22:32.200Z"
       },
       "_remote": {
         "_": "Inbox semantic activity",
@@ -22,13 +22,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:57:47.431Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
           "timestamp": "2026-04-28T17:58:18.050Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -370,6 +363,13 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T08:22:32.200Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
         }
       ]
     },
@@ -377,7 +377,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "0.1.discovery",
-        "updated_at": "2026-04-29T08:08:48.112Z"
+        "updated_at": "2026-04-29T08:22:32.200Z"
       },
       "_remote": {
         "_": "Discovery beach signal",
@@ -393,13 +393,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:57:47.431Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
           "timestamp": "2026-04-28T17:58:18.050Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -741,6 +734,13 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T08:22:32.200Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
         }
       ]
     },
@@ -748,7 +748,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "identity.agent",
-        "updated_at": "2026-04-29T08:08:48.112Z"
+        "updated_at": "2026-04-29T08:22:32.200Z"
       },
       "_remote": {
         "_": "Runtime identity lock",
@@ -764,13 +764,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:57:47.431Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
           "timestamp": "2026-04-28T17:58:18.050Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -1112,6 +1105,13 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T08:22:32.200Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
         }
       ]
     },
@@ -1119,7 +1119,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "5.1.1.signal_site",
-        "updated_at": "2026-04-29T08:08:48.112Z"
+        "updated_at": "2026-04-29T08:22:32.200Z"
       },
       "_remote": {
         "_": "Signal site coordinate signal",
@@ -1135,13 +1135,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:57:47.431Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
           "timestamp": "2026-04-28T17:58:18.050Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -1479,6 +1472,13 @@
         },
         {
           "timestamp": "2026-04-29T08:08:48.112Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T08:22:32.200Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
           "relation_band": "active tension",

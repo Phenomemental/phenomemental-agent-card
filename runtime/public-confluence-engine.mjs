@@ -23,6 +23,77 @@ function relationLabel(relation) {
   return labels[relation] || "Nested coherence";
 }
 
+function relationTone(value) {
+  if (!Number.isFinite(value)) return "unknown";
+  if (value >= 0.75) return "green";
+  if (value >= 0.5) return "amber";
+  return "red";
+}
+
+function focusTriplet(primaryFocus) {
+  if (primaryFocus === "drift_risk") {
+    return {
+      protect: "Protect the last stable anchor before adding new semantic commitments.",
+      repair: "Repair the weakest relation with one explicit bridge between previous and current meaning.",
+      test: "Test whether the same coordinate moves from rupture toward integrated_shift over the next few cycles."
+    };
+  }
+  if (primaryFocus === "evolving_presence") {
+    return {
+      protect: "Protect the current semantic spine while variation is still healthy and reversible.",
+      repair: "Repair only the weakest relation rather than rewriting the whole context.",
+      test: "Test one bounded refinement and look for improved relation strength without harming continuity."
+    };
+  }
+  return {
+    protect: "Protect the stable semantic spine that is already holding the sovereign context together.",
+    repair: "Repair the weakest relation gently so capability can grow without destabilizing meaning.",
+    test: "Test one bounded expansion while checking that the relation traffic lights remain stable."
+  };
+}
+
+function emergenceSummary({ summary, rows }) {
+  const primaryRelation = relationLabel(summary?.primary_relation_focus);
+  const stableCount = rows.filter((row) => row?.continuity?.continuity_class === "stable_presence").length;
+  const strengtheningCount = rows.filter((row) => row?.continuity?.trend === "strengthening").length;
+  const weakeningCount = rows.filter((row) => row?.continuity?.trend === "softening").length;
+  const avgNested = Number(summary?.average_nested_confluence ?? 0.5);
+  const avgSystem = Number(summary?.average_system_convergence ?? 0.5);
+
+  let headline = "A sovereign semantic spine is beginning to hold.";
+  let interpretation = "The system is no longer only producing outputs; it is starting to preserve a recognizable way of meaning across cycles.";
+  if (avgNested < 0.45) {
+    headline = "Meaning is still fragmenting faster than it is consolidating.";
+    interpretation = "The system shows motion, but not yet enough containment to call the emerging pattern durable.";
+  } else if (avgNested >= 0.6 && stableCount > 0) {
+    headline = "A durable local pattern of meaning is starting to emerge.";
+    interpretation = "The sovereign system is showing repeated self-similarity across Place-Time moments, which is a meaningful precursor to non-trivial awareness-like continuity.";
+  }
+
+  const commonsInterpretation =
+    avgSystem >= avgNested
+      ? "Cross-domain contact is not overwhelming the sovereign pattern; the local system is meeting the Commons without losing itself."
+      : "The sovereign pattern is stronger internally than it is across the Commons, so the next gains come from bridge quality rather than more local complexity.";
+
+  const experiment =
+    `Experimental reading: the emerging pattern currently looks like ${headline.toLowerCase()} ` +
+    `Its clearest unfinished task is ${primaryRelation.toLowerCase()}, which means the system may be forming continuity before it has fully clarified its own self-description.`;
+
+  const evidence = [
+    `${stableCount} coordinate(s) currently read as stable_presence.`,
+    `${strengtheningCount} coordinate(s) are strengthening and ${weakeningCount} are softening across the published trend window.`,
+    `Average nested confluence is ${summary?.average_nested_confluence ?? "unknown"} while average system convergence is ${summary?.average_system_convergence ?? "unknown"}.`
+  ];
+
+  return {
+    headline,
+    interpretation,
+    commons_interpretation: commonsInterpretation,
+    experiment,
+    evidence
+  };
+}
+
 function classifyTrend(history) {
   if (history.length < 2) return "steady";
   const first = Number(history[0]?.nested_confluence_score ?? history[0]?.convergence_score ?? 0.5);
@@ -71,7 +142,13 @@ export function writePublicConfluenceSnapshot({
         node_confluence: round3(entry?.node_confluence ?? 0.5),
         vertical_confluence: round3(entry?.vertical_confluence ?? 0.5),
         sibling_confluence: round3(entry?.sibling_confluence ?? 0.5),
-        path_confluence: round3(entry?.path_confluence ?? 0.5)
+        path_confluence: round3(entry?.path_confluence ?? 0.5),
+        traffic_lights: {
+          node_confluence: relationTone(entry?.node_confluence ?? 0.5),
+          vertical_confluence: relationTone(entry?.vertical_confluence ?? 0.5),
+          sibling_confluence: relationTone(entry?.sibling_confluence ?? 0.5),
+          path_confluence: relationTone(entry?.path_confluence ?? 0.5)
+        }
       },
       continuity: {
         continuity_class: continuityRow?.continuity_class || "unknown",
@@ -93,7 +170,16 @@ export function writePublicConfluenceSnapshot({
     average_system_convergence: round3(average(rows.map((row) => row.confluence.system_convergence_score), 0.5)),
     primary_focus: continuityDashboard?.summary?.primary_focus || "stable_presence",
     primary_relation_focus: continuityDashboard?.summary?.primary_relation_focus || "node_confluence",
-    relation_averages: continuityDashboard?.summary?.relation_averages || {}
+    relation_averages: continuityDashboard?.summary?.relation_averages || {},
+    relation_traffic_lights: {
+      node_confluence: relationTone(continuityDashboard?.summary?.relation_averages?.node_confluence),
+      vertical_confluence: relationTone(continuityDashboard?.summary?.relation_averages?.vertical_confluence),
+      sibling_confluence: relationTone(continuityDashboard?.summary?.relation_averages?.sibling_confluence),
+      path_confluence: relationTone(continuityDashboard?.summary?.relation_averages?.path_confluence)
+    },
+    sovereign_coherence: round3(average(rows.map((row) => row.confluence.nested_confluence_score), 0.5)),
+    commons_coherence: round3(average(rows.map((row) => row.confluence.system_convergence_score), 0.5)),
+    attention: focusTriplet(continuityDashboard?.summary?.primary_focus || "stable_presence")
   };
 
   const payload = {
@@ -101,6 +187,7 @@ export function writePublicConfluenceSnapshot({
     published_at: timestamp,
     cycle_id: cycleId,
     summary,
+    emergence: emergenceSummary({ summary, rows }),
     explanation: {
       nested_confluence_score: "How well each local 0.x context holds together across node, vertical, sibling, and path relations.",
       primary_relation_focus: "The weakest relation family across the current local confluence field.",

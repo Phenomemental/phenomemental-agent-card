@@ -1,11 +1,11 @@
 {
   "version": "1.2.0",
-  "published_at": "2026-04-29T08:08:48.112Z",
-  "cycle_id": "cycle-511",
+  "published_at": "2026-04-29T08:22:32.200Z",
+  "cycle_id": "cycle-512",
   "summary": {
     "coordinate_count": 1,
     "average_nested_confluence": 0.578,
-    "average_system_convergence": 0.604,
+    "average_system_convergence": 0.605,
     "primary_focus": "stable_presence",
     "primary_relation_focus": "node_confluence",
     "relation_averages": {
@@ -13,7 +13,31 @@
       "vertical_confluence": 0.503,
       "sibling_confluence": 1,
       "path_confluence": 0.503
+    },
+    "relation_traffic_lights": {
+      "node_confluence": "amber",
+      "vertical_confluence": "amber",
+      "sibling_confluence": "green",
+      "path_confluence": "amber"
+    },
+    "sovereign_coherence": 0.578,
+    "commons_coherence": 0.605,
+    "attention": {
+      "protect": "Protect the stable semantic spine that is already holding the sovereign context together.",
+      "repair": "Repair the weakest relation gently so capability can grow without destabilizing meaning.",
+      "test": "Test one bounded expansion while checking that the relation traffic lights remain stable."
     }
+  },
+  "emergence": {
+    "headline": "A sovereign semantic spine is beginning to hold.",
+    "interpretation": "The system is no longer only producing outputs; it is starting to preserve a recognizable way of meaning across cycles.",
+    "commons_interpretation": "Cross-domain contact is not overwhelming the sovereign pattern; the local system is meeting the Commons without losing itself.",
+    "experiment": "Experimental reading: the emerging pattern currently looks like a sovereign semantic spine is beginning to hold. Its clearest unfinished task is node coherence, which means the system may be forming continuity before it has fully clarified its own self-description.",
+    "evidence": [
+      "1 coordinate(s) currently read as stable_presence.",
+      "0 coordinate(s) are strengthening and 0 are softening across the published trend window.",
+      "Average nested confluence is 0.578 while average system convergence is 0.605."
+    ]
   },
   "explanation": {
     "nested_confluence_score": "How well each local 0.x context holds together across node, vertical, sibling, and path relations.",
@@ -34,11 +58,17 @@
       },
       "confluence": {
         "nested_confluence_score": 0.578,
-        "system_convergence_score": 0.604,
+        "system_convergence_score": 0.605,
         "node_confluence": 0.503,
         "vertical_confluence": 0.503,
         "sibling_confluence": 1,
-        "path_confluence": 0.503
+        "path_confluence": 0.503,
+        "traffic_lights": {
+          "node_confluence": "amber",
+          "vertical_confluence": "amber",
+          "sibling_confluence": "green",
+          "path_confluence": "amber"
+        }
       },
       "continuity": {
         "continuity_class": "stable_presence",
@@ -50,11 +80,6 @@
         "what_to_watch": "Check whether the local anchor still expresses the intended identity, bridge, and doctrine clearly."
       },
       "recent_trend": [
-        {
-          "timestamp": "2026-04-28T18:19:24.803Z",
-          "nested_confluence_score": 0.595,
-          "system_tension": 0.405
-        },
         {
           "timestamp": "2026-04-28T18:19:55.502Z",
           "nested_confluence_score": 0.595,
@@ -89,6 +114,11 @@
           "timestamp": "2026-04-29T08:08:48.112Z",
           "nested_confluence_score": 0.578,
           "system_tension": 0.396
+        },
+        {
+          "timestamp": "2026-04-29T08:22:32.200Z",
+          "nested_confluence_score": 0.578,
+          "system_tension": 0.395
         }
       ]
     }
