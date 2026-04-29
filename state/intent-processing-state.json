@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-29T08:22:32.200Z",
+  "updated_at": "2026-04-29T09:21:43.674Z",
   "processing_mode": "dual_layer_v1",
   "governance": {
     "safety_logic": "excluded_middle",
@@ -14,14 +14,14 @@
   },
   "last_tension_snapshot": {
     "coordinate": "0.1",
-    "convergence_score": 0.605,
-    "nested_confluence_score": 0.578,
-    "tension_value": 0.395,
-    "local_confluence_tension": 0.422,
-    "cross_domain_tension": 0.33,
+    "convergence_score": 0.478,
+    "nested_confluence_score": 0.357,
+    "tension_value": 0.522,
+    "local_confluence_tension": 0.643,
+    "cross_domain_tension": 0.332,
     "weakest_relation_type": "node_confluence",
     "local_state": "mixed",
-    "updated_at": "2026-04-29T08:22:32.200Z",
+    "updated_at": "2026-04-29T09:21:43.674Z",
     "notes": "Latest contrast context from Mobius remember phase."
   },
   "intent_reference": {

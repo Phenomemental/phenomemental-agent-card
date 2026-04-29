@@ -1,32 +1,32 @@
 {
   "version": "1.1.0",
-  "updated_at": "2026-04-29T08:22:32.200Z",
-  "cycle_id": "cycle-512",
+  "updated_at": "2026-04-29T09:21:43.674Z",
+  "cycle_id": "cycle-517",
   "summary": {
-    "total_coordinates": 1,
-    "stable_presence_count": 1,
-    "evolving_presence_count": 0,
+    "total_coordinates": 3,
+    "stable_presence_count": 0,
+    "evolving_presence_count": 3,
     "drift_risk_count": 0,
-    "primary_focus": "stable_presence",
+    "primary_focus": "evolving_presence",
     "primary_relation_focus": "node_confluence",
     "relation_averages": {
-      "node_confluence": 0.503,
-      "vertical_confluence": 0.503,
-      "sibling_confluence": 1,
-      "path_confluence": 0.503
+      "node_confluence": 0.517,
+      "vertical_confluence": 0.517,
+      "sibling_confluence": 0.707,
+      "path_confluence": 0.517
     }
   },
   "actionable_focus": {
-    "primary_focus": "stable_presence",
+    "primary_focus": "evolving_presence",
     "primary_relation_focus": "node_confluence",
     "primary_guidance": {
-      "focus": "Protect coherence and convert stability into durable capability.",
-      "what_it_means": "Your Place-Time moments are consistently integrated. The system recognizes a coherent identity and meaning spine across cycles.",
-      "why_it_matters": "Stability is not the end-state; it is a platform. You can now expand capability without losing coherence if you change one controlled variable at a time.",
+      "focus": "Stabilize sameness while preserving useful variation.",
+      "what_it_means": "The system is learning and adapting, but coherence is not fully settled yet. This is healthy motion, but it still needs deliberate shaping.",
+      "why_it_matters": "This is the best stage for calibration: small improvements compound quickly if you keep the semantic spine stable while testing new moves.",
       "actions": [
-        "Lock the current anchor as a reference pattern (example: treat this exact anchor text as your baseline and compare all future variants against it).",
-        "Add one bounded experimental extension and monitor for drift (example: add a new sub-context like 0.2 for a specific ambition while keeping 0.1 unchanged for 3 cycles).",
-        "Document why this context is stable so it can be reused (example: note how node/path/vertical relations stayed coherent, especially node coherence)."
+        "Keep anchor wording stable for 3-5 cycles unless evidence changes (example: keep core phrase 'sovereign local identity...' fixed while refining one clause at a time).",
+        "Track sameness_focus_terms and the weakest relation deliberately (example: if node coherence keeps lagging, make one targeted repair instead of broad rewriting).",
+        "Prefer reversible harmonization moves over large semantic jumps (example: one bounded patch and one cycle check, not a full semantic rewrite)."
       ]
     },
     "class_guidance": {
@@ -64,45 +64,115 @@
   },
   "focus_coordinates": {
     "drift_risk": [],
-    "evolving_presence": [],
-    "stable_presence": [
-      "0.1"
-    ]
+    "evolving_presence": [
+      "0.1",
+      "0.2",
+      "0.4"
+    ],
+    "stable_presence": []
   },
   "coordinates": [
     {
       "coordinate": "0.1",
       "remote_coordinate": "0.1.discovery",
-      "continuity_class": "stable_presence",
-      "integrated_ratio": 1,
-      "rupture_ratio": 0,
-      "avg_moment_confluence": 0.6,
-      "avg_tension": 0.4,
-      "avg_node_confluence": 0.503,
-      "avg_vertical_confluence": 0.503,
-      "avg_sibling_confluence": 1,
-      "avg_path_confluence": 0.503,
-      "latest_cycle_id": "cycle-512",
-      "latest_transition_status": "integrated_shift",
-      "latest_moment_confluence": 0.605,
-      "latest_tension_value": 0.395,
+      "continuity_class": "evolving_presence",
+      "integrated_ratio": 0.5,
+      "rupture_ratio": 0.125,
+      "avg_moment_confluence": 0.557,
+      "avg_tension": 0.443,
+      "avg_node_confluence": 0.405,
+      "avg_vertical_confluence": 0.405,
+      "avg_sibling_confluence": 0.816,
+      "avg_path_confluence": 0.405,
+      "latest_cycle_id": "cycle-517",
+      "latest_transition_status": "tension_shift",
+      "latest_moment_confluence": 0.478,
+      "latest_tension_value": 0.522,
       "latest_sameness_focus_terms": [
         "sovereign",
         "local",
-        "identity",
         "context",
         "for",
         "phenomemental",
         "signal",
-        "sovereignty"
+        "without",
+        "forced"
       ],
       "latest_sameness_focus_relation": "node_confluence",
       "weakest_relation_type": "node_confluence",
       "latest_nested_components": {
-        "node_confluence": 0.503,
-        "vertical_confluence": 0.503,
-        "sibling_confluence": 1,
-        "path_confluence": 0.503
+        "node_confluence": 0.308,
+        "vertical_confluence": 0.308,
+        "sibling_confluence": 0.632,
+        "path_confluence": 0.308
+      }
+    },
+    {
+      "coordinate": "0.2",
+      "remote_coordinate": null,
+      "continuity_class": "evolving_presence",
+      "integrated_ratio": 0,
+      "rupture_ratio": 0,
+      "avg_moment_confluence": 0.571,
+      "avg_tension": 0.429,
+      "avg_node_confluence": 0.588,
+      "avg_vertical_confluence": 0.588,
+      "avg_sibling_confluence": 0.673,
+      "avg_path_confluence": 0.588,
+      "latest_cycle_id": "cycle-517",
+      "latest_transition_status": "tension_shift",
+      "latest_moment_confluence": 0.571,
+      "latest_tension_value": 0.429,
+      "latest_sameness_focus_terms": [
+        "sovereign",
+        "local",
+        "context",
+        "for",
+        "phenomemental",
+        "identity",
+        "signal",
+        "without"
+      ],
+      "latest_sameness_focus_relation": "node_confluence",
+      "weakest_relation_type": "node_confluence",
+      "latest_nested_components": {
+        "node_confluence": 0.588,
+        "vertical_confluence": 0.588,
+        "sibling_confluence": 0.673,
+        "path_confluence": 0.588
+      }
+    },
+    {
+      "coordinate": "0.4",
+      "remote_coordinate": null,
+      "continuity_class": "evolving_presence",
+      "integrated_ratio": 0,
+      "rupture_ratio": 0,
+      "avg_moment_confluence": 0.548,
+      "avg_tension": 0.452,
+      "avg_node_confluence": 0.558,
+      "avg_vertical_confluence": 0.558,
+      "avg_sibling_confluence": 0.631,
+      "avg_path_confluence": 0.558,
+      "latest_cycle_id": "cycle-517",
+      "latest_transition_status": "tension_shift",
+      "latest_moment_confluence": 0.548,
+      "latest_tension_value": 0.452,
+      "latest_sameness_focus_terms": [
+        "sovereign",
+        "local",
+        "context",
+        "for",
+        "phenomemental",
+        "and"
+      ],
+      "latest_sameness_focus_relation": "node_confluence",
+      "weakest_relation_type": "node_confluence",
+      "latest_nested_components": {
+        "node_confluence": 0.558,
+        "vertical_confluence": 0.558,
+        "sibling_confluence": 0.631,
+        "path_confluence": 0.558
       }
     }
   ]

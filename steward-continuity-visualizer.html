@@ -89,6 +89,20 @@
         border-radius: 10px;
         padding: 10px;
       }
+      .prose-panel {
+        display: grid;
+        gap: 12px;
+      }
+      .prose-block {
+        background: #121834;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .prose-block p {
+        margin: 0;
+        line-height: 1.55;
+      }
       .signal-row {
         display: flex;
         gap: 8px;
@@ -242,6 +256,7 @@
           <thead>
             <tr>
               <th>Coordinate</th>
+              <th>Role</th>
               <th>Nested Breakdown</th>
               <th>Continuity</th>
               <th>Weakest Relation</th>
@@ -258,6 +273,11 @@
         <p class="hint" id="focusMeaning"></p>
         <p class="hint" id="focusWhy"></p>
         <ul id="focusActions"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Confluence Prose Report</h2>
+        <div class="prose-panel" id="prosePanel"></div>
       </section>
     </main>
 
@@ -281,6 +301,7 @@
         focusRepair: document.getElementById("focusRepair"),
         focusTest: document.getElementById("focusTest"),
         summarySignals: document.getElementById("summarySignals"),
+        prosePanel: document.getElementById("prosePanel"),
         focusText: document.getElementById("focusText"),
         focusMeaning: document.getElementById("focusMeaning"),
         focusWhy: document.getElementById("focusWhy"),
@@ -338,6 +359,7 @@
         const primaryFocus = summary?.primary_focus || payload?.summary?.primary_focus || "stable_presence";
         const relationFocus = summary?.primary_relation_focus || "node_confluence";
         const emergence = payload?.emergence || {};
+        const proseReport = payload?.prose_report || {};
         const guidance = {
           drift_risk: {
             focus: "Rebuild semantic bridge before expanding scope.",
@@ -390,6 +412,21 @@
         for (const key of ["node_confluence", "vertical_confluence", "sibling_confluence", "path_confluence"]) {
           els.summarySignals.insertAdjacentHTML("beforeend", signalChip(relationLabel(key), relationLights[key]));
         }
+        els.prosePanel.innerHTML = "";
+        const proseSections = [
+          ["Overview", proseReport.intro],
+          ["Protect", proseReport.protect],
+          ["Repair", proseReport.repair],
+          ["Test", proseReport.test],
+          ["Why It Matters", proseReport.closing]
+        ];
+        for (const [title, text] of proseSections) {
+          if (!text) continue;
+          const block = document.createElement("div");
+          block.className = "prose-block";
+          block.innerHTML = "<div class='k'>" + escapeHtml(title) + "</div><p>" + escapeHtml(text) + "</p>";
+          els.prosePanel.appendChild(block);
+        }
 
         els.rows.innerHTML = "";
         for (const row of coordinates) {
@@ -408,6 +445,7 @@
           tr.innerHTML =
             "<td>" + escapeHtml(row.coordinate || "-") + "<div class='hint'>" +
               escapeHtml(((row?.hierarchy?.path_coordinates) || []).join(" -> ")) + "</div></td>" +
+            "<td>" + escapeHtml(row.role || "-") + "<div class='hint'>" + escapeHtml(row.meaning_prompt || "") + "</div></td>" +
             "<td>" + breakdown + "</td>" +
             "<td>" + classChip(continuity.continuity_class) +
               "<div class='hint'>" + escapeHtml((continuity.latest_transition_status || "-") + " / " + trendArrow(continuity.trend || "-")) + "</div></td>" +

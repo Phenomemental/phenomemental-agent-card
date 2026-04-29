@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
-  "updated_at": "2026-04-29T08:22:32.200Z",
+  "updated_at": "2026-04-29T09:21:43.674Z",
   "coordinates": {
     "0.inbox": {
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "0.inbox",
-        "updated_at": "2026-04-29T08:22:32.200Z"
+        "updated_at": "2026-04-29T09:21:43.674Z"
       },
       "_remote": {
         "_": "Inbox semantic activity",
@@ -22,55 +22,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:58:18.050Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T17:58:49.343Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:20.008Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:51.170Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:21.859Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:52.788Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
-          "timestamp": "2026-04-28T18:01:23.513Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
-        },
-        {
           "timestamp": "2026-04-28T18:01:54.745Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -370,6 +321,55 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T08:33:36.534Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:12.615Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:43.716Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:10:23.903Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:20:41.230Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:12.667Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:43.674Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Inbox semantic activity'"
         }
       ]
     },
@@ -377,7 +377,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "0.1.discovery",
-        "updated_at": "2026-04-29T08:22:32.200Z"
+        "updated_at": "2026-04-29T09:21:43.674Z"
       },
       "_remote": {
         "_": "Discovery beach signal",
@@ -393,55 +393,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:58:18.050Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:58:49.343Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:20.008Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:51.170Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:21.859Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:52.788Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:01:23.513Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
-        },
-        {
           "timestamp": "2026-04-28T18:01:54.745Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -741,6 +692,55 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T08:33:36.534Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:12.615Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:43.716Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:10:23.903Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:20:41.230Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:12.667Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:43.674Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Discovery beach signal'"
         }
       ]
     },
@@ -748,7 +748,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "identity.agent",
-        "updated_at": "2026-04-29T08:22:32.200Z"
+        "updated_at": "2026-04-29T09:21:43.674Z"
       },
       "_remote": {
         "_": "Runtime identity lock",
@@ -764,55 +764,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:58:18.050Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T17:58:49.343Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:20.008Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:51.170Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:21.859Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:52.788Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
-          "timestamp": "2026-04-28T18:01:23.513Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
-        },
-        {
           "timestamp": "2026-04-28T18:01:54.745Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -1112,6 +1063,55 @@
           "tension_value": 0.5,
           "relation_band": "active tension",
           "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T08:33:36.534Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:12.615Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:43.716Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:10:23.903Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:20:41.230Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:12.667Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:43.674Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Runtime identity lock'"
         }
       ]
     },
@@ -1119,7 +1119,7 @@
       "_": "uninitialized local meaning",
       "_meta": {
         "address": "5.1.1.signal_site",
-        "updated_at": "2026-04-29T08:22:32.200Z"
+        "updated_at": "2026-04-29T09:21:43.674Z"
       },
       "_remote": {
         "_": "Signal site coordinate signal",
@@ -1135,55 +1135,6 @@
       },
       "_history": [
         {
-          "timestamp": "2026-04-28T17:58:18.050Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:58:49.343Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:20.008Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T17:59:51.170Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:21.859Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:00:52.788Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
-          "timestamp": "2026-04-28T18:01:23.513Z",
-          "convergence_score": 0.5,
-          "tension_value": 0.5,
-          "relation_band": "active tension",
-          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
-        },
-        {
           "timestamp": "2026-04-28T18:01:54.745Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
@@ -1479,6 +1430,55 @@
         },
         {
           "timestamp": "2026-04-29T08:22:32.200Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T08:33:36.534Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:12.615Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:09:43.716Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:10:23.903Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:20:41.230Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:12.667Z",
+          "convergence_score": 0.5,
+          "tension_value": 0.5,
+          "relation_band": "active tension",
+          "meaning_delta": "bootstrap midpoint: local='uninitialized local meaning' | remote='Signal site coordinate signal'"
+        },
+        {
+          "timestamp": "2026-04-29T09:21:43.674Z",
           "convergence_score": 0.5,
           "tension_value": 0.5,
           "relation_band": "active tension",

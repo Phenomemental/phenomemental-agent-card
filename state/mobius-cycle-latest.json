@@ -1,6 +1,6 @@
 {
-  "cycle_id": "cycle-512",
-  "timestamp": "2026-04-29T08:22:32.200Z",
+  "cycle_id": "cycle-517",
+  "timestamp": "2026-04-29T09:21:43.674Z",
   "phases": {
     "observe": {
       "unread_count": 0,
@@ -28,19 +28,19 @@
     "remember": {
       "semantic_coordinates": 4,
       "local_context_opened": [],
-      "contrast_contexts": 1,
-      "place_time_coordinates": 1,
+      "contrast_contexts": 3,
+      "place_time_coordinates": 3,
       "place_time_file": "state/place-time-continuity-ledger.json",
       "continuity_dashboard_file": "state/steward-continuity-dashboard.json",
       "public_confluence_dashboard_file": "public-confluence-dashboard.json",
-      "continuity_primary_focus": "stable_presence",
-      "nested_confluence_score_local": 0.578,
+      "continuity_primary_focus": "evolving_presence",
+      "nested_confluence_score_local": 0.509,
       "nested_confluence_status": "scaffold_mismatch",
       "weakest_relation_type": "node_confluence",
-      "primary_confluence_gap": 0.497,
+      "primary_confluence_gap": 0.515,
       "processing_mode": "dual_layer_v1",
       "tension_snapshot_coordinate": "0.1",
-      "tension_snapshot_value": 0.395
+      "tension_snapshot_value": 0.522
     },
     "report": {
       "cycle_file": "state/mobius-cycle-latest.json",
@@ -49,7 +49,7 @@
   },
   "fidelity": {
     "version": "1.0.0",
-    "updated_at": "2026-04-29T08:22:32.240Z",
+    "updated_at": "2026-04-29T09:21:43.697Z",
     "all_pass": true,
     "gates": {
       "coordinate_semantics": true,
